@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS places (id TEXT PRIMARY KEY, apiKey TEXT, settings TEXT);
+
+CREATE TABLE IF NOT EXISTS access_points (id TEXT PRIMARY KEY, placeId TEXT, name TEXT, enabled INTEGER DEFAULT 1, unlockTime INTEGER DEFAULT 8, armState INTEGER DEFAULT 1, readyData TEXT DEFAULT '{}', disarmedData TEXT DEFAULT '{}', grantedData TEXT DEFAULT '{}', deniedData TEXT DEFAULT '{}', FOREIGN KEY(placeId) REFERENCES places(id));
+
+CREATE TABLE IF NOT EXISTS acl (id INTEGER PRIMARY KEY AUTOINCREMENT, accessPoint TEXT, type INTEGER DEFAULT 0, data TEXT, FOREIGN KEY(accessPoint) REFERENCES access_points(id));
