@@ -2,6 +2,7 @@ require('dotenv').config({ quiet: true });
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
+const session = require('express-session');
 const port = process.env.PORT || 3000;
 
 const db = new sqlite3.Database('./database.db', (err) => {
@@ -19,11 +20,15 @@ const db = new sqlite3.Database('./database.db', (err) => {
 	};
 });
 
-global.db = db;
-
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+	secret: process.env.SESSION_SECRET || 'your-secret-key', // Change this to a secure random string
+	resave: false,
+	saveUninitialized: true,
+	cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 app.use((req, res, next) => {
 	console.log(`${req.method} ${req.originalUrl}`);
@@ -50,7 +55,7 @@ function loadRoutes(dir, basePath = '/') {
 			const routeUrl = path.join(basePath, routeName === 'index' ? '' : routeName).replace(/\\/g, '/');
 			
 			try {
-				const route = require(fullPath);
+				const route = require(fullPath)(db);
 				// If the module exports a router/function, use it
 				if (typeof route === 'function' || route.name === 'router') {
 					app.use(routeUrl, route);

@@ -1,8 +1,11 @@
-const db = global.db
+let db;
 const express = require('express');
 const router = express.Router();
 
-module.exports = router;
+module.exports = (dbInit) => {
+	db = dbInit;
+	return router;
+};
 
 
 router.get('/', (req, res) => {
