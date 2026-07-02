@@ -318,7 +318,7 @@ document.getElementById('add-acl-form').addEventListener('submit', async (e) => 
 	} else if (type === 2 || type === 3) {
 		const groupId = document.getElementById('acl-group-id').value.trim();
 		const rank = document.getElementById('acl-group-rank').value.trim();
-		if (!groupId || rank === '') return;
+		if (!groupId || !rank) return;
 		data = `${groupId}:${rank}`;
 	} else if (type === 4) {
 		data = '*';
