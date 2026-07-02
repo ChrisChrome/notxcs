@@ -79,22 +79,15 @@
 				</div>
 
 				<div class="card">
-					<h3>Add reader</h3>
-					<form id="add-reader-form" class="inline-form">
-						<div class="field-group">
-							<label for="reader-id">Reader ID</label>
-							<input type="text" id="reader-id" required>
-						</div>
-						<div class="field-group">
-							<label for="reader-name">Name</label>
-							<input type="text" id="reader-name" required>
-						</div>
-						<button type="submit" class="primary">Add reader</button>
-					</form>
-				</div>
-
-				<div class="card">
-					<h3>Readers</h3>
+					<div class="card-header">
+						<h3>Readers</h3>
+						<form id="add-reader-form" class="inline-form card-header-form">
+							<div class="field-group">
+								<input type="text" id="reader-name" placeholder="Reader name" required>
+							</div>
+							<button type="submit" class="primary">Add reader</button>
+						</form>
+					</div>
 					<div id="readers-empty" class="empty-state hidden">No readers yet for this place.</div>
 					<div class="readers-grid" id="readers-grid"></div>
 				</div>
