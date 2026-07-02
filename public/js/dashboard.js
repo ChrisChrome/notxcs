@@ -9,7 +9,7 @@ async function api(path, options = {}) {
 	});
 	const data = await res.json().catch(() => ({ success: false, message: 'Invalid response from server' }));
 	if (res.status === 401) {
-		window.location.href = '/login.html';
+		window.location.href = '/login';
 		throw new Error('Not authenticated');
 	}
 	return data;
@@ -18,7 +18,7 @@ async function api(path, options = {}) {
 async function init() {
 	const me = await api('/auth/me');
 	if (!me.success) {
-		window.location.href = '/login.html';
+		window.location.href = '/login';
 		return;
 	}
 	document.getElementById('username-display').textContent = me.user.username;
@@ -188,7 +188,7 @@ document.getElementById('delete-place-btn').addEventListener('click', async () =
 
 document.getElementById('logout-btn').addEventListener('click', async () => {
 	await api('/auth/logout', { method: 'POST' });
-	window.location.href = '/login.html';
+	window.location.href = '/login';
 });
 
 // --- ACL (allowed persons / credentials) management ---
