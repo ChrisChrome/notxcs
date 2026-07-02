@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>User administration - NOTXCS</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar">
+			<h2>NOTXCS</h2>
+			<div class="user-info">Signed in as <strong id="username-display"></strong> <span id="role-badge" class="badge type-badge"></span></div>
+			<a href="/dashboard" style="display:block;margin-bottom:12px;color:var(--accent);font-size:13px;">Back to dashboard</a>
+			<button class="secondary" id="logout-btn" style="margin-bottom: 16px;">Log out</button>
+		</aside>
+
+		<main class="main">
+			<div class="main-header">
+				<h1>User administration</h1>
+			</div>
+
+			<div class="card">
+				<h3>Create user</h3>
+				<form id="add-user-form" class="inline-form">
+					<div class="field-group">
+						<label for="new-user-username">Username</label>
+						<input type="text" id="new-user-username" required>
+					</div>
+					<div class="field-group">
+						<label for="new-user-password">Password</label>
+						<input type="password" id="new-user-password" required>
+					</div>
+					<div class="field-group">
+						<label for="new-user-role">Role</label>
+						<select id="new-user-role">
+							<option value="1">User</option>
+							<option value="2">Elevated</option>
+							<option value="3">Admin</option>
+						</select>
+					</div>
+					<button type="submit" class="primary">Create user</button>
+				</form>
+			</div>
+
+			<div class="card">
+				<h3>Users</h3>
+				<div id="users-empty" class="empty-state hidden">No users found.</div>
+				<ul class="acl-list" id="users-list"></ul>
+			</div>
+		</main>
+	</div>
+
+	<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -582,6 +582,67 @@ document.getElementById('group-modal').addEventListener('click', (e) => {
 	if (e.target.id === 'group-modal') closeGroupModal();
 });
 
+// --- Shared place access (owner/elevated/admin can grant other users access to a place's settings) ---
+
+async function loadSharedAccess() {
+	if (!currentPlaceId) return;
+	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access`);
+	renderSharedAccessList(data.grants || []);
+}
+
+function renderSharedAccessList(grants) {
+	const list = document.getElementById('shared-access-list');
+	const empty = document.getElementById('shared-access-empty');
+	list.innerHTML = '';
+
+	if (grants.length === 0) {
+		empty.classList.remove('hidden');
+		return;
+	}
+	empty.classList.add('hidden');
+
+	grants.forEach((grant) => {
+		const li = document.createElement('li');
+		li.className = 'acl-entry';
+		li.innerHTML = `
+			<span class="acl-description">${escapeHtml(grant.username)}</span>
+			<button class="danger shared-access-revoke-btn">Revoke</button>
+		`;
+		li.querySelector('.shared-access-revoke-btn').addEventListener('click', () => revokeSharedAccess(grant.userId));
+		list.appendChild(li);
+	});
+}
+
+async function revokeSharedAccess(userId) {
+	if (!currentPlaceId) return;
+	if (!confirm('Revoke this user\'s access to the place?')) return;
+
+	await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access/${encodeURIComponent(userId)}`, {
+		method: 'DELETE'
+	});
+	await loadSharedAccess();
+}
+
+document.getElementById('add-shared-access-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	if (!currentPlaceId) return;
+
+	const username = document.getElementById('shared-access-username').value.trim();
+	if (!username) return;
+
+	const result = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access`, {
+		method: 'POST',
+		body: JSON.stringify({ username })
+	});
+
+	if (result.success) {
+		document.getElementById('shared-access-username').value = '';
+		await loadSharedAccess();
+	} else {
+		alert(result.message || 'Failed to grant access');
+	}
+});
+
 // --- Scan logs viewing ---
 
 let currentLogsReaderId = null;
