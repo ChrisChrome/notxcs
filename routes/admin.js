@@ -195,3 +195,54 @@ router.delete('/users/:userId', (req, res) => {
 		});
 	});
 });
+
+// Get the current global lockdown state. While active, every reader at every place is disabled
+// and all scans are denied, regardless of that reader's own settings or ACL entries.
+router.get('/lockdown', (req, res) => {
+	db.get(
+		`SELECT active, activatedBy, activatedAt FROM system_lockdown WHERE id = 1`,
+		[],
+		(err, row) => {
+			if (err) {
+				console.error('Failed to retrieve lockdown state:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({
+				success: true,
+				active: !!(row && row.active),
+				activatedBy: row ? row.activatedBy : null,
+				activatedAt: row ? row.activatedAt : null
+			});
+		}
+	);
+});
+
+// Engage the lockdown for all places. Any admin (or superadmin) may do this.
+router.post('/lockdown', (req, res) => {
+	db.run(
+		`UPDATE system_lockdown SET active = 1, activatedBy = ?, activatedAt = CURRENT_TIMESTAMP WHERE id = 1`,
+		[req.user.id],
+		(err) => {
+			if (err) {
+				console.error('Failed to engage lockdown:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, active: true });
+		}
+	);
+});
+
+// Lift the lockdown, restoring every reader to its own configured state.
+router.delete('/lockdown', (req, res) => {
+	db.run(
+		`UPDATE system_lockdown SET active = 0, activatedBy = NULL, activatedAt = NULL WHERE id = 1`,
+		[],
+		(err) => {
+			if (err) {
+				console.error('Failed to lift lockdown:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, active: false });
+		}
+	);
+});

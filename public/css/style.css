@@ -194,6 +194,13 @@ button.danger {
 	gap: 2px;
 }
 
+.place-list-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
 .place-list-id {
 	font-size: 14px;
 }

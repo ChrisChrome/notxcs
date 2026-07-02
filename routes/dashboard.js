@@ -65,6 +65,18 @@ function requireOwnerOrBypass(req, res, next) {
 
 router.use(requireAuth(() => db));
 
+// Read-only lockdown status check, available to any authenticated user (not just admins) so the
+// dashboard can show a banner while readers are disabled site-wide.
+router.get('/lockdown', (req, res) => {
+	db.get(`SELECT active FROM system_lockdown WHERE id = 1`, [], (err, row) => {
+		if (err) {
+			console.error('Failed to retrieve lockdown state:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, active: !!(row && row.active) });
+	});
+});
+
 // List places owned by, or shared with, the current user. Elevated/admin users see every place.
 // Includes the owner's username (as `ownerUsername`) so the sidebar can display who owns each place.
 router.get('/places', (req, res) => {
@@ -184,6 +196,38 @@ router.post('/places/:placeId/regenerate-key', loadPlace, (req, res) => {
 		}
 		res.json({ success: true, apiKey });
 	});
+});
+
+// Engage a lockdown for this place only, disabling every reader at this place until it's lifted.
+// Anyone with access to the place (owner, shared access, or elevated/admin bypass) may do this -
+// unlike the global (all-places) lockdown in routes/admin.js, it doesn't require the admin role.
+router.post('/places/:placeId/lockdown', loadPlace, (req, res) => {
+	db.run(
+		`UPDATE places SET lockdown = 1, lockdownActivatedBy = ?, lockdownActivatedAt = CURRENT_TIMESTAMP WHERE id = ?`,
+		[req.user.id, req.place.id],
+		(err) => {
+			if (err) {
+				console.error('Failed to engage place lockdown:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, lockdown: true });
+		}
+	);
+});
+
+// Lift this place's lockdown, restoring every reader at this place to its own configured state.
+router.delete('/places/:placeId/lockdown', loadPlace, (req, res) => {
+	db.run(
+		`UPDATE places SET lockdown = 0, lockdownActivatedBy = NULL, lockdownActivatedAt = NULL WHERE id = ?`,
+		[req.place.id],
+		(err) => {
+			if (err) {
+				console.error('Failed to lift place lockdown:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, lockdown: false });
+		}
+	);
 });
 
 // Download the place's Roblox kit (xcs-template.rbxmx) with the placeId/apiKey placeholders

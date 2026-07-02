@@ -43,29 +43,41 @@ router.get('/:placeId', (req, res) => {
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
 
-			let resp = {
-				success: true,
-				accessPoints: accessPoints.reduce((acc, ap) => {
-					const armed = !!ap.armState; // Will have state 2 eventually for armed on schedule, but for now just 1 or 0.
+			db.get(`SELECT active FROM system_lockdown WHERE id = 1`, [], (err, lockdownRow) => {
+				if (err) {
+					console.error('Failed to retrieve lockdown state:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
 
-					acc[ap.id] = {
-						id: ap.id,
-						name: ap.name,
-						unlockTime: ap.unlockTime,
-						config: {
-							active: !!ap.enabled,
-							armed,
-							scanData: {
-								ready: JSON.parse(ap.readyData || '{}'),
-								disarmed: JSON.parse(ap.disarmedData || '{}')
+				// While a lockdown is active (either the global, all-places lockdown or this place's own
+				// lockdown), every reader is reported as inactive regardless of its own `enabled` setting.
+				const lockdownActive = !!(lockdownRow && lockdownRow.active) || !!row.lockdown;
+
+				let resp = {
+					success: true,
+					lockdown: lockdownActive,
+					accessPoints: accessPoints.reduce((acc, ap) => {
+						const armed = !!ap.armState; // Will have state 2 eventually for armed on schedule, but for now just 1 or 0.
+
+						acc[ap.id] = {
+							id: ap.id,
+							name: ap.name,
+							unlockTime: ap.unlockTime,
+							config: {
+								active: lockdownActive ? false : !!ap.enabled,
+								armed,
+								scanData: {
+									ready: JSON.parse(ap.readyData || '{}'),
+									disarmed: JSON.parse(ap.disarmedData || '{}')
+								}
 							}
 						}
-					}
-					return acc;
-				}, {})
-			};
-			console.log(resp)
-			res.json(resp);
+						return acc;
+					}, {})
+				};
+				// console.log(resp)
+				res.json(resp);
+			});
 		});
 	});
 });
@@ -107,98 +119,128 @@ router.get('/:placeId/:accessPointId/onScan', async (req, res) => {
 				return res.status(404).json({ success: false, message: "Access point not found" });
 			}
 
-			db.all(`SELECT * FROM acl WHERE accessPoint = ?`, [accessPointId], async (err, aclEntries) => {
+			db.get(`SELECT active FROM system_lockdown WHERE id = 1`, [], (err, lockdownRow) => {
 				if (err) {
-					console.error('Failed to retrieve ACL entries:', err.message);
+					console.error('Failed to retrieve lockdown state:', err.message);
 					return res.status(500).json({ success: false, message: "Internal server error" });
 				}
 
-				// Access group entries (type 5) reference an access_groups.id in `data`. Resolve their
-				// members up front so the group's users/cards/ranks are checked just like direct entries.
-				const groupIds = [...new Set(aclEntries.filter(e => e.type === 5).map(e => e.data))];
-				let groupMembersById = {};
-				if (groupIds.length > 0) {
-					const placeholders = groupIds.map(() => '?').join(',');
-					groupMembersById = await new Promise((resolve) => {
-						db.all(`SELECT * FROM access_group_members WHERE groupId IN (${placeholders})`, groupIds, (err, members) => {
-							if (err) {
-								console.error('Failed to retrieve access group members:', err.message);
-								return resolve({});
-							}
-							const byGroup = {};
-							for (const member of members) {
-								// Groups can only contain direct credentials (types 0-4); the API rejects
-								// nested groups on write, but skip any type 5 here too as defense-in-depth
-								// against infinite recursion if the database is ever modified directly.
-								if (member.type === 5) continue;
-								if (!byGroup[member.groupId]) byGroup[member.groupId] = [];
-								byGroup[member.groupId].push(member);
-							}
-							resolve(byGroup);
-						});
+				const globalLockdownActive = !!(lockdownRow && lockdownRow.active);
+				const placeLockdownActive = !!place.lockdown;
+
+				if (globalLockdownActive || placeLockdownActive) {
+					// Every reader is disabled during a lockdown (either global, all-places, or just this
+					// place) - deny immediately without consulting the ACL, and log it distinctly so it's
+					// clear this wasn't a normal denial.
+					db.run(
+						`INSERT INTO scan_logs (placeId, accessPoint, userId, cardNumbers, granted, responseCode) VALUES (?, ?, ?, ?, ?, ?)`,
+						[placeId, accessPointId, userId || null, cardNumbers.join(','), 0, globalLockdownActive ? 'lockdown' : 'place_lockdown'],
+						(err) => {
+							if (err) console.error('Failed to record scan log:', err.message);
+						}
+					);
+					return res.json({
+						success: true,
+						grant_type: 'user_scan',
+						response_code: 'access_denied',
+						response_time: 0,
+						scan_data: JSON.parse(ap.deniedData || '{}')
 					});
 				}
 
-				let userGroups = await fetch(`https://groups.roblox.com/v1/users/${userId}/groups/roles`).then(r => r.json()).then(data => data.data || []).catch(() => []);
-				userGroups = userGroups.map(g => ({group: g.group.id, rank: g.role.rank}));
-				console.log('User groups:', userGroups);
+			db.all(`SELECT * FROM acl WHERE accessPoint = ?`, [accessPointId], async (err, aclEntries) => {
+					if (err) {
+						console.error('Failed to retrieve ACL entries:', err.message);
+						return res.status(500).json({ success: false, message: "Internal server error" });
+					}
 
-				// Types: 0 = User ID; 1 = Card Number; 2 = Group Exact Rank; 3 = Group Min Rank; 4 = Allow All; 5 = Access Group
-				function matchesEntry(entry) {
-					switch (entry.type) {
-						case 0: // User ID
-							return entry.data == userId;
-						case 1: // Card Number
-							return cardNumbers.includes(entry.data);
-						case 2: { // Group Exact Rank
-							const [group, rank] = entry.data.split(':');
-							return userGroups.some(g => g.group == group && g.rank == rank);
+					// Access group entries (type 5) reference an access_groups.id in `data`. Resolve their
+					// members up front so the group's users/cards/ranks are checked just like direct entries.
+					const groupIds = [...new Set(aclEntries.filter(e => e.type === 5).map(e => e.data))];
+					let groupMembersById = {};
+					if (groupIds.length > 0) {
+						const placeholders = groupIds.map(() => '?').join(',');
+						groupMembersById = await new Promise((resolve) => {
+							db.all(`SELECT * FROM access_group_members WHERE groupId IN (${placeholders})`, groupIds, (err, members) => {
+								if (err) {
+									console.error('Failed to retrieve access group members:', err.message);
+									return resolve({});
+								}
+								const byGroup = {};
+								for (const member of members) {
+									// Groups can only contain direct credentials (types 0-4); the API rejects
+									// nested groups on write, but skip any type 5 here too as defense-in-depth
+									// against infinite recursion if the database is ever modified directly.
+									if (member.type === 5) continue;
+									if (!byGroup[member.groupId]) byGroup[member.groupId] = [];
+									byGroup[member.groupId].push(member);
+								}
+								resolve(byGroup);
+							});
+						});
+					}
+
+					let userGroups = await fetch(`https://groups.roblox.com/v1/users/${userId}/groups/roles`).then(r => r.json()).then(data => data.data || []).catch(() => []);
+					userGroups = userGroups.map(g => ({group: g.group.id, rank: g.role.rank}));
+					// console.log('User groups:', userGroups);
+
+					// Types: 0 = User ID; 1 = Card Number; 2 = Group Exact Rank; 3 = Group Min Rank; 4 = Allow All; 5 = Access Group
+					function matchesEntry(entry) {
+						switch (entry.type) {
+							case 0: // User ID
+								return entry.data == userId;
+							case 1: // Card Number
+								return cardNumbers.includes(entry.data);
+							case 2: { // Group Exact Rank
+								const [group, rank] = entry.data.split(':');
+								return userGroups.some(g => g.group == group && g.rank == rank);
+							}
+							case 3: { // Group Min Rank
+								const [group, rank] = entry.data.split(':');
+								return userGroups.some(g => g.group == group && g.rank >= rank);
+							}
+							case 4: // Allow All
+								return true;
+							case 5: // Access Group - granted if any credential in the group matches.
+								return (groupMembersById[entry.data] || []).some(matchesEntry);
+							default:
+								return false;
 						}
-						case 3: { // Group Min Rank
-							const [group, rank] = entry.data.split(':');
-							return userGroups.some(g => g.group == group && g.rank >= rank);
+					}
+
+					let granted = false;
+					// Check every entry (users, cards, group ranks, then access groups made up of the above).
+					for (const entry of aclEntries) {
+						if (matchesEntry(entry)) {
+							granted = true;
+							break;
 						}
-						case 4: // Allow All
-							return true;
-						case 5: // Access Group - granted if any credential in the group matches.
-							return (groupMembersById[entry.data] || []).some(matchesEntry);
-						default:
-							return false;
 					}
-				}
 
-				let granted = false;
-				// Check every entry (users, cards, group ranks, then access groups made up of the above).
-				for (const entry of aclEntries) {
-					if (matchesEntry(entry)) {
-						granted = true;
-						break;
+					const responseCode = granted ? 'access_granted' : 'access_denied';
+					db.run(
+						`INSERT INTO scan_logs (placeId, accessPoint, userId, cardNumbers, granted, responseCode) VALUES (?, ?, ?, ?, ?, ?)`,
+						[placeId, accessPointId, userId || null, cardNumbers.join(','), granted ? 1 : 0, responseCode],
+						(err) => {
+							if (err) console.error('Failed to record scan log:', err.message);
+						}
+					);
+
+					const responseData = granted ? {
+						success: true,
+						grant_type: 'user_scan',
+						response_code: 'access_granted',
+						response_time: 0, // This is just analytics for how long their backend took to generate the response
+						scan_data: JSON.parse(ap.grantedData || '{}')
+					} : {
+						success: true,
+						grant_type: 'user_scan',
+						response_code: 'access_denied',
+						response_time: 0,
+						scan_data: JSON.parse(ap.deniedData || '{}')
 					}
-				}
-
-				const responseCode = granted ? 'access_granted' : 'access_denied';
-				db.run(
-					`INSERT INTO scan_logs (placeId, accessPoint, userId, cardNumbers, granted, responseCode) VALUES (?, ?, ?, ?, ?, ?)`,
-					[placeId, accessPointId, userId || null, cardNumbers.join(','), granted ? 1 : 0, responseCode],
-					(err) => {
-						if (err) console.error('Failed to record scan log:', err.message);
-					}
-				);
-
-				const responseData = granted ? {
-					success: true,
-					grant_type: 'user_scan',
-					response_code: 'access_granted',
-					response_time: 0, // This is just analytics for how long their backend took to generate the response
-					scan_data: JSON.parse(ap.grantedData || '{}')
-				} : {
-					success: true,
-					grant_type: 'user_scan',
-					response_code: 'access_denied',
-					response_time: 0,
-					scan_data: JSON.parse(ap.deniedData || '{}')
-				}
-				res.json(responseData);
+					res.json(responseData);
+				});
 			});
 		});
 	});

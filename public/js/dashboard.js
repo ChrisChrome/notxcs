@@ -37,7 +37,16 @@ async function init() {
 	document.getElementById('add-place-custom-fields').classList.toggle('hidden', me.user.role < 3);
 	document.getElementById('set-api-key-form').classList.toggle('hidden', me.user.role < 3);
 
+	await loadLockdownBanner();
 	await loadPlaces();
+}
+
+async function loadLockdownBanner() {
+	const data = await api('/dashboard/lockdown');
+	const banner = document.getElementById('lockdown-banner');
+	if (banner) {
+		banner.classList.toggle('hidden', !(data.success && data.active));
+	}
 }
 
 async function loadPlaces() {
@@ -54,10 +63,22 @@ function renderPlaceList() {
 		const li = document.createElement('li');
 		li.className = place.id === currentPlaceId ? 'active' : '';
 
+		const row = document.createElement('div');
+		row.className = 'place-list-row';
+
 		const idSpan = document.createElement('span');
 		idSpan.className = 'place-list-id';
 		idSpan.textContent = place.name || place.id;
-		li.appendChild(idSpan);
+		row.appendChild(idSpan);
+
+		if (place.lockdown) {
+			const lockdownBadge = document.createElement('span');
+			lockdownBadge.className = 'badge off';
+			lockdownBadge.textContent = 'Locked down';
+			row.appendChild(lockdownBadge);
+		}
+
+		li.appendChild(row);
 
 		if (place.ownerUsername) {
 			const ownerSpan = document.createElement('span');
@@ -97,10 +118,34 @@ async function selectPlace(placeId) {
 	document.getElementById('delete-place-btn').classList.toggle('hidden', !canManageOwnership);
 	document.getElementById('shared-access-card').classList.toggle('hidden', !canManageOwnership);
 
+	updatePlaceLockdownUI(!!data.place.lockdown);
+
 	renderReaders(data.accessPoints || []);
 	await loadAccessGroups();
 	if (canManageOwnership) {
 		await loadSharedAccess();
+	}
+}
+
+function updatePlaceLockdownUI(active) {
+	const engageBtn = document.getElementById('engage-place-lockdown-btn');
+	const liftBtn = document.getElementById('lift-place-lockdown-btn');
+	const banner = document.getElementById('place-lockdown-banner');
+
+	if (active) {
+		engageBtn.classList.add('hidden');
+		liftBtn.classList.remove('hidden');
+		banner.classList.remove('hidden');
+	} else {
+		engageBtn.classList.remove('hidden');
+		liftBtn.classList.add('hidden');
+		banner.classList.add('hidden');
+	}
+
+	const place = places.find((p) => p.id === currentPlaceId);
+	if (place) {
+		place.lockdown = active ? 1 : 0;
+		renderPlaceList();
 	}
 }
 
@@ -232,6 +277,29 @@ document.getElementById('delete-place-btn').addEventListener('click', async () =
 	document.getElementById('place-view').classList.add('hidden');
 	document.getElementById('no-place').classList.remove('hidden');
 	await loadPlaces();
+});
+
+document.getElementById('engage-place-lockdown-btn').addEventListener('click', async () => {
+	if (!currentPlaceId) return;
+	if (!confirm('Engage lockdown for this place? This disables every reader here until lifted.')) return;
+
+	const result = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/lockdown`, { method: 'POST' });
+	if (result.success) {
+		updatePlaceLockdownUI(true);
+	} else {
+		alert(result.message || 'Failed to engage lockdown');
+	}
+});
+
+document.getElementById('lift-place-lockdown-btn').addEventListener('click', async () => {
+	if (!currentPlaceId) return;
+
+	const result = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/lockdown`, { method: 'DELETE' });
+	if (result.success) {
+		updatePlaceLockdownUI(false);
+	} else {
+		alert(result.message || 'Failed to lift lockdown');
+	}
 });
 
 document.getElementById('download-kit-btn').addEventListener('click', async () => {

@@ -47,7 +47,52 @@ async function init() {
 	}
 
 	await loadUsers();
+	await loadLockdownStatus();
 }
+
+async function loadLockdownStatus() {
+	const data = await api('/admin/lockdown');
+	const badge = document.getElementById('lockdown-badge');
+	const engageBtn = document.getElementById('engage-lockdown-btn');
+	const liftBtn = document.getElementById('lift-lockdown-btn');
+
+	if (!data.success) {
+		badge.textContent = 'Unknown';
+		return;
+	}
+
+	if (data.active) {
+		badge.textContent = 'Lockdown active';
+		badge.className = 'badge off';
+		engageBtn.classList.add('hidden');
+		liftBtn.classList.remove('hidden');
+	} else {
+		badge.textContent = 'Normal operation';
+		badge.className = 'badge on';
+		engageBtn.classList.remove('hidden');
+		liftBtn.classList.add('hidden');
+	}
+}
+
+document.getElementById('engage-lockdown-btn').addEventListener('click', async () => {
+	if (!confirm('Engage site-wide lockdown? This will disable every reader at every place until lifted.')) return;
+
+	const result = await api('/admin/lockdown', { method: 'POST' });
+	if (result.success) {
+		await loadLockdownStatus();
+	} else {
+		alert(result.message || 'Failed to engage lockdown');
+	}
+});
+
+document.getElementById('lift-lockdown-btn').addEventListener('click', async () => {
+	const result = await api('/admin/lockdown', { method: 'DELETE' });
+	if (result.success) {
+		await loadLockdownStatus();
+	} else {
+		alert(result.message || 'Failed to lift lockdown');
+	}
+});
 
 async function loadUsers() {
 	const data = await api('/admin/users');

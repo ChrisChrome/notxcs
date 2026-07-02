@@ -33,6 +33,10 @@
 		</aside>
 
 		<main class="main">
+			<div id="lockdown-banner" class="error hidden" style="display:block;margin-bottom:16px;">
+				Site-wide lockdown is active - every reader at every place is disabled until an admin lifts it.
+			</div>
+
 			<div id="no-place" class="empty-state">
 				Select or create a place from the sidebar to manage its readers.
 			</div>
@@ -41,7 +45,13 @@
 				<div class="main-header">
 					<h1 id="place-title"></h1>
 					<button class="secondary" id="download-kit-btn">Download kit</button>
+					<button class="danger" id="engage-place-lockdown-btn">Engage lockdown</button>
+					<button class="secondary hidden" id="lift-place-lockdown-btn">Lift lockdown</button>
 					<button class="danger" id="delete-place-btn">Delete place</button>
+				</div>
+
+				<div id="place-lockdown-banner" class="error hidden" style="display:block;margin-bottom:16px;">
+					This place is in lockdown - every reader here is disabled until it's lifted.
 				</div>
 
 				<div class="card">

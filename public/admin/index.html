@@ -20,6 +20,16 @@
 				<h1>User administration</h1>
 			</div>
 
+			<div class="card" id="lockdown-card">
+				<h3>Site-wide lockdown</h3>
+				<p style="margin-top:-8px;color:var(--muted);font-size:13px;">While engaged, every reader at every place is disabled and all scans are denied, regardless of that reader's own settings, until the lockdown is lifted.</p>
+				<div class="inline-form">
+					<span class="badge" id="lockdown-badge">Loading&hellip;</span>
+					<button type="button" class="danger" id="engage-lockdown-btn">Engage lockdown</button>
+					<button type="button" class="secondary hidden" id="lift-lockdown-btn">Lift lockdown</button>
+				</div>
+			</div>
+
 			<div class="card">
 				<h3>Create user</h3>
 				<form id="add-user-form" class="inline-form">
