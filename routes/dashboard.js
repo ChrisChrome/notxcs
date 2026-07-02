@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, ROLES } = require('../lib/auth');
-const { generatePlaceId, generateApiKey } = require('../lib/generators');
+const { generatePlaceId, generateApiKey, generateReaderId } = require('../lib/generators');
 
 let db;
 
@@ -266,38 +266,48 @@ function loadOwnedAccessPoint(req, res, next) {
 	});
 }
 
-// Create a new reader (access point) for a place
+// Create a new reader (access point) for a place. The reader id is always
+// generated server-side as a random 16-character alphanumeric string; no
+// caller-supplied id is ever accepted.
 router.post('/places/:placeId/access-points', loadPlace, (req, res) => {
-	const { id, name } = req.body || {};
-	if (!id || !name) {
-		return res.status(400).json({ success: false, message: "Reader id and name are required" });
+	const { name } = req.body || {};
+	if (!name) {
+		return res.status(400).json({ success: false, message: "Reader name is required" });
 	}
 
 	const enabled = req.body.enabled !== undefined ? (req.body.enabled ? 1 : 0) : 1;
 	const unlockTime = req.body.unlockTime !== undefined ? req.body.unlockTime : 8;
 	const armState = req.body.armState !== undefined ? req.body.armState : 1;
 
-	db.get(`SELECT id FROM access_points WHERE id = ?`, [id], (err, existing) => {
-		if (err) {
-			console.error('Failed to check for existing reader:', err.message);
-			return res.status(500).json({ success: false, message: "Internal server error" });
-		}
-		if (existing) {
-			return res.status(409).json({ success: false, message: "A reader with that id already exists" });
-		}
-
-		db.run(
-			`INSERT INTO access_points (id, placeId, name, enabled, unlockTime, armState) VALUES (?, ?, ?, ?, ?, ?)`,
-			[id, req.place.id, name, enabled, unlockTime, armState],
-			(err) => {
-				if (err) {
-					console.error('Failed to create reader:', err.message);
-					return res.status(500).json({ success: false, message: "Internal server error" });
-				}
-				res.json({ success: true });
+	function tryInsert(attemptsLeft) {
+		const id = generateReaderId();
+		db.get(`SELECT id FROM access_points WHERE id = ?`, [id], (err, existing) => {
+			if (err) {
+				console.error('Failed to check for existing reader:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
-		);
-	});
+			if (existing) {
+				if (attemptsLeft <= 0) {
+					return res.status(500).json({ success: false, message: "Failed to generate a unique reader id" });
+				}
+				return tryInsert(attemptsLeft - 1);
+			}
+
+			db.run(
+				`INSERT INTO access_points (id, placeId, name, enabled, unlockTime, armState) VALUES (?, ?, ?, ?, ?, ?)`,
+				[id, req.place.id, name, enabled, unlockTime, armState],
+				(err) => {
+					if (err) {
+						console.error('Failed to create reader:', err.message);
+						return res.status(500).json({ success: false, message: "Internal server error" });
+					}
+					res.json({ success: true, id });
+				}
+			);
+		});
+	}
+
+	tryInsert(5);
 });
 
 // Update a reader's settings

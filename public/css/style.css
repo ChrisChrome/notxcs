@@ -224,6 +224,27 @@ button.danger {
 	margin-top: 0;
 }
 
+.card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.card-header h3 {
+	margin: 0;
+}
+
+.card-header-form {
+	flex-wrap: nowrap;
+}
+
+.card-header-form .field-group {
+	flex: none;
+	min-width: 180px;
+}
+
 .readers-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

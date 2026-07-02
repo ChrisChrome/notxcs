@@ -207,17 +207,15 @@ document.getElementById('add-reader-form').addEventListener('submit', async (e) 
 	e.preventDefault();
 	if (!currentPlaceId) return;
 
-	const id = document.getElementById('reader-id').value.trim();
 	const name = document.getElementById('reader-name').value.trim();
-	if (!id || !name) return;
+	if (!name) return;
 
 	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access-points`, {
 		method: 'POST',
-		body: JSON.stringify({ id, name })
+		body: JSON.stringify({ name })
 	});
 
 	if (data.success) {
-		document.getElementById('reader-id').value = '';
 		document.getElementById('reader-name').value = '';
 		selectPlace(currentPlaceId);
 	} else {
