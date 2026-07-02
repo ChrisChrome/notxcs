@@ -1,6 +1,15 @@
 let currentPlaceId = null;
 let places = [];
 let accessGroups = [];
+let currentUser = null;
+let currentPlaceAccessLevel = null;
+
+const ROLE_LABELS = {
+	1: 'User',
+	2: 'Elevated',
+	3: 'Admin',
+	4: 'Superadmin'
+};
 
 async function api(path, options = {}) {
 	const res = await fetch(path, {
@@ -21,7 +30,10 @@ async function init() {
 		window.location.href = '/login.html';
 		return;
 	}
+	currentUser = me.user;
 	document.getElementById('username-display').textContent = me.user.username;
+	document.getElementById('role-badge').textContent = ROLE_LABELS[me.user.role] || 'User';
+	document.getElementById('admin-link').classList.toggle('hidden', me.user.role < 3);
 
 	await loadPlaces();
 }
@@ -52,12 +64,21 @@ async function selectPlace(placeId) {
 	const data = await api(`/dashboard/places/${encodeURIComponent(placeId)}`);
 	if (!data.success) return;
 
+	currentPlaceAccessLevel = data.accessLevel;
+
 	document.getElementById('no-place').classList.add('hidden');
 	document.getElementById('place-view').classList.remove('hidden');
 	document.getElementById('place-title').textContent = placeId;
 
+	const canManageOwnership = currentPlaceAccessLevel === 'owner' || currentPlaceAccessLevel === 'bypass';
+	document.getElementById('delete-place-btn').classList.toggle('hidden', !canManageOwnership);
+	document.getElementById('shared-access-card').classList.toggle('hidden', !canManageOwnership);
+
 	renderReaders(data.accessPoints || []);
 	await loadAccessGroups();
+	if (canManageOwnership) {
+		await loadSharedAccess();
+	}
 }
 
 function renderReaders(accessPoints) {
