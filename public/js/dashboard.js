@@ -241,11 +241,16 @@ document.getElementById('toggle-api-key-btn').addEventListener('click', () => {
 document.getElementById('copy-api-key-btn').addEventListener('click', async () => {
 	const value = document.getElementById('place-api-key-display').value;
 	if (!value) return;
+
+	const btn = document.getElementById('copy-api-key-btn');
+	const originalLabel = btn.textContent;
 	try {
 		await navigator.clipboard.writeText(value);
+		btn.textContent = 'Copied!';
 	} catch (err) {
-		// Clipboard API may be unavailable; fail silently.
+		btn.textContent = 'Copy failed';
 	}
+	setTimeout(() => { btn.textContent = originalLabel; }, 1500);
 });
 
 document.getElementById('regenerate-api-key-btn').addEventListener('click', async () => {
