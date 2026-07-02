@@ -103,13 +103,9 @@ router.post('/places', (req, res) => {
 		return res.status(403).json({ success: false, message: "Only admins can set a custom place id or API key" });
 	}
 
-	if (!canSetCustomValues) {
-		id = '';
-		apiKey = '';
-	} else {
-		id = id ? String(id).trim() : '';
-		apiKey = apiKey ? String(apiKey).trim() : '';
-	}
+	// If we reach here, either the caller is an admin, or both id and apiKey were already falsy.
+	id = id ? String(id).trim() : '';
+	apiKey = apiKey ? String(apiKey).trim() : '';
 
 	if (!id) id = generatePlaceId();
 	if (!apiKey) apiKey = generateApiKey();
