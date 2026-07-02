@@ -363,7 +363,8 @@ button.danger {
 	margin-bottom: 4px;
 }
 
-.inline-form input {
+.inline-form input,
+.inline-form select {
 	margin-bottom: 0;
 }
 
