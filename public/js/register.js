@@ -20,7 +20,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
 			return;
 		}
 
-		window.location.href = '/dashboard.html';
+		window.location.href = '/dashboard';
 	} catch (err) {
 		errorEl.textContent = 'Unable to reach the server. Please try again.';
 		errorEl.classList.add('visible');
