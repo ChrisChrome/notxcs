@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>NOTXCS</title>
+	<script>
+		fetch('/auth/me').then(r => r.json()).then(data => {
+			window.location.replace(data.success ? '/dashboard.html' : '/login.html');
+		}).catch(() => window.location.replace('/login.html'));
+	</script>
+</head>
+<body>
+</body>
+</html>
