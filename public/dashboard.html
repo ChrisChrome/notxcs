@@ -61,6 +61,51 @@
 			</div>
 		</main>
 	</div>
+
+	<div id="acl-modal" class="modal-overlay hidden">
+		<div class="modal">
+			<div class="modal-header">
+				<h2>Allowed persons &amp; credentials — <span id="acl-reader-name"></span></h2>
+				<button class="secondary" id="acl-close-btn">Close</button>
+			</div>
+
+			<div class="card">
+				<h3>Add entry</h3>
+				<form id="add-acl-form" class="inline-form">
+					<div class="field-group">
+						<label for="acl-type">Type</label>
+						<select id="acl-type">
+							<option value="0">User ID</option>
+							<option value="1">Card number</option>
+							<option value="2">Group exact rank</option>
+							<option value="3">Group minimum rank</option>
+							<option value="4">Allow all</option>
+						</select>
+					</div>
+					<div class="field-group" id="acl-data-group">
+						<label for="acl-data">User ID</label>
+						<input type="text" id="acl-data">
+					</div>
+					<div class="field-group hidden" id="acl-group-id-group">
+						<label for="acl-group-id">Group ID</label>
+						<input type="text" id="acl-group-id">
+					</div>
+					<div class="field-group hidden" id="acl-group-rank-group">
+						<label for="acl-group-rank">Rank</label>
+						<input type="number" id="acl-group-rank" min="0">
+					</div>
+					<button type="submit" class="primary">Add entry</button>
+				</form>
+			</div>
+
+			<div class="card">
+				<h3>Entries</h3>
+				<div id="acl-empty" class="empty-state hidden">No entries yet. Access will be denied for everyone until an entry is added.</div>
+				<ul class="acl-list" id="acl-list"></ul>
+			</div>
+		</div>
+	</div>
+
 	<script src="/js/dashboard.js"></script>
 </body>
 </html>

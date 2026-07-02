@@ -304,3 +304,68 @@ button.danger {
 .hidden {
 	display: none !important;
 }
+
+.modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	z-index: 100;
+}
+
+.modal {
+	width: 100%;
+	max-width: 560px;
+	max-height: 85vh;
+	overflow-y: auto;
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 24px;
+}
+
+.modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.modal-header h2 {
+	margin: 0;
+	font-size: 18px;
+}
+
+.acl-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.acl-entry {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 0;
+	border-bottom: 1px solid var(--border);
+	font-size: 14px;
+}
+
+.acl-entry:last-child {
+	border-bottom: none;
+}
+
+.acl-entry .acl-description {
+	flex: 1;
+	color: var(--text);
+}
+
+.badge.type-badge {
+	background: rgba(79, 124, 255, 0.15);
+	color: var(--accent);
+	white-space: nowrap;
+}
