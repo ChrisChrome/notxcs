@@ -56,7 +56,7 @@ function renderPlaceList() {
 
 		const idSpan = document.createElement('span');
 		idSpan.className = 'place-list-id';
-		idSpan.textContent = place.id;
+		idSpan.textContent = place.name || place.id;
 		li.appendChild(idSpan);
 
 		if (place.ownerUsername) {
@@ -82,7 +82,10 @@ async function selectPlace(placeId) {
 
 	document.getElementById('no-place').classList.add('hidden');
 	document.getElementById('place-view').classList.remove('hidden');
-	document.getElementById('place-title').textContent = placeId;
+	document.getElementById('place-title').textContent = data.place.name || placeId;
+
+	document.getElementById('place-id-display').value = placeId;
+	document.getElementById('place-name-custom').value = data.place.name || '';
 
 	const apiKeyInput = document.getElementById('place-api-key-display');
 	apiKeyInput.value = data.place.apiKey || '';
@@ -177,10 +180,12 @@ document.getElementById('add-place-form').addEventListener('submit', async (e) =
 	e.preventDefault();
 	const id = document.getElementById('place-id').value.trim();
 	const apiKey = document.getElementById('place-api-key').value.trim();
+	const name = document.getElementById('place-name').value.trim();
 
 	const body = {};
 	if (id) body.id = id;
 	if (apiKey) body.apiKey = apiKey;
+	if (name) body.name = name;
 
 	const data = await api('/dashboard/places', {
 		method: 'POST',
@@ -190,6 +195,7 @@ document.getElementById('add-place-form').addEventListener('submit', async (e) =
 	if (data.success) {
 		document.getElementById('place-id').value = '';
 		document.getElementById('place-api-key').value = '';
+		document.getElementById('place-name').value = '';
 		await loadPlaces();
 		selectPlace(data.place.id);
 	} else {
@@ -262,6 +268,24 @@ document.getElementById('regenerate-api-key-btn').addEventListener('click', asyn
 		document.getElementById('place-api-key-display').value = data.apiKey;
 	} else {
 		alert(data.message || 'Failed to regenerate API key');
+	}
+});
+
+document.getElementById('set-place-name-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	if (!currentPlaceId) return;
+
+	const name = document.getElementById('place-name-custom').value.trim();
+	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}`, {
+		method: 'PUT',
+		body: JSON.stringify({ name })
+	});
+
+	if (data.success) {
+		await loadPlaces();
+		selectPlace(currentPlaceId);
+	} else {
+		alert(data.message || 'Failed to set place name');
 	}
 });
 

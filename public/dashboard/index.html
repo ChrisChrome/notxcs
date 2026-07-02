@@ -19,6 +19,8 @@
 			<div class="card" style="margin-top: 16px;">
 				<h3 style="margin-top:0;font-size:14px;">Add place</h3>
 				<form id="add-place-form">
+					<label for="place-name">Name <span style="color:var(--muted);font-weight:normal;">(optional)</span></label>
+					<input type="text" id="place-name">
 					<div id="add-place-custom-fields" class="hidden">
 						<label for="place-id">Place ID <span style="color:var(--muted);font-weight:normal;">(leave blank to auto-generate)</span></label>
 						<input type="text" id="place-id">
@@ -42,8 +44,23 @@
 				</div>
 
 				<div class="card">
+					<h3>Name</h3>
+					<form id="set-place-name-form" class="inline-form">
+						<div class="field-group">
+							<label for="place-name-custom">Place name <span style="color:var(--muted);font-weight:normal;">(leave blank to show the place ID instead)</span></label>
+							<input type="text" id="place-name-custom">
+						</div>
+						<button type="submit" class="primary">Save</button>
+					</form>
+				</div>
+
+				<div class="card">
 					<h3>API Key</h3>
 					<div class="inline-form">
+						<div class="field-group">
+							<label for="place-id-display">Place ID</label>
+							<input type="text" id="place-id-display" readonly>
+						</div>
 						<div class="field-group">
 							<label for="place-api-key-display">Current key</label>
 							<input type="password" id="place-api-key-display" readonly>

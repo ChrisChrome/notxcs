@@ -97,7 +97,7 @@ router.get('/places', (req, res) => {
 router.post('/places', (req, res) => {
 	const canSetCustomValues = req.user.role >= ROLES.ADMIN;
 	const { settings } = req.body || {};
-	let { id, apiKey } = req.body || {};
+	let { id, apiKey, name } = req.body || {};
 
 	if (!canSetCustomValues && (id || apiKey)) {
 		return res.status(403).json({ success: false, message: "Only admins can set a custom place id or API key" });
@@ -106,6 +106,7 @@ router.post('/places', (req, res) => {
 	// If we reach here, either the caller is an admin, or both id and apiKey were already falsy.
 	id = id ? String(id).trim() : '';
 	apiKey = apiKey ? String(apiKey).trim() : '';
+	name = name ? String(name).trim() : '';
 
 	if (!id) id = generatePlaceId();
 	if (!apiKey) apiKey = generateApiKey();
@@ -119,12 +120,12 @@ router.post('/places', (req, res) => {
 			return res.status(409).json({ success: false, message: "A place with that id already exists" });
 		}
 
-		db.run(`INSERT INTO places (id, apiKey, settings, ownerId) VALUES (?, ?, ?, ?)`, [id, apiKey, settings || '{}', req.user.id], (err) => {
+		db.run(`INSERT INTO places (id, apiKey, settings, ownerId, name) VALUES (?, ?, ?, ?, ?)`, [id, apiKey, settings || '{}', req.user.id, name || null], (err) => {
 			if (err) {
 				console.error('Failed to create place:', err.message);
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
-			res.json({ success: true, place: { id, apiKey, settings: settings || '{}', ownerId: req.user.id } });
+			res.json({ success: true, place: { id, apiKey, settings: settings || '{}', ownerId: req.user.id, name: name || null } });
 		});
 	});
 });
@@ -155,8 +156,9 @@ router.put('/places/:placeId', loadPlace, (req, res) => {
 		apiKey = String(req.body.apiKey).trim() || generateApiKey();
 	}
 	const settings = req.body.settings !== undefined ? req.body.settings : req.place.settings;
+	const name = req.body.name !== undefined ? (String(req.body.name).trim() || null) : req.place.name;
 
-	db.run(`UPDATE places SET apiKey = ?, settings = ? WHERE id = ?`, [apiKey, settings, req.place.id], (err) => {
+	db.run(`UPDATE places SET apiKey = ?, settings = ?, name = ? WHERE id = ?`, [apiKey, settings, name, req.place.id], (err) => {
 		if (err) {
 			console.error('Failed to update place:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
