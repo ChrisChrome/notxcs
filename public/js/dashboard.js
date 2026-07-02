@@ -1,6 +1,15 @@
 let currentPlaceId = null;
 let places = [];
 let accessGroups = [];
+let currentUser = null;
+let currentPlaceAccessLevel = null;
+
+const ROLE_LABELS = {
+	1: 'User',
+	2: 'Elevated',
+	3: 'Admin',
+	4: 'Superadmin'
+};
 
 async function api(path, options = {}) {
 	const res = await fetch(path, {
@@ -21,7 +30,10 @@ async function init() {
 		window.location.href = '/login';
 		return;
 	}
+	currentUser = me.user;
 	document.getElementById('username-display').textContent = me.user.username;
+	document.getElementById('role-badge').textContent = ROLE_LABELS[me.user.role] || 'User';
+	document.getElementById('admin-link').classList.toggle('hidden', me.user.role < 3);
 
 	await loadPlaces();
 }
@@ -52,12 +64,21 @@ async function selectPlace(placeId) {
 	const data = await api(`/dashboard/places/${encodeURIComponent(placeId)}`);
 	if (!data.success) return;
 
+	currentPlaceAccessLevel = data.accessLevel;
+
 	document.getElementById('no-place').classList.add('hidden');
 	document.getElementById('place-view').classList.remove('hidden');
 	document.getElementById('place-title').textContent = placeId;
 
+	const canManageOwnership = currentPlaceAccessLevel === 'owner' || currentPlaceAccessLevel === 'bypass';
+	document.getElementById('delete-place-btn').classList.toggle('hidden', !canManageOwnership);
+	document.getElementById('shared-access-card').classList.toggle('hidden', !canManageOwnership);
+
 	renderReaders(data.accessPoints || []);
 	await loadAccessGroups();
+	if (canManageOwnership) {
+		await loadSharedAccess();
+	}
 }
 
 function renderReaders(accessPoints) {
@@ -559,6 +580,67 @@ document.getElementById('add-group-member-form').addEventListener('submit', asyn
 document.getElementById('group-close-btn').addEventListener('click', closeGroupModal);
 document.getElementById('group-modal').addEventListener('click', (e) => {
 	if (e.target.id === 'group-modal') closeGroupModal();
+});
+
+// --- Shared place access (owner/elevated/admin can grant other users access to a place's settings) ---
+
+async function loadSharedAccess() {
+	if (!currentPlaceId) return;
+	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access`);
+	renderSharedAccessList(data.grants || []);
+}
+
+function renderSharedAccessList(grants) {
+	const list = document.getElementById('shared-access-list');
+	const empty = document.getElementById('shared-access-empty');
+	list.innerHTML = '';
+
+	if (grants.length === 0) {
+		empty.classList.remove('hidden');
+		return;
+	}
+	empty.classList.add('hidden');
+
+	grants.forEach((grant) => {
+		const li = document.createElement('li');
+		li.className = 'acl-entry';
+		li.innerHTML = `
+			<span class="acl-description">${escapeHtml(grant.username)}</span>
+			<button class="danger shared-access-revoke-btn">Revoke</button>
+		`;
+		li.querySelector('.shared-access-revoke-btn').addEventListener('click', () => revokeSharedAccess(grant.userId));
+		list.appendChild(li);
+	});
+}
+
+async function revokeSharedAccess(userId) {
+	if (!currentPlaceId) return;
+	if (!confirm('Revoke this user\'s access to the place?')) return;
+
+	await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access/${encodeURIComponent(userId)}`, {
+		method: 'DELETE'
+	});
+	await loadSharedAccess();
+}
+
+document.getElementById('add-shared-access-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	if (!currentPlaceId) return;
+
+	const username = document.getElementById('shared-access-username').value.trim();
+	if (!username) return;
+
+	const result = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/access`, {
+		method: 'POST',
+		body: JSON.stringify({ username })
+	});
+
+	if (result.success) {
+		document.getElementById('shared-access-username').value = '';
+		await loadSharedAccess();
+	} else {
+		alert(result.message || 'Failed to grant access');
+	}
 });
 
 // --- Scan logs viewing ---

@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
+const { ROLES } = require('../lib/auth');
 
 let db;
 
@@ -30,21 +31,32 @@ router.post('/register', (req, res) => {
 			return res.status(409).json({ success: false, message: "Username is already taken" });
 		}
 
-		bcrypt.hash(password, 10, (err, hash) => {
+		// The very first registered user becomes a superadmin; every user after that is a normal user.
+		// This is the only way to obtain a superadmin account short of editing the database directly.
+		db.get(`SELECT COUNT(*) as count FROM users`, [], (err, row) => {
 			if (err) {
-				console.error('Failed to hash password:', err.message);
+				console.error('Failed to count users:', err.message);
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
 
-			db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hash], function (err) {
+			const role = row.count === 0 ? ROLES.SUPERADMIN : ROLES.USER;
+
+			bcrypt.hash(password, 10, (err, hash) => {
 				if (err) {
-					console.error('Failed to create user:', err.message);
+					console.error('Failed to hash password:', err.message);
 					return res.status(500).json({ success: false, message: "Internal server error" });
 				}
 
-				req.session.userId = this.lastID;
-				req.session.username = username;
-				res.json({ success: true, user: { id: this.lastID, username } });
+				db.run(`INSERT INTO users (username, password, role) VALUES (?, ?, ?)`, [username, hash, role], function (err) {
+					if (err) {
+						console.error('Failed to create user:', err.message);
+						return res.status(500).json({ success: false, message: "Internal server error" });
+					}
+
+					req.session.userId = this.lastID;
+					req.session.username = username;
+					res.json({ success: true, user: { id: this.lastID, username, role } });
+				});
 			});
 		});
 	});
@@ -79,7 +91,7 @@ router.post('/login', (req, res) => {
 
 			req.session.userId = user.id;
 			req.session.username = user.username;
-			res.json({ success: true, user: { id: user.id, username: user.username } });
+			res.json({ success: true, user: { id: user.id, username: user.username, role: user.role } });
 		});
 	});
 });
@@ -99,6 +111,20 @@ router.get('/me', (req, res) => {
 	if (!req.session.userId) {
 		return res.status(401).json({ success: false, message: "Not authenticated" });
 	}
-	res.json({ success: true, user: { id: req.session.userId, username: req.session.username } });
+
+	db.get(`SELECT id, username, role FROM users WHERE id = ?`, [req.session.userId], (err, user) => {
+		if (err) {
+			console.error('Failed to retrieve user:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+
+		if (!user) {
+			return req.session.destroy(() => {
+				res.status(401).json({ success: false, message: "Not authenticated" });
+			});
+		}
+
+		res.json({ success: true, user });
+	});
 });
 

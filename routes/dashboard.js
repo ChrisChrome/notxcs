@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { requireAuth, ROLES } = require('../lib/auth');
 
 let db;
 
@@ -8,16 +9,11 @@ module.exports = (dbInit) => {
 	return router;
 };
 
-function requireAuth(req, res, next) {
-	if (!req.session || !req.session.userId) {
-		return res.status(401).json({ success: false, message: "Not authenticated" });
-	}
-	next();
-}
-
-function loadOwnedPlace(req, res, next) {
+// Loads the place, granting access if the current user owns it, holds an elevated/admin role
+// (which bypasses ownership checks entirely), or has been explicitly granted shared access to it.
+function loadPlace(req, res, next) {
 	const { placeId } = req.params;
-	db.get(`SELECT * FROM places WHERE id = ? AND ownerId = ?`, [placeId, req.session.userId], (err, place) => {
+	db.get(`SELECT * FROM places WHERE id = ?`, [placeId], (err, place) => {
 		if (err) {
 			console.error('Failed to retrieve place:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
@@ -25,22 +21,68 @@ function loadOwnedPlace(req, res, next) {
 		if (!place) {
 			return res.status(404).json({ success: false, message: "Place not found" });
 		}
-		req.place = place;
-		next();
+
+		if (place.ownerId === req.user.id) {
+			req.place = place;
+			req.placeAccessLevel = 'owner';
+			return next();
+		}
+
+		if (req.user.role >= ROLES.ELEVATED) {
+			req.place = place;
+			req.placeAccessLevel = 'bypass';
+			return next();
+		}
+
+		db.get(`SELECT 1 FROM place_access WHERE placeId = ? AND userId = ?`, [placeId, req.user.id], (err, grant) => {
+			if (err) {
+				console.error('Failed to check place access:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			if (!grant) {
+				return res.status(404).json({ success: false, message: "Place not found" });
+			}
+			req.place = place;
+			req.placeAccessLevel = 'shared';
+			next();
+		});
 	});
 }
 
-router.use(requireAuth);
+// Only the owner (or an elevated/admin user, who bypasses ownership checks) may perform this action,
+// e.g. deleting the place or managing who else has shared access to it.
+function requireOwnerOrBypass(req, res, next) {
+	if (req.placeAccessLevel === 'owner' || req.placeAccessLevel === 'bypass') {
+		return next();
+	}
+	return res.status(403).json({ success: false, message: "Only the place owner or an elevated user can perform this action" });
+}
 
-// List places owned by the current user
+router.use(requireAuth(() => db));
+
+// List places owned by, or shared with, the current user. Elevated/admin users see every place.
 router.get('/places', (req, res) => {
-	db.all(`SELECT * FROM places WHERE ownerId = ?`, [req.session.userId], (err, places) => {
-		if (err) {
-			console.error('Failed to retrieve places:', err.message);
-			return res.status(500).json({ success: false, message: "Internal server error" });
+	if (req.user.role >= ROLES.ELEVATED) {
+		return db.all(`SELECT * FROM places`, [], (err, places) => {
+			if (err) {
+				console.error('Failed to retrieve places:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, places });
+		});
+	}
+
+	db.all(
+		`SELECT * FROM places WHERE ownerId = ? OR id IN (SELECT placeId FROM place_access WHERE userId = ?)`,
+		[req.user.id, req.user.id],
+		(err, places) => {
+			if (err) {
+				console.error('Failed to retrieve places:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, places });
 		}
-		res.json({ success: true, places });
-	});
+	);
 });
 
 // Create a new place
@@ -59,29 +101,29 @@ router.post('/places', (req, res) => {
 			return res.status(409).json({ success: false, message: "A place with that id already exists" });
 		}
 
-		db.run(`INSERT INTO places (id, apiKey, settings, ownerId) VALUES (?, ?, ?, ?)`, [id, apiKey, settings || '{}', req.session.userId], (err) => {
+		db.run(`INSERT INTO places (id, apiKey, settings, ownerId) VALUES (?, ?, ?, ?)`, [id, apiKey, settings || '{}', req.user.id], (err) => {
 			if (err) {
 				console.error('Failed to create place:', err.message);
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
-			res.json({ success: true, place: { id, apiKey, settings: settings || '{}', ownerId: req.session.userId } });
+			res.json({ success: true, place: { id, apiKey, settings: settings || '{}', ownerId: req.user.id } });
 		});
 	});
 });
 
 // Get a single place with its access points (readers)
-router.get('/places/:placeId', loadOwnedPlace, (req, res) => {
+router.get('/places/:placeId', loadPlace, (req, res) => {
 	db.all(`SELECT * FROM access_points WHERE placeId = ?`, [req.place.id], (err, accessPoints) => {
 		if (err) {
 			console.error('Failed to retrieve access points:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
-		res.json({ success: true, place: req.place, accessPoints });
+		res.json({ success: true, place: req.place, accessPoints, accessLevel: req.placeAccessLevel });
 	});
 });
 
 // Update a place's apiKey/settings
-router.put('/places/:placeId', loadOwnedPlace, (req, res) => {
+router.put('/places/:placeId', loadPlace, (req, res) => {
 	const apiKey = req.body.apiKey !== undefined ? req.body.apiKey : req.place.apiKey;
 	const settings = req.body.settings !== undefined ? req.body.settings : req.place.settings;
 
@@ -94,8 +136,8 @@ router.put('/places/:placeId', loadOwnedPlace, (req, res) => {
 	});
 });
 
-// Delete a place (and its readers/acl entries/access groups/scan logs)
-router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
+// Delete a place (and its readers/acl entries/access groups/scan logs/shared access grants)
+router.delete('/places/:placeId', loadPlace, requireOwnerOrBypass, (req, res) => {
 	db.all(`SELECT id FROM access_points WHERE placeId = ?`, [req.place.id], (err, accessPoints) => {
 		if (err) {
 			console.error('Failed to retrieve access points:', err.message);
@@ -144,12 +186,19 @@ router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
 						return res.status(500).json({ success: false, message: "Internal server error" });
 					}
 
-					db.run(`DELETE FROM places WHERE id = ?`, [req.place.id], (err) => {
+					db.run(`DELETE FROM place_access WHERE placeId = ?`, [req.place.id], (err) => {
 						if (err) {
-							console.error('Failed to delete place:', err.message);
+							console.error('Failed to delete access grants for place:', err.message);
 							return res.status(500).json({ success: false, message: "Internal server error" });
 						}
-						res.json({ success: true });
+
+						db.run(`DELETE FROM places WHERE id = ?`, [req.place.id], (err) => {
+							if (err) {
+								console.error('Failed to delete place:', err.message);
+								return res.status(500).json({ success: false, message: "Internal server error" });
+							}
+							res.json({ success: true });
+						});
 					});
 				});
 			});
@@ -172,7 +221,7 @@ function loadOwnedAccessPoint(req, res, next) {
 }
 
 // Create a new reader (access point) for a place
-router.post('/places/:placeId/access-points', loadOwnedPlace, (req, res) => {
+router.post('/places/:placeId/access-points', loadPlace, (req, res) => {
 	const { id, name } = req.body || {};
 	if (!id || !name) {
 		return res.status(400).json({ success: false, message: "Reader id and name are required" });
@@ -206,7 +255,7 @@ router.post('/places/:placeId/access-points', loadOwnedPlace, (req, res) => {
 });
 
 // Update a reader's settings
-router.put('/places/:placeId/access-points/:accessPointId', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.put('/places/:placeId/access-points/:accessPointId', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	const ap = req.accessPoint;
 	const name = req.body.name !== undefined ? req.body.name : ap.name;
 	const enabled = req.body.enabled !== undefined ? (req.body.enabled ? 1 : 0) : ap.enabled;
@@ -231,7 +280,7 @@ router.put('/places/:placeId/access-points/:accessPointId', loadOwnedPlace, load
 });
 
 // Delete a reader
-router.delete('/places/:placeId/access-points/:accessPointId', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.delete('/places/:placeId/access-points/:accessPointId', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	db.run(`DELETE FROM acl WHERE accessPoint = ?`, [req.accessPoint.id], (err) => {
 		if (err) {
 			console.error('Failed to delete ACL entries for reader:', err.message);
@@ -254,7 +303,7 @@ router.delete('/places/:placeId/access-points/:accessPointId', loadOwnedPlace, l
 });
 
 // List scan logs for a reader (most recent first)
-router.get('/places/:placeId/access-points/:accessPointId/logs', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.get('/places/:placeId/access-points/:accessPointId/logs', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	const limit = Math.min(parseInt(req.query.limit, 10) || 100, 500);
 	db.all(
 		`SELECT * FROM scan_logs WHERE accessPoint = ? ORDER BY scannedAt DESC, id DESC LIMIT ?`,
@@ -270,7 +319,7 @@ router.get('/places/:placeId/access-points/:accessPointId/logs', loadOwnedPlace,
 });
 
 // List ACL entries for a reader
-router.get('/places/:placeId/access-points/:accessPointId/acl', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.get('/places/:placeId/access-points/:accessPointId/acl', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	db.all(`SELECT * FROM acl WHERE accessPoint = ?`, [req.accessPoint.id], (err, entries) => {
 		if (err) {
 			console.error('Failed to retrieve ACL entries:', err.message);
@@ -281,7 +330,7 @@ router.get('/places/:placeId/access-points/:accessPointId/acl', loadOwnedPlace, 
 });
 
 // Add an ACL entry for a reader
-router.post('/places/:placeId/access-points/:accessPointId/acl', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.post('/places/:placeId/access-points/:accessPointId/acl', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	const { type, data } = req.body || {};
 	if (type === undefined || !data) {
 		return res.status(400).json({ success: false, message: "ACL type and data are required" });
@@ -297,7 +346,7 @@ router.post('/places/:placeId/access-points/:accessPointId/acl', loadOwnedPlace,
 });
 
 // Delete an ACL entry
-router.delete('/places/:placeId/access-points/:accessPointId/acl/:aclId', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+router.delete('/places/:placeId/access-points/:accessPointId/acl/:aclId', loadPlace, loadOwnedAccessPoint, (req, res) => {
 	db.run(`DELETE FROM acl WHERE id = ? AND accessPoint = ?`, [req.params.aclId, req.accessPoint.id], (err) => {
 		if (err) {
 			console.error('Failed to delete ACL entry:', err.message);
@@ -322,7 +371,7 @@ function loadOwnedAccessGroup(req, res, next) {
 }
 
 // List access groups for a place
-router.get('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
+router.get('/places/:placeId/access-groups', loadPlace, (req, res) => {
 	db.all(`SELECT * FROM access_groups WHERE placeId = ?`, [req.place.id], (err, groups) => {
 		if (err) {
 			console.error('Failed to retrieve access groups:', err.message);
@@ -333,7 +382,7 @@ router.get('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
 });
 
 // Create an access group (e.g. "Staff") for a place
-router.post('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
+router.post('/places/:placeId/access-groups', loadPlace, (req, res) => {
 	const { name } = req.body || {};
 	if (!name) {
 		return res.status(400).json({ success: false, message: "Access group name is required" });
@@ -349,7 +398,7 @@ router.post('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
 });
 
 // Rename an access group
-router.put('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+router.put('/places/:placeId/access-groups/:groupId', loadPlace, loadOwnedAccessGroup, (req, res) => {
 	const name = req.body.name !== undefined ? req.body.name : req.accessGroup.name;
 	if (!name) {
 		return res.status(400).json({ success: false, message: "Access group name is required" });
@@ -365,7 +414,7 @@ router.put('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwnedA
 });
 
 // Delete an access group (and its members, and any ACL entries referencing it)
-router.delete('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+router.delete('/places/:placeId/access-groups/:groupId', loadPlace, loadOwnedAccessGroup, (req, res) => {
 	db.run(`DELETE FROM access_group_members WHERE groupId = ?`, [req.accessGroup.id], (err) => {
 		if (err) {
 			console.error('Failed to delete access group members:', err.message);
@@ -389,7 +438,7 @@ router.delete('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwn
 });
 
 // List members (creds) of an access group
-router.get('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+router.get('/places/:placeId/access-groups/:groupId/members', loadPlace, loadOwnedAccessGroup, (req, res) => {
 	db.all(`SELECT * FROM access_group_members WHERE groupId = ?`, [req.accessGroup.id], (err, members) => {
 		if (err) {
 			console.error('Failed to retrieve access group members:', err.message);
@@ -400,7 +449,7 @@ router.get('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, lo
 });
 
 // Add a member (user, card, group rank rule, etc) to an access group
-router.post('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+router.post('/places/:placeId/access-groups/:groupId/members', loadPlace, loadOwnedAccessGroup, (req, res) => {
 	const { type, data } = req.body || {};
 	if (type === undefined || !data) {
 		return res.status(400).json({ success: false, message: "Member type and data are required" });
@@ -420,10 +469,76 @@ router.post('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, l
 });
 
 // Remove a member from an access group
-router.delete('/places/:placeId/access-groups/:groupId/members/:memberId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+router.delete('/places/:placeId/access-groups/:groupId/members/:memberId', loadPlace, loadOwnedAccessGroup, (req, res) => {
 	db.run(`DELETE FROM access_group_members WHERE id = ? AND groupId = ?`, [req.params.memberId, req.accessGroup.id], (err) => {
 		if (err) {
 			console.error('Failed to remove access group member:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true });
+	});
+});
+
+// --- Shared place access (lets an owner grant other users access to a place's settings) ---
+
+// List users who have been granted shared access to this place
+router.get('/places/:placeId/access', loadPlace, requireOwnerOrBypass, (req, res) => {
+	db.all(
+		`SELECT place_access.id, place_access.userId, users.username, place_access.createdAt
+		 FROM place_access JOIN users ON users.id = place_access.userId
+		 WHERE place_access.placeId = ?`,
+		[req.place.id],
+		(err, grants) => {
+			if (err) {
+				console.error('Failed to retrieve access grants:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, grants });
+		}
+	);
+});
+
+// Grant another user access to this place's settings, by username
+router.post('/places/:placeId/access', loadPlace, requireOwnerOrBypass, (req, res) => {
+	const { username } = req.body || {};
+	if (!username) {
+		return res.status(400).json({ success: false, message: "Username is required" });
+	}
+
+	db.get(`SELECT id FROM users WHERE username = ?`, [username], (err, user) => {
+		if (err) {
+			console.error('Failed to look up user:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		if (!user) {
+			return res.status(404).json({ success: false, message: "No user with that username was found" });
+		}
+		if (user.id === req.place.ownerId) {
+			return res.status(400).json({ success: false, message: "The place owner already has full access" });
+		}
+
+		db.run(
+			`INSERT INTO place_access (placeId, userId, grantedBy) VALUES (?, ?, ?)`,
+			[req.place.id, user.id, req.user.id],
+			function (err) {
+				if (err) {
+					if (err.message && err.message.includes('UNIQUE')) {
+						return res.status(409).json({ success: false, message: "That user already has access to this place" });
+					}
+					console.error('Failed to grant place access:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
+				res.json({ success: true, grant: { id: this.lastID, placeId: req.place.id, userId: user.id, username } });
+			}
+		);
+	});
+});
+
+// Revoke a user's shared access to this place
+router.delete('/places/:placeId/access/:userId', loadPlace, requireOwnerOrBypass, (req, res) => {
+	db.run(`DELETE FROM place_access WHERE placeId = ? AND userId = ?`, [req.place.id, req.params.userId], (err) => {
+		if (err) {
+			console.error('Failed to revoke place access:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
 		res.json({ success: true });
