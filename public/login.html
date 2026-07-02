@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login - NOTXCS</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div class="auth-wrapper">
+		<div class="auth-card">
+			<h1>Welcome back</h1>
+			<p class="subtitle">Sign in to manage your readers and settings.</p>
+			<div id="error" class="error"></div>
+			<form id="login-form">
+				<label for="username">Username</label>
+				<input type="text" id="username" name="username" autocomplete="username" required>
+
+				<label for="password">Password</label>
+				<input type="password" id="password" name="password" autocomplete="current-password" required>
+
+				<button type="submit" class="primary">Log in</button>
+			</form>
+			<p class="switch-link">Don't have an account? <a href="/register.html">Register</a></p>
+		</div>
+	</div>
+	<script src="/js/login.js"></script>
+</body>
+</html>

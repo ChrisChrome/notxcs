@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard - NOTXCS</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar">
+			<h2>NOTXCS</h2>
+			<div class="user-info">Signed in as <strong id="username-display"></strong></div>
+			<button class="secondary" id="logout-btn" style="margin-bottom: 16px;">Log out</button>
+
+			<ul class="place-list" id="place-list"></ul>
+
+			<div class="card" style="margin-top: 16px;">
+				<h3 style="margin-top:0;font-size:14px;">Add place</h3>
+				<form id="add-place-form">
+					<label for="place-id">Place ID</label>
+					<input type="text" id="place-id" required>
+					<label for="place-api-key">API Key</label>
+					<input type="text" id="place-api-key" required>
+					<button type="submit" class="primary">Add place</button>
+				</form>
+			</div>
+		</aside>
+
+		<main class="main">
+			<div id="no-place" class="empty-state">
+				Select or create a place from the sidebar to manage its readers.
+			</div>
+
+			<div id="place-view" class="hidden">
+				<div class="main-header">
+					<h1 id="place-title"></h1>
+					<button class="danger" id="delete-place-btn">Delete place</button>
+				</div>
+
+				<div class="card">
+					<h3>Add reader</h3>
+					<form id="add-reader-form" class="inline-form">
+						<div class="field-group">
+							<label for="reader-id">Reader ID</label>
+							<input type="text" id="reader-id" required>
+						</div>
+						<div class="field-group">
+							<label for="reader-name">Name</label>
+							<input type="text" id="reader-name" required>
+						</div>
+						<button type="submit" class="primary">Add reader</button>
+					</form>
+				</div>
+
+				<div class="card">
+					<h3>Readers</h3>
+					<div id="readers-empty" class="empty-state hidden">No readers yet for this place.</div>
+					<div class="readers-grid" id="readers-grid"></div>
+				</div>
+			</div>
+		</main>
+	</div>
+	<script src="/js/dashboard.js"></script>
+</body>
+</html>

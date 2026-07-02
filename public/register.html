@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register - NOTXCS</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div class="auth-wrapper">
+		<div class="auth-card">
+			<h1>Create an account</h1>
+			<p class="subtitle">Register to start managing your readers.</p>
+			<div id="error" class="error"></div>
+			<form id="register-form">
+				<label for="username">Username</label>
+				<input type="text" id="username" name="username" autocomplete="username" minlength="3" required>
+
+				<label for="password">Password</label>
+				<input type="password" id="password" name="password" autocomplete="new-password" minlength="6" required>
+
+				<button type="submit" class="primary">Register</button>
+			</form>
+			<p class="switch-link">Already have an account? <a href="/login.html">Log in</a></p>
+		</div>
+	</div>
+	<script src="/js/register.js"></script>
+</body>
+</html>
