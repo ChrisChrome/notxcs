@@ -407,7 +407,7 @@ router.post('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, l
 	}
 	// Groups cannot contain other groups, to avoid nested/circular resolution.
 	if (parseInt(type, 10) === 5) {
-		return res.status(400).json({ success: false, message: "An access group cannot contain another access group" });
+		return res.status(400).json({ success: false, message: "An access group cannot contain another access group, to prevent circular/nested resolution" });
 	}
 
 	db.run(`INSERT INTO access_group_members (groupId, type, data) VALUES (?, ?, ?)`, [req.accessGroup.id, type, data], function (err) {

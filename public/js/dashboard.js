@@ -598,10 +598,10 @@ function renderLogsList(logs) {
 		const li = document.createElement('li');
 		li.className = 'acl-entry';
 		const granted = !!log.granted;
-		const cards = log.cardNumbers ? `, cards: ${log.cardNumbers}` : '';
+		const cards = log.cardNumbers ? `, cards: ${escapeHtml(log.cardNumbers)}` : '';
 		li.innerHTML = `
 			<span class="badge type-badge" style="background:${granted ? 'var(--success)' : 'var(--danger)'};">${granted ? 'Granted' : 'Denied'}</span>
-			<span class="acl-description">${escapeHtml(log.scannedAt)} — user: ${escapeHtml(log.userId || 'unknown')}${escapeHtml(cards)}</span>
+			<span class="acl-description">${escapeHtml(log.scannedAt)} — user: ${escapeHtml(log.userId || 'unknown')}${cards}</span>
 		`;
 		list.appendChild(li);
 	});

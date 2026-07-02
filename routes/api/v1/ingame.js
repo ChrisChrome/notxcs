@@ -127,6 +127,10 @@ router.get('/:placeId/:accessPointId/onScan', async (req, res) => {
 							}
 							const byGroup = {};
 							for (const member of members) {
+								// Groups can only contain direct credentials (types 0-4); the API rejects
+								// nested groups on write, but skip any type 5 here too as defense-in-depth
+								// against infinite recursion if the database is ever modified directly.
+								if (member.type === 5) continue;
 								if (!byGroup[member.groupId]) byGroup[member.groupId] = [];
 								byGroup[member.groupId].push(member);
 							}
