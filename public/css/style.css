@@ -222,6 +222,7 @@ button.danger {
 	border: 1px solid var(--border);
 	border-radius: 10px;
 	padding: 16px;
+	min-width: 0;
 }
 
 .reader-card .reader-name {
@@ -252,8 +253,15 @@ button.danger {
 
 .reader-card .actions {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 8px;
 	margin-top: 12px;
+}
+
+.reader-card .actions button {
+	flex: 1 1 calc(50% - 8px);
+	padding: 10px 8px;
+	white-space: nowrap;
 }
 
 .badge {
