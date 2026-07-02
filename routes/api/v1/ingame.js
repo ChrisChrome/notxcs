@@ -113,46 +113,73 @@ router.get('/:placeId/:accessPointId/onScan', async (req, res) => {
 					return res.status(500).json({ success: false, message: "Internal server error" });
 				}
 
+				// Access group entries (type 5) reference an access_groups.id in `data`. Resolve their
+				// members up front so the group's users/cards/ranks are checked just like direct entries.
+				const groupIds = [...new Set(aclEntries.filter(e => e.type === 5).map(e => e.data))];
+				let groupMembersById = {};
+				if (groupIds.length > 0) {
+					const placeholders = groupIds.map(() => '?').join(',');
+					groupMembersById = await new Promise((resolve) => {
+						db.all(`SELECT * FROM access_group_members WHERE groupId IN (${placeholders})`, groupIds, (err, members) => {
+							if (err) {
+								console.error('Failed to retrieve access group members:', err.message);
+								return resolve({});
+							}
+							const byGroup = {};
+							for (const member of members) {
+								if (!byGroup[member.groupId]) byGroup[member.groupId] = [];
+								byGroup[member.groupId].push(member);
+							}
+							resolve(byGroup);
+						});
+					});
+				}
+
 				let userGroups = await fetch(`https://groups.roblox.com/v1/users/${userId}/groups/roles`).then(r => r.json()).then(data => data.data || []).catch(() => []);
 				userGroups = userGroups.map(g => ({group: g.group.id, rank: g.role.rank}));
 				console.log('User groups:', userGroups);
-				let grant_type;
-				let granted = false;
-				// Types: 0 = User ID; 1 = Card Number; 2 = Group Exact Rank; 3 = Group Min Rank, 4 = Allow All
-				// Check user ID, then group ranks, then card numbers.
-				for (const entry of aclEntries) {
+
+				// Types: 0 = User ID; 1 = Card Number; 2 = Group Exact Rank; 3 = Group Min Rank; 4 = Allow All; 5 = Access Group
+				function matchesEntry(entry) {
 					switch (entry.type) {
 						case 0: // User ID
-							if (entry.data == userId) {
-								granted = true;
-							}
-							break;
+							return entry.data == userId;
 						case 1: // Card Number
-							if (cardNumbers.includes(entry.data)) {
-								granted = true;
-							}
-							break;
+							return cardNumbers.includes(entry.data);
 						case 2: { // Group Exact Rank
 							const [group, rank] = entry.data.split(':');
-							if (userGroups.some(g => g.group == group && g.rank == rank)) {
-								granted = true;
-							}
-							break;
+							return userGroups.some(g => g.group == group && g.rank == rank);
 						}
 						case 3: { // Group Min Rank
 							const [group, rank] = entry.data.split(':');
-							if (userGroups.some(g => g.group == group && g.rank >= rank)) {
-								granted = true;
-							}
-							break;
+							return userGroups.some(g => g.group == group && g.rank >= rank);
 						}
 						case 4: // Allow All
-							granted = true;
-							break;
+							return true;
+						case 5: // Access Group - granted if any credential in the group matches.
+							return (groupMembersById[entry.data] || []).some(matchesEntry);
+						default:
+							return false;
 					}
-
-					if (granted) break;
 				}
+
+				let granted = false;
+				// Check every entry (users, cards, group ranks, then access groups made up of the above).
+				for (const entry of aclEntries) {
+					if (matchesEntry(entry)) {
+						granted = true;
+						break;
+					}
+				}
+
+				const responseCode = granted ? 'access_granted' : 'access_denied';
+				db.run(
+					`INSERT INTO scan_logs (placeId, accessPoint, userId, cardNumbers, granted, responseCode) VALUES (?, ?, ?, ?, ?, ?)`,
+					[placeId, accessPointId, userId || null, cardNumbers.join(','), granted ? 1 : 0, responseCode],
+					(err) => {
+						if (err) console.error('Failed to record scan log:', err.message);
+					}
+				);
 
 				const responseData = granted ? {
 					success: true,

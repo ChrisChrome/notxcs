@@ -58,6 +58,24 @@
 					<div id="readers-empty" class="empty-state hidden">No readers yet for this place.</div>
 					<div class="readers-grid" id="readers-grid"></div>
 				</div>
+
+				<div class="card">
+					<h3>Add access group</h3>
+					<p style="margin-top:-8px;color:var(--muted);font-size:13px;">Access groups (e.g. "Staff") bundle multiple users/cards/rank rules so they can be assigned to multiple readers at once.</p>
+					<form id="add-access-group-form" class="inline-form">
+						<div class="field-group">
+							<label for="access-group-name">Name</label>
+							<input type="text" id="access-group-name" required>
+						</div>
+						<button type="submit" class="primary">Add group</button>
+					</form>
+				</div>
+
+				<div class="card">
+					<h3>Access groups</h3>
+					<div id="access-groups-empty" class="empty-state hidden">No access groups yet for this place.</div>
+					<ul class="acl-list" id="access-groups-list"></ul>
+				</div>
 			</div>
 		</main>
 	</div>
@@ -80,6 +98,7 @@
 							<option value="2">Group exact rank</option>
 							<option value="3">Group minimum rank</option>
 							<option value="4">Allow all</option>
+							<option value="5">Access group</option>
 						</select>
 					</div>
 					<div class="field-group" id="acl-data-group">
@@ -94,6 +113,10 @@
 						<label for="acl-group-rank">Rank</label>
 						<input type="number" id="acl-group-rank" min="0">
 					</div>
+					<div class="field-group hidden" id="acl-access-group-group">
+						<label for="acl-access-group">Access group</label>
+						<select id="acl-access-group"></select>
+					</div>
 					<button type="submit" class="primary">Add entry</button>
 				</form>
 			</div>
@@ -106,6 +129,66 @@
 		</div>
 	</div>
 
+	<div id="logs-modal" class="modal-overlay hidden">
+		<div class="modal">
+			<div class="modal-header">
+				<h2>Scan logs — <span id="logs-reader-name"></span></h2>
+				<button class="secondary" id="logs-close-btn">Close</button>
+			</div>
+
+			<div class="card">
+				<h3>Recent scans</h3>
+				<div id="logs-empty" class="empty-state hidden">No scans have been recorded for this reader yet.</div>
+				<ul class="acl-list" id="logs-list"></ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="group-modal" class="modal-overlay hidden">
+		<div class="modal">
+			<div class="modal-header">
+				<h2>Access group members — <span id="group-name"></span></h2>
+				<button class="secondary" id="group-close-btn">Close</button>
+			</div>
+
+			<div class="card">
+				<h3>Add member</h3>
+				<form id="add-group-member-form" class="inline-form">
+					<div class="field-group">
+						<label for="group-member-type">Type</label>
+						<select id="group-member-type">
+							<option value="0">User ID</option>
+							<option value="1">Card number</option>
+							<option value="2">Group exact rank</option>
+							<option value="3">Group minimum rank</option>
+							<option value="4">Allow all</option>
+						</select>
+					</div>
+					<div class="field-group" id="group-member-data-group">
+						<label for="group-member-data">User ID</label>
+						<input type="text" id="group-member-data">
+					</div>
+					<div class="field-group hidden" id="group-member-group-id-group">
+						<label for="group-member-group-id">Group ID</label>
+						<input type="text" id="group-member-group-id">
+					</div>
+					<div class="field-group hidden" id="group-member-group-rank-group">
+						<label for="group-member-group-rank">Rank</label>
+						<input type="number" id="group-member-group-rank" min="0">
+					</div>
+					<button type="submit" class="primary">Add member</button>
+				</form>
+			</div>
+
+			<div class="card">
+				<h3>Members</h3>
+				<div id="group-members-empty" class="empty-state hidden">No members yet. This group grants no access until members are added.</div>
+				<ul class="acl-list" id="group-members-list"></ul>
+			</div>
+		</div>
+	</div>
+
 	<script src="/js/dashboard.js"></script>
 </body>
 </html>
+

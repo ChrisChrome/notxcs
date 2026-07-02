@@ -94,7 +94,7 @@ router.put('/places/:placeId', loadOwnedPlace, (req, res) => {
 	});
 });
 
-// Delete a place (and its readers/acl entries)
+// Delete a place (and its readers/acl entries/access groups/scan logs)
 router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
 	db.all(`SELECT id FROM access_points WHERE placeId = ?`, [req.place.id], (err, accessPoints) => {
 		if (err) {
@@ -109,7 +109,10 @@ router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
 			const placeholders = apIds.map(() => '?').join(',');
 			db.run(`DELETE FROM acl WHERE accessPoint IN (${placeholders})`, apIds, (err) => {
 				if (err) return cb(err);
-				db.run(`DELETE FROM access_points WHERE placeId = ?`, [req.place.id], cb);
+				db.run(`DELETE FROM scan_logs WHERE accessPoint IN (${placeholders})`, apIds, (err) => {
+					if (err) return cb(err);
+					db.run(`DELETE FROM access_points WHERE placeId = ?`, [req.place.id], cb);
+				});
 			});
 		};
 
@@ -119,12 +122,36 @@ router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
 
-			db.run(`DELETE FROM places WHERE id = ?`, [req.place.id], (err) => {
+			db.all(`SELECT id FROM access_groups WHERE placeId = ?`, [req.place.id], (err, groups) => {
 				if (err) {
-					console.error('Failed to delete place:', err.message);
+					console.error('Failed to retrieve access groups for place:', err.message);
 					return res.status(500).json({ success: false, message: "Internal server error" });
 				}
-				res.json({ success: true });
+
+				const groupIds = groups.map(g => g.id);
+				const deleteGroups = (cb) => {
+					if (groupIds.length === 0) return cb();
+					const placeholders = groupIds.map(() => '?').join(',');
+					db.run(`DELETE FROM access_group_members WHERE groupId IN (${placeholders})`, groupIds, (err) => {
+						if (err) return cb(err);
+						db.run(`DELETE FROM access_groups WHERE placeId = ?`, [req.place.id], cb);
+					});
+				};
+
+				deleteGroups((err) => {
+					if (err) {
+						console.error('Failed to delete access groups for place:', err.message);
+						return res.status(500).json({ success: false, message: "Internal server error" });
+					}
+
+					db.run(`DELETE FROM places WHERE id = ?`, [req.place.id], (err) => {
+						if (err) {
+							console.error('Failed to delete place:', err.message);
+							return res.status(500).json({ success: false, message: "Internal server error" });
+						}
+						res.json({ success: true });
+					});
+				});
 			});
 		});
 	});
@@ -210,14 +237,36 @@ router.delete('/places/:placeId/access-points/:accessPointId', loadOwnedPlace, l
 			console.error('Failed to delete ACL entries for reader:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
-		db.run(`DELETE FROM access_points WHERE id = ?`, [req.accessPoint.id], (err) => {
+		db.run(`DELETE FROM scan_logs WHERE accessPoint = ?`, [req.accessPoint.id], (err) => {
 			if (err) {
-				console.error('Failed to delete reader:', err.message);
+				console.error('Failed to delete scan logs for reader:', err.message);
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
-			res.json({ success: true });
+			db.run(`DELETE FROM access_points WHERE id = ?`, [req.accessPoint.id], (err) => {
+				if (err) {
+					console.error('Failed to delete reader:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
+				res.json({ success: true });
+			});
 		});
 	});
+});
+
+// List scan logs for a reader (most recent first)
+router.get('/places/:placeId/access-points/:accessPointId/logs', loadOwnedPlace, loadOwnedAccessPoint, (req, res) => {
+	const limit = Math.min(parseInt(req.query.limit, 10) || 100, 500);
+	db.all(
+		`SELECT * FROM scan_logs WHERE accessPoint = ? ORDER BY scannedAt DESC, id DESC LIMIT ?`,
+		[req.accessPoint.id, limit],
+		(err, logs) => {
+			if (err) {
+				console.error('Failed to retrieve scan logs:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			res.json({ success: true, logs });
+		}
+	);
 });
 
 // List ACL entries for a reader
@@ -252,6 +301,129 @@ router.delete('/places/:placeId/access-points/:accessPointId/acl/:aclId', loadOw
 	db.run(`DELETE FROM acl WHERE id = ? AND accessPoint = ?`, [req.params.aclId, req.accessPoint.id], (err) => {
 		if (err) {
 			console.error('Failed to delete ACL entry:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true });
+	});
+});
+
+function loadOwnedAccessGroup(req, res, next) {
+	db.get(`SELECT * FROM access_groups WHERE id = ? AND placeId = ?`, [req.params.groupId, req.place.id], (err, group) => {
+		if (err) {
+			console.error('Failed to retrieve access group:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		if (!group) {
+			return res.status(404).json({ success: false, message: "Access group not found" });
+		}
+		req.accessGroup = group;
+		next();
+	});
+}
+
+// List access groups for a place
+router.get('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
+	db.all(`SELECT * FROM access_groups WHERE placeId = ?`, [req.place.id], (err, groups) => {
+		if (err) {
+			console.error('Failed to retrieve access groups:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, groups });
+	});
+});
+
+// Create an access group (e.g. "Staff") for a place
+router.post('/places/:placeId/access-groups', loadOwnedPlace, (req, res) => {
+	const { name } = req.body || {};
+	if (!name) {
+		return res.status(400).json({ success: false, message: "Access group name is required" });
+	}
+
+	db.run(`INSERT INTO access_groups (placeId, name) VALUES (?, ?)`, [req.place.id, name], function (err) {
+		if (err) {
+			console.error('Failed to create access group:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, group: { id: this.lastID, placeId: req.place.id, name } });
+	});
+});
+
+// Rename an access group
+router.put('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+	const name = req.body.name !== undefined ? req.body.name : req.accessGroup.name;
+	if (!name) {
+		return res.status(400).json({ success: false, message: "Access group name is required" });
+	}
+
+	db.run(`UPDATE access_groups SET name = ? WHERE id = ?`, [name, req.accessGroup.id], (err) => {
+		if (err) {
+			console.error('Failed to update access group:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true });
+	});
+});
+
+// Delete an access group (and its members, and any ACL entries referencing it)
+router.delete('/places/:placeId/access-groups/:groupId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+	db.run(`DELETE FROM access_group_members WHERE groupId = ?`, [req.accessGroup.id], (err) => {
+		if (err) {
+			console.error('Failed to delete access group members:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		// Access group ACL entries store the group id in `data` with type 5.
+		db.run(`DELETE FROM acl WHERE type = 5 AND data = ?`, [String(req.accessGroup.id)], (err) => {
+			if (err) {
+				console.error('Failed to delete ACL entries referencing access group:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+			db.run(`DELETE FROM access_groups WHERE id = ?`, [req.accessGroup.id], (err) => {
+				if (err) {
+					console.error('Failed to delete access group:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
+				res.json({ success: true });
+			});
+		});
+	});
+});
+
+// List members (creds) of an access group
+router.get('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+	db.all(`SELECT * FROM access_group_members WHERE groupId = ?`, [req.accessGroup.id], (err, members) => {
+		if (err) {
+			console.error('Failed to retrieve access group members:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, members });
+	});
+});
+
+// Add a member (user, card, group rank rule, etc) to an access group
+router.post('/places/:placeId/access-groups/:groupId/members', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+	const { type, data } = req.body || {};
+	if (type === undefined || !data) {
+		return res.status(400).json({ success: false, message: "Member type and data are required" });
+	}
+	// Groups cannot contain other groups, to avoid nested/circular resolution.
+	if (parseInt(type, 10) === 5) {
+		return res.status(400).json({ success: false, message: "An access group cannot contain another access group" });
+	}
+
+	db.run(`INSERT INTO access_group_members (groupId, type, data) VALUES (?, ?, ?)`, [req.accessGroup.id, type, data], function (err) {
+		if (err) {
+			console.error('Failed to add access group member:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, id: this.lastID });
+	});
+});
+
+// Remove a member from an access group
+router.delete('/places/:placeId/access-groups/:groupId/members/:memberId', loadOwnedPlace, loadOwnedAccessGroup, (req, res) => {
+	db.run(`DELETE FROM access_group_members WHERE id = ? AND groupId = ?`, [req.params.memberId, req.accessGroup.id], (err) => {
+		if (err) {
+			console.error('Failed to remove access group member:', err.message);
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
 		res.json({ success: true });
