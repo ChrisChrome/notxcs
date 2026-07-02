@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, ROLES } = require('../lib/auth');
+const { generatePlaceId, generateApiKey } = require('../lib/generators');
 
 let db;
 
@@ -61,19 +62,24 @@ function requireOwnerOrBypass(req, res, next) {
 router.use(requireAuth(() => db));
 
 // List places owned by, or shared with, the current user. Elevated/admin users see every place.
+// Includes the owner's username (as `ownerUsername`) so the sidebar can display who owns each place.
 router.get('/places', (req, res) => {
 	if (req.user.role >= ROLES.ELEVATED) {
-		return db.all(`SELECT * FROM places`, [], (err, places) => {
-			if (err) {
-				console.error('Failed to retrieve places:', err.message);
-				return res.status(500).json({ success: false, message: "Internal server error" });
+		return db.all(
+			`SELECT places.*, users.username AS ownerUsername FROM places LEFT JOIN users ON users.id = places.ownerId`,
+			[],
+			(err, places) => {
+				if (err) {
+					console.error('Failed to retrieve places:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
+				res.json({ success: true, places });
 			}
-			res.json({ success: true, places });
-		});
+		);
 	}
 
 	db.all(
-		`SELECT * FROM places WHERE ownerId = ? OR id IN (SELECT placeId FROM place_access WHERE userId = ?)`,
+		`SELECT places.*, users.username AS ownerUsername FROM places LEFT JOIN users ON users.id = places.ownerId WHERE places.ownerId = ? OR places.id IN (SELECT placeId FROM place_access WHERE userId = ?)`,
 		[req.user.id, req.user.id],
 		(err, places) => {
 			if (err) {
@@ -85,12 +91,23 @@ router.get('/places', (req, res) => {
 	);
 });
 
-// Create a new place
+// Create a new place. Only admins (and superadmins) may supply a custom id/apiKey - everyone else
+// always gets a generated (random UUID / random 64-char) id and apiKey. Admins that leave either
+// field blank also get one generated for them.
 router.post('/places', (req, res) => {
-	const { id, apiKey, settings } = req.body || {};
-	if (!id || !apiKey) {
-		return res.status(400).json({ success: false, message: "Place id and apiKey are required" });
+	const canSetCustomValues = req.user.role >= ROLES.ADMIN;
+	const { settings } = req.body || {};
+	let { id, apiKey } = req.body || {};
+
+	if (!canSetCustomValues && (id || apiKey)) {
+		return res.status(403).json({ success: false, message: "Only admins can set a custom place id or API key" });
 	}
+
+	id = canSetCustomValues && id ? String(id).trim() : '';
+	apiKey = canSetCustomValues && apiKey ? String(apiKey).trim() : '';
+
+	if (!id) id = generatePlaceId();
+	if (!apiKey) apiKey = generateApiKey();
 
 	db.get(`SELECT id FROM places WHERE id = ?`, [id], (err, existing) => {
 		if (err) {
@@ -122,9 +139,20 @@ router.get('/places/:placeId', loadPlace, (req, res) => {
 	});
 });
 
-// Update a place's apiKey/settings
+// Update a place's apiKey/settings. Only admins (and superadmins) may set a custom apiKey value -
+// everyone else must use the regenerate-key endpoint below. Admins that explicitly send a blank
+// apiKey get a freshly generated one instead of clearing it.
 router.put('/places/:placeId', loadPlace, (req, res) => {
-	const apiKey = req.body.apiKey !== undefined ? req.body.apiKey : req.place.apiKey;
+	const canSetCustomValues = req.user.role >= ROLES.ADMIN;
+
+	if (req.body.apiKey !== undefined && !canSetCustomValues) {
+		return res.status(403).json({ success: false, message: "Only admins can set a custom API key; use regenerate instead" });
+	}
+
+	let apiKey = req.place.apiKey;
+	if (req.body.apiKey !== undefined) {
+		apiKey = String(req.body.apiKey).trim() || generateApiKey();
+	}
 	const settings = req.body.settings !== undefined ? req.body.settings : req.place.settings;
 
 	db.run(`UPDATE places SET apiKey = ?, settings = ? WHERE id = ?`, [apiKey, settings, req.place.id], (err) => {
@@ -133,6 +161,21 @@ router.put('/places/:placeId', loadPlace, (req, res) => {
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
 		res.json({ success: true });
+	});
+});
+
+// Regenerate a place's API key to a new random value. Anyone with access to the place (owner,
+// shared access, or elevated/admin bypass) may do this - unlike setting a custom value, this
+// doesn't require admin privileges since it never lets the caller choose the resulting key.
+router.post('/places/:placeId/regenerate-key', loadPlace, (req, res) => {
+	const apiKey = generateApiKey();
+
+	db.run(`UPDATE places SET apiKey = ? WHERE id = ?`, [apiKey, req.place.id], (err) => {
+		if (err) {
+			console.error('Failed to regenerate API key:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+		res.json({ success: true, apiKey });
 	});
 });
 

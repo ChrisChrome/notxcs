@@ -19,10 +19,12 @@
 			<div class="card" style="margin-top: 16px;">
 				<h3 style="margin-top:0;font-size:14px;">Add place</h3>
 				<form id="add-place-form">
-					<label for="place-id">Place ID</label>
-					<input type="text" id="place-id" required>
-					<label for="place-api-key">API Key</label>
-					<input type="text" id="place-api-key" required>
+					<div id="add-place-custom-fields" class="hidden">
+						<label for="place-id">Place ID <span style="color:var(--muted);font-weight:normal;">(leave blank to auto-generate)</span></label>
+						<input type="text" id="place-id">
+						<label for="place-api-key">API Key <span style="color:var(--muted);font-weight:normal;">(leave blank to auto-generate)</span></label>
+						<input type="text" id="place-api-key">
+					</div>
 					<button type="submit" class="primary">Add place</button>
 				</form>
 			</div>
@@ -37,6 +39,26 @@
 				<div class="main-header">
 					<h1 id="place-title"></h1>
 					<button class="danger" id="delete-place-btn">Delete place</button>
+				</div>
+
+				<div class="card">
+					<h3>API Key</h3>
+					<div class="inline-form">
+						<div class="field-group">
+							<label for="place-api-key-display">Current key</label>
+							<input type="password" id="place-api-key-display" readonly>
+						</div>
+						<button type="button" class="secondary" id="toggle-api-key-btn">Show</button>
+						<button type="button" class="secondary" id="copy-api-key-btn">Copy</button>
+						<button type="button" class="secondary" id="regenerate-api-key-btn">Regenerate</button>
+					</div>
+					<form id="set-api-key-form" class="inline-form hidden" style="margin-top:12px;">
+						<div class="field-group">
+							<label for="place-api-key-custom">Set custom key <span style="color:var(--muted);font-weight:normal;">(leave blank to auto-generate)</span></label>
+							<input type="text" id="place-api-key-custom">
+						</div>
+						<button type="submit" class="primary">Save</button>
+					</form>
 				</div>
 
 				<div class="card">

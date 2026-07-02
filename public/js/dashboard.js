@@ -34,6 +34,8 @@ async function init() {
 	document.getElementById('username-display').textContent = me.user.username;
 	document.getElementById('role-badge').textContent = ROLE_LABELS[me.user.role] || 'User';
 	document.getElementById('admin-link').classList.toggle('hidden', me.user.role < 3);
+	document.getElementById('add-place-custom-fields').classList.toggle('hidden', me.user.role < 3);
+	document.getElementById('set-api-key-form').classList.toggle('hidden', me.user.role < 3);
 
 	await loadPlaces();
 }
@@ -50,8 +52,20 @@ function renderPlaceList() {
 
 	places.forEach((place) => {
 		const li = document.createElement('li');
-		li.textContent = place.id;
 		li.className = place.id === currentPlaceId ? 'active' : '';
+
+		const idSpan = document.createElement('span');
+		idSpan.className = 'place-list-id';
+		idSpan.textContent = place.id;
+		li.appendChild(idSpan);
+
+		if (place.ownerUsername) {
+			const ownerSpan = document.createElement('span');
+			ownerSpan.className = 'place-list-owner';
+			ownerSpan.textContent = `Owner: ${place.ownerUsername}`;
+			li.appendChild(ownerSpan);
+		}
+
 		li.addEventListener('click', () => selectPlace(place.id));
 		list.appendChild(li);
 	});
@@ -69,6 +83,12 @@ async function selectPlace(placeId) {
 	document.getElementById('no-place').classList.add('hidden');
 	document.getElementById('place-view').classList.remove('hidden');
 	document.getElementById('place-title').textContent = placeId;
+
+	const apiKeyInput = document.getElementById('place-api-key-display');
+	apiKeyInput.value = data.place.apiKey || '';
+	apiKeyInput.type = 'password';
+	document.getElementById('toggle-api-key-btn').textContent = 'Show';
+	document.getElementById('place-api-key-custom').value = '';
 
 	const canManageOwnership = currentPlaceAccessLevel === 'owner' || currentPlaceAccessLevel === 'bypass';
 	document.getElementById('delete-place-btn').classList.toggle('hidden', !canManageOwnership);
@@ -157,18 +177,21 @@ document.getElementById('add-place-form').addEventListener('submit', async (e) =
 	e.preventDefault();
 	const id = document.getElementById('place-id').value.trim();
 	const apiKey = document.getElementById('place-api-key').value.trim();
-	if (!id || !apiKey) return;
+
+	const body = {};
+	if (id) body.id = id;
+	if (apiKey) body.apiKey = apiKey;
 
 	const data = await api('/dashboard/places', {
 		method: 'POST',
-		body: JSON.stringify({ id, apiKey })
+		body: JSON.stringify(body)
 	});
 
 	if (data.success) {
 		document.getElementById('place-id').value = '';
 		document.getElementById('place-api-key').value = '';
 		await loadPlaces();
-		selectPlace(id);
+		selectPlace(data.place.id);
 	} else {
 		alert(data.message || 'Failed to add place');
 	}
@@ -205,6 +228,54 @@ document.getElementById('delete-place-btn').addEventListener('click', async () =
 	document.getElementById('place-view').classList.add('hidden');
 	document.getElementById('no-place').classList.remove('hidden');
 	await loadPlaces();
+});
+
+document.getElementById('toggle-api-key-btn').addEventListener('click', () => {
+	const input = document.getElementById('place-api-key-display');
+	const btn = document.getElementById('toggle-api-key-btn');
+	const revealed = input.type === 'text';
+	input.type = revealed ? 'password' : 'text';
+	btn.textContent = revealed ? 'Show' : 'Hide';
+});
+
+document.getElementById('copy-api-key-btn').addEventListener('click', async () => {
+	const value = document.getElementById('place-api-key-display').value;
+	if (!value) return;
+	try {
+		await navigator.clipboard.writeText(value);
+	} catch (err) {
+		// Clipboard API may be unavailable; fail silently.
+	}
+});
+
+document.getElementById('regenerate-api-key-btn').addEventListener('click', async () => {
+	if (!currentPlaceId) return;
+	if (!confirm('Regenerate the API key for this place? The old key will stop working immediately.')) return;
+
+	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/regenerate-key`, { method: 'POST' });
+	if (data.success) {
+		document.getElementById('place-api-key-display').value = data.apiKey;
+	} else {
+		alert(data.message || 'Failed to regenerate API key');
+	}
+});
+
+document.getElementById('set-api-key-form').addEventListener('submit', async (e) => {
+	e.preventDefault();
+	if (!currentPlaceId) return;
+
+	const apiKey = document.getElementById('place-api-key-custom').value.trim();
+	const data = await api(`/dashboard/places/${encodeURIComponent(currentPlaceId)}`, {
+		method: 'PUT',
+		body: JSON.stringify({ apiKey })
+	});
+
+	if (data.success) {
+		document.getElementById('place-api-key-custom').value = '';
+		selectPlace(currentPlaceId);
+	} else {
+		alert(data.message || 'Failed to set API key');
+	}
 });
 
 document.getElementById('logout-btn').addEventListener('click', async () => {
