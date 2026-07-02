@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 const { requireAuth, ROLES } = require('../lib/auth');
 const { generatePlaceId, generateApiKey, generateReaderId } = require('../lib/generators');
+
+const KIT_TEMPLATE_PATH = path.join(__dirname, '..', 'xcs-template.rbxmx');
 
 let db;
 
@@ -179,6 +183,26 @@ router.post('/places/:placeId/regenerate-key', loadPlace, (req, res) => {
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
 		res.json({ success: true, apiKey });
+	});
+});
+
+// Download the place's Roblox kit (xcs-template.rbxmx) with the placeId/apiKey placeholders
+// filled in for this specific place. Available to anyone with access to the place.
+router.get('/places/:placeId/kit', loadPlace, (req, res) => {
+	fs.readFile(KIT_TEMPLATE_PATH, 'utf8', (err, template) => {
+		if (err) {
+			console.error('Failed to read kit template:', err.message);
+			return res.status(500).json({ success: false, message: "Internal server error" });
+		}
+
+		const kit = template
+			.split('%%PLACEID%%').join(req.place.id)
+			.split('%%APIKEY%%').join(req.place.apiKey);
+
+		const filename = `${(req.place.name || req.place.id).replace(/[^a-zA-Z0-9-_]/g, '_')}.rbxmx`;
+		res.setHeader('Content-Type', 'application/xml');
+		res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+		res.send(kit);
 	});
 });
 

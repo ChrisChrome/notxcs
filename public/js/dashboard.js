@@ -234,6 +234,47 @@ document.getElementById('delete-place-btn').addEventListener('click', async () =
 	await loadPlaces();
 });
 
+document.getElementById('download-kit-btn').addEventListener('click', async () => {
+	if (!currentPlaceId) return;
+
+	const btn = document.getElementById('download-kit-btn');
+	const originalLabel = btn.textContent;
+	btn.textContent = 'Downloading...';
+	btn.disabled = true;
+
+	try {
+		const res = await fetch(`/dashboard/places/${encodeURIComponent(currentPlaceId)}/kit`);
+		if (res.status === 401) {
+			window.location.href = '/login';
+			return;
+		}
+		if (!res.ok) {
+			const data = await res.json().catch(() => ({}));
+			alert(data.message || 'Failed to download kit');
+			return;
+		}
+
+		const blob = await res.blob();
+		const disposition = res.headers.get('Content-Disposition') || '';
+		const match = disposition.match(/filename="([^"]+)"/);
+		const filename = match ? match[1] : `${currentPlaceId}.rbxmx`;
+
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = filename;
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
+		URL.revokeObjectURL(url);
+	} catch (err) {
+		alert('Failed to download kit');
+	} finally {
+		btn.textContent = originalLabel;
+		btn.disabled = false;
+	}
+});
+
 document.getElementById('toggle-api-key-btn').addEventListener('click', () => {
 	const input = document.getElementById('place-api-key-display');
 	const btn = document.getElementById('toggle-api-key-btn');
