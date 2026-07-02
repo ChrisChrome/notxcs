@@ -216,8 +216,8 @@ button.danger {
 	background: var(--panel);
 	border: 1px solid var(--border);
 	border-radius: 12px;
-	padding: 20px;
-	margin-bottom: 20px;
+	padding: 16px;
+	margin-bottom: 14px;
 }
 
 .card h3 {
@@ -320,6 +320,11 @@ button.danger {
 
 .inline-form input {
 	margin-bottom: 0;
+}
+
+.inline-form button {
+	width: auto;
+	white-space: nowrap;
 }
 
 .hidden {
