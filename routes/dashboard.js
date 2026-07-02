@@ -105,6 +105,7 @@ router.delete('/places/:placeId', loadOwnedPlace, (req, res) => {
 		const apIds = accessPoints.map(ap => ap.id);
 		const deleteAclAndAp = (cb) => {
 			if (apIds.length === 0) return cb();
+			// Build a `?` placeholder per id so all values stay parameterized; apIds never contains raw user input here.
 			const placeholders = apIds.map(() => '?').join(',');
 			db.run(`DELETE FROM acl WHERE accessPoint IN (${placeholders})`, apIds, (err) => {
 				if (err) return cb(err);

@@ -30,16 +30,22 @@ router.post('/register', (req, res) => {
 			return res.status(409).json({ success: false, message: "Username is already taken" });
 		}
 
-		const hash = bcrypt.hashSync(password, 10);
-		db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hash], function (err) {
+		bcrypt.hash(password, 10, (err, hash) => {
 			if (err) {
-				console.error('Failed to create user:', err.message);
+				console.error('Failed to hash password:', err.message);
 				return res.status(500).json({ success: false, message: "Internal server error" });
 			}
 
-			req.session.userId = this.lastID;
-			req.session.username = username;
-			res.json({ success: true, user: { id: this.lastID, username } });
+			db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hash], function (err) {
+				if (err) {
+					console.error('Failed to create user:', err.message);
+					return res.status(500).json({ success: false, message: "Internal server error" });
+				}
+
+				req.session.userId = this.lastID;
+				req.session.username = username;
+				res.json({ success: true, user: { id: this.lastID, username } });
+			});
 		});
 	});
 });
@@ -57,13 +63,24 @@ router.post('/login', (req, res) => {
 			return res.status(500).json({ success: false, message: "Internal server error" });
 		}
 
-		if (!user || !bcrypt.compareSync(password, user.password)) {
+		if (!user) {
 			return res.status(401).json({ success: false, message: "Invalid username or password" });
 		}
 
-		req.session.userId = user.id;
-		req.session.username = user.username;
-		res.json({ success: true, user: { id: user.id, username: user.username } });
+		bcrypt.compare(password, user.password, (err, matches) => {
+			if (err) {
+				console.error('Failed to verify password:', err.message);
+				return res.status(500).json({ success: false, message: "Internal server error" });
+			}
+
+			if (!matches) {
+				return res.status(401).json({ success: false, message: "Invalid username or password" });
+			}
+
+			req.session.userId = user.id;
+			req.session.username = user.username;
+			res.json({ success: true, user: { id: user.id, username: user.username } });
+		});
 	});
 });
 
