@@ -4,7 +4,6 @@
 	<External>nil</External>
 	<Item class="Model" referent="RBX9F347F49A8384E3492F3E36C26FA4EB3">
 		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
 			<token name="LevelOfDetail">0</token>
 			<CoordinateFrame name="ModelMeshCFrame">
 				<X>0</X>
@@ -27,12 +26,10 @@
 				<Z>0</Z>
 			</Vector3>
 			<token name="ModelStreamingMode">0</token>
-			<string name="Name">Restrafes XCS</string>
 			<bool name="NeedsPivotMigration">false</bool>
 			<Ref name="PrimaryPart">null</Ref>
 			<float name="ScaleFactor">1</float>
-			<int64 name="SourceAssetId">7108324788</int64>
-			<BinaryString name="Tags"></BinaryString>
+			<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<OptionalCoordinateFrame name="WorldPivotData">
 				<CFrame>
 					<X>17.5</X>
@@ -49,13 +46,16 @@
 					<R22>7.38481347e-08</R22>
 				</CFrame>
 			</OptionalCoordinateFrame>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">Restrafes XCS</string>
+			<int64 name="SourceAssetId">7108324788</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 		</Properties>
 		<Item class="ModuleScript" referent="RBXA7C4B4F1335A43858D376EB6A739C7D4">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
 				<Content name="LinkedSource"><null></null></Content>
-				<string name="Name">config</string>
-				<string name="ScriptGuid">{B88BC829-2E70-458E-9567-27196412A674}</string>
 				<ProtectedString name="Source"><![CDATA[--[[
 
 NotXCS
@@ -87,37 +87,1652 @@ local settings = {
 };
 
 return settings;]]></ProtectedString>
+				<string name="ScriptGuid">{B88BC829-2E70-458E-9567-27196412A674}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">config</string>
 				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 			<Item class="Script" referent="RBX3CA3B3822FA34F018F0291D27677871C">
 				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<bool name="Disabled">false</bool>
-					<Content name="LinkedSource"><null></null></Content>
-					<string name="Name">loader</string>
-					<token name="RunContext">0</token>
-					<string name="ScriptGuid">{CD756DAA-C3CA-4FCF-8E82-33ACB5E578B6}</string>
-					<ProtectedString name="Source"><![CDATA[local loader = require(7108284356);
+					<ProtectedString name="Source"><![CDATA[local loader = require(script.xcssrc);
 local _m = require(loader({["branch"]="xcs-superior";}));
 _m.init({["config"]=require(script.Parent);});
 
 ]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{CD756DAA-C3CA-4FCF-8E82-33ACB5E578B6}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">loader</string>
 					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
+				<Item class="ModuleScript" referent="RBX48C33D1F87AF4B4FA3A328EB54F70CDC">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[--[[
+
+This code is for XCS, a Roblox access control framework that allows experiences to verify users, manage permissions, and control access to doors, areas, systems, and protected features through configurable roles and access groups. HTTPService is used to securely communicate with the XCS backend, allowing the game to check access permissions, validate users, and retrieve the latest access control data.
+
+]]
+
+local sss = game.ServerScriptService;
+
+return function(t)
+	if t["branch"] == "axesys-reader" then
+		local scriptClone = script.unitAxesys:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "axesys-superior" then
+		local scriptClone = script.controllerAxesys:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "xcs-reader" then
+		local scriptClone = script.unit:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "xcs-superior" then
+		local scriptClone = script.controller:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "httpm" then
+		local httpmClone = script.httpm:Clone();
+		httpmClone.Parent = nil;
+		httpmClone.Name = math.random(9*100,10*200);
+		httpmClone.Parent = sss;
+		httpmClone.Disabled = false;
+		return;
+	end
+	string.format("XCS - You've entered an invalid branch (%s). Please check your configuration and try again.", t["branch"])
+end
+
+]]></ProtectedString>
+						<string name="ScriptGuid">{ef7612db-42e6-4525-8e79-9c583fec2bff}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+						<bool name="DefinesCapabilities">true</bool>
+						<string name="Name">xcssrc</string>
+						<int64 name="SourceAssetId">7108284356</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					</Properties>
+					<Item class="Script" referent="RBX63B2CC09B51E4555A23E59D73A67B01D">
+						<Properties>
+							<ProtectedString name="Source"><![CDATA[local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
+local MessageGui = script.XCS_HTTP
+
+for _,P in pairs(Players:GetChildren()) do
+	local Msg = MessageGui:Clone()
+	Msg.Parent = P.PlayerGui
+end
+Players.PlayerAdded:Connect(function(Player)
+	local Msg = MessageGui:Clone()
+	Msg.Parent = Player.PlayerGui
+end)
+
+]]></ProtectedString>
+							<bool name="Disabled">true</bool>
+							<Content name="LinkedSource"><null></null></Content>
+							<token name="RunContext">0</token>
+							<string name="ScriptGuid">{cd26dcdf-c1c0-4c32-a66e-890426c8e596}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+							<bool name="DefinesCapabilities">true</bool>
+							<string name="Name">httpm</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+						<Item class="ScreenGui" referent="RBX8B3CCD0295FA4351B500A36E08E85DF4">
+							<Properties>
+								<bool name="ClipToDeviceSafeArea">true</bool>
+								<int name="DisplayOrder">0</int>
+								<token name="SafeAreaCompatibility">1</token>
+								<token name="ScreenInsets">2</token>
+								<bool name="Enabled">true</bool>
+								<bool name="ResetOnSpawn">false</bool>
+								<token name="ZIndexBehavior">0</token>
+								<bool name="AutoLocalize">true</bool>
+								<Ref name="RootLocalizationTable">null</Ref>
+								<token name="SelectionBehaviorDown">0</token>
+								<token name="SelectionBehaviorLeft">0</token>
+								<token name="SelectionBehaviorRight">0</token>
+								<token name="SelectionBehaviorUp">0</token>
+								<bool name="SelectionGroup">false</bool>
+								<BinaryString name="AttributesSerialize"></BinaryString>
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">XCS_HTTP</string>
+								<int64 name="SourceAssetId">-1</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+							<Item class="Frame" referent="RBXA43D6C7D129445139AAEA040F7170CC5">
+								<Properties>
+									<token name="Style">0</token>
+									<bool name="Active">false</bool>
+									<Vector2 name="AnchorPoint">
+										<X>0</X>
+										<Y>0</Y>
+									</Vector2>
+									<token name="AutomaticSize">0</token>
+									<Color3 name="BackgroundColor3">
+										<R>0</R>
+										<G>0</G>
+										<B>0</B>
+									</Color3>
+									<float name="BackgroundTransparency">0</float>
+									<Color3 name="BorderColor3">
+										<R>0.105882362</R>
+										<G>0.164705887</G>
+										<B>0.207843155</B>
+									</Color3>
+									<token name="BorderMode">0</token>
+									<int name="BorderSizePixel">0</int>
+									<bool name="ClipsDescendants">false</bool>
+									<bool name="Draggable">false</bool>
+									<token name="InputSink">0</token>
+									<bool name="Interactable">true</bool>
+									<int name="LayoutOrder">0</int>
+									<Ref name="NextSelectionDown">null</Ref>
+									<Ref name="NextSelectionLeft">null</Ref>
+									<Ref name="NextSelectionRight">null</Ref>
+									<Ref name="NextSelectionUp">null</Ref>
+									<UDim2 name="Position">
+										<XS>0.5</XS>
+										<XO>-300</XO>
+										<YS>0</YS>
+										<YO>0</YO>
+									</UDim2>
+									<float name="Rotation">0</float>
+									<bool name="Selectable">false</bool>
+									<Ref name="SelectionImageObject">null</Ref>
+									<int name="SelectionOrder">0</int>
+									<UDim2 name="Size">
+										<XS>0</XS>
+										<XO>600</XO>
+										<YS>0</YS>
+										<YO>50</YO>
+									</UDim2>
+									<token name="SizeConstraint">0</token>
+									<bool name="Visible">true</bool>
+									<int name="ZIndex">1</int>
+									<bool name="AutoLocalize">true</bool>
+									<Ref name="RootLocalizationTable">null</Ref>
+									<token name="SelectionBehaviorDown">0</token>
+									<token name="SelectionBehaviorLeft">0</token>
+									<token name="SelectionBehaviorRight">0</token>
+									<token name="SelectionBehaviorUp">0</token>
+									<bool name="SelectionGroup">false</bool>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+									<bool name="DefinesCapabilities">false</bool>
+									<string name="Name">Frame</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+								<Item class="ImageButton" referent="RBXB7800919118F44FC89B364585232E943">
+									<Properties>
+										<Content name="HoverImage"><null></null></Content>
+										<Content name="Image"><url>http://www.roblox.com/asset/?id=14511145204</url></Content>
+										<Color3 name="ImageColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<Vector2 name="ImageRectOffset">
+											<X>0</X>
+											<Y>0</Y>
+										</Vector2>
+										<Vector2 name="ImageRectSize">
+											<X>0</X>
+											<Y>0</Y>
+										</Vector2>
+										<float name="ImageTransparency">0</float>
+										<Content name="PressedImage"><null></null></Content>
+										<token name="ResampleMode">0</token>
+										<token name="ScaleType">3</token>
+										<Rect2D name="SliceCenter">
+											<min>
+												<X>0</X>
+												<Y>0</Y>
+											</min>
+											<max>
+												<X>0</X>
+												<Y>0</Y>
+											</max>
+										</Rect2D>
+										<float name="SliceScale">1</float>
+										<UDim2 name="TileSize">
+											<XS>1</XS>
+											<XO>0</XO>
+											<YS>1</YS>
+											<YO>0</YO>
+										</UDim2>
+										<bool name="AutoButtonColor">false</bool>
+										<Ref name="HoverHapticEffect">null</Ref>
+										<bool name="Modal">false</bool>
+										<Ref name="PressHapticEffect">null</Ref>
+										<bool name="Selected">false</bool>
+										<token name="Style">0</token>
+										<bool name="Active">true</bool>
+										<Vector2 name="AnchorPoint">
+											<X>0</X>
+											<Y>0.5</Y>
+										</Vector2>
+										<token name="AutomaticSize">0</token>
+										<Color3 name="BackgroundColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<float name="BackgroundTransparency">1</float>
+										<Color3 name="BorderColor3">
+											<R>0.105882362</R>
+											<G>0.164705887</G>
+											<B>0.207843155</B>
+										</Color3>
+										<token name="BorderMode">0</token>
+										<int name="BorderSizePixel">0</int>
+										<bool name="ClipsDescendants">false</bool>
+										<bool name="Draggable">false</bool>
+										<token name="InputSink">0</token>
+										<bool name="Interactable">true</bool>
+										<int name="LayoutOrder">0</int>
+										<Ref name="NextSelectionDown">null</Ref>
+										<Ref name="NextSelectionLeft">null</Ref>
+										<Ref name="NextSelectionRight">null</Ref>
+										<Ref name="NextSelectionUp">null</Ref>
+										<UDim2 name="Position">
+											<XS>0</XS>
+											<XO>10</XO>
+											<YS>0.5</YS>
+											<YO>0</YO>
+										</UDim2>
+										<float name="Rotation">0</float>
+										<bool name="Selectable">false</bool>
+										<Ref name="SelectionImageObject">null</Ref>
+										<int name="SelectionOrder">0</int>
+										<UDim2 name="Size">
+											<XS>0</XS>
+											<XO>80</XO>
+											<YS>0</YS>
+											<YO>18</YO>
+										</UDim2>
+										<token name="SizeConstraint">0</token>
+										<bool name="Visible">true</bool>
+										<int name="ZIndex">1</int>
+										<bool name="AutoLocalize">true</bool>
+										<Ref name="RootLocalizationTable">null</Ref>
+										<token name="SelectionBehaviorDown">0</token>
+										<token name="SelectionBehaviorLeft">0</token>
+										<token name="SelectionBehaviorRight">0</token>
+										<token name="SelectionBehaviorUp">0</token>
+										<bool name="SelectionGroup">false</bool>
+										<BinaryString name="AttributesSerialize"></BinaryString>
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">Logo</string>
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="TextLabel" referent="RBX91C7E5F3F40440F5947E595D37EF1442">
+									<Properties>
+										<Font name="FontFace">
+											<Family><url>rbxasset://fonts/families/Roboto.json</url></Family>
+											<Weight>400</Weight>
+											<Style>Normal</Style>
+										</Font>
+										<float name="LineHeight">1</float>
+										<string name="LocalizationMatchIdentifier"></string>
+										<string name="LocalizationMatchedSourceText"></string>
+										<int name="MaxVisibleGraphemes">-1</int>
+										<string name="OpenTypeFeatures"></string>
+										<bool name="RichText">false</bool>
+										<string name="Text">HttpService is required, please enable it in game settings.</string>
+										<Color3 name="TextColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<token name="TextDirection">0</token>
+										<bool name="TextScaled">false</bool>
+										<float name="TextSize">18</float>
+										<Color3 name="TextStrokeColor3">
+											<R>0</R>
+											<G>0</G>
+											<B>0</B>
+										</Color3>
+										<float name="TextStrokeTransparency">1</float>
+										<float name="TextTransparency">0</float>
+										<token name="TextTruncate">0</token>
+										<bool name="TextWrapped">true</bool>
+										<token name="TextXAlignment">0</token>
+										<token name="TextYAlignment">0</token>
+										<bool name="Active">false</bool>
+										<Vector2 name="AnchorPoint">
+											<X>0</X>
+											<Y>0</Y>
+										</Vector2>
+										<token name="AutomaticSize">0</token>
+										<Color3 name="BackgroundColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<float name="BackgroundTransparency">1</float>
+										<Color3 name="BorderColor3">
+											<R>0.105882362</R>
+											<G>0.164705887</G>
+											<B>0.207843155</B>
+										</Color3>
+										<token name="BorderMode">0</token>
+										<int name="BorderSizePixel">0</int>
+										<bool name="ClipsDescendants">false</bool>
+										<bool name="Draggable">false</bool>
+										<token name="InputSink">0</token>
+										<bool name="Interactable">true</bool>
+										<int name="LayoutOrder">0</int>
+										<Ref name="NextSelectionDown">null</Ref>
+										<Ref name="NextSelectionLeft">null</Ref>
+										<Ref name="NextSelectionRight">null</Ref>
+										<Ref name="NextSelectionUp">null</Ref>
+										<UDim2 name="Position">
+											<XS>0</XS>
+											<XO>100</XO>
+											<YS>0</YS>
+											<YO>25</YO>
+										</UDim2>
+										<float name="Rotation">0</float>
+										<bool name="Selectable">false</bool>
+										<Ref name="SelectionImageObject">null</Ref>
+										<int name="SelectionOrder">0</int>
+										<UDim2 name="Size">
+											<XS>0</XS>
+											<XO>500</XO>
+											<YS>0</YS>
+											<YO>25</YO>
+										</UDim2>
+										<token name="SizeConstraint">0</token>
+										<bool name="Visible">true</bool>
+										<int name="ZIndex">1</int>
+										<bool name="AutoLocalize">true</bool>
+										<Ref name="RootLocalizationTable">null</Ref>
+										<token name="SelectionBehaviorDown">0</token>
+										<token name="SelectionBehaviorLeft">0</token>
+										<token name="SelectionBehaviorRight">0</token>
+										<token name="SelectionBehaviorUp">0</token>
+										<bool name="SelectionGroup">false</bool>
+										<BinaryString name="AttributesSerialize"></BinaryString>
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">Line2</string>
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+								<Item class="TextLabel" referent="RBXE587EA841A9C40209668257F5FA0F478">
+									<Properties>
+										<Font name="FontFace">
+											<Family><url>rbxasset://fonts/families/Roboto.json</url></Family>
+											<Weight>400</Weight>
+											<Style>Normal</Style>
+										</Font>
+										<float name="LineHeight">1</float>
+										<string name="LocalizationMatchIdentifier"></string>
+										<string name="LocalizationMatchedSourceText"></string>
+										<int name="MaxVisibleGraphemes">-1</int>
+										<string name="OpenTypeFeatures"></string>
+										<bool name="RichText">false</bool>
+										<string name="Text">Restrafes XCS Controller Error</string>
+										<Color3 name="TextColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<token name="TextDirection">0</token>
+										<bool name="TextScaled">false</bool>
+										<float name="TextSize">18</float>
+										<Color3 name="TextStrokeColor3">
+											<R>0</R>
+											<G>0</G>
+											<B>0</B>
+										</Color3>
+										<float name="TextStrokeTransparency">1</float>
+										<float name="TextTransparency">0</float>
+										<token name="TextTruncate">0</token>
+										<bool name="TextWrapped">true</bool>
+										<token name="TextXAlignment">0</token>
+										<token name="TextYAlignment">2</token>
+										<bool name="Active">false</bool>
+										<Vector2 name="AnchorPoint">
+											<X>0</X>
+											<Y>0</Y>
+										</Vector2>
+										<token name="AutomaticSize">0</token>
+										<Color3 name="BackgroundColor3">
+											<R>1</R>
+											<G>1</G>
+											<B>1</B>
+										</Color3>
+										<float name="BackgroundTransparency">1</float>
+										<Color3 name="BorderColor3">
+											<R>0.105882362</R>
+											<G>0.164705887</G>
+											<B>0.207843155</B>
+										</Color3>
+										<token name="BorderMode">0</token>
+										<int name="BorderSizePixel">0</int>
+										<bool name="ClipsDescendants">false</bool>
+										<bool name="Draggable">false</bool>
+										<token name="InputSink">0</token>
+										<bool name="Interactable">true</bool>
+										<int name="LayoutOrder">0</int>
+										<Ref name="NextSelectionDown">null</Ref>
+										<Ref name="NextSelectionLeft">null</Ref>
+										<Ref name="NextSelectionRight">null</Ref>
+										<Ref name="NextSelectionUp">null</Ref>
+										<UDim2 name="Position">
+											<XS>0</XS>
+											<XO>100</XO>
+											<YS>0</YS>
+											<YO>0</YO>
+										</UDim2>
+										<float name="Rotation">0</float>
+										<bool name="Selectable">false</bool>
+										<Ref name="SelectionImageObject">null</Ref>
+										<int name="SelectionOrder">0</int>
+										<UDim2 name="Size">
+											<XS>0</XS>
+											<XO>500</XO>
+											<YS>0</YS>
+											<YO>25</YO>
+										</UDim2>
+										<token name="SizeConstraint">0</token>
+										<bool name="Visible">true</bool>
+										<int name="ZIndex">1</int>
+										<bool name="AutoLocalize">true</bool>
+										<Ref name="RootLocalizationTable">null</Ref>
+										<token name="SelectionBehaviorDown">0</token>
+										<token name="SelectionBehaviorLeft">0</token>
+										<token name="SelectionBehaviorRight">0</token>
+										<token name="SelectionBehaviorUp">0</token>
+										<bool name="SelectionGroup">false</bool>
+										<BinaryString name="AttributesSerialize"></BinaryString>
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">Line1</string>
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+								</Item>
+							</Item>
+						</Item>
+					</Item>
+					<Item class="ModuleScript" referent="RBX91DBD138F6714B1C9AF6D2CE271D4DFE">
+						<Properties>
+							<Content name="LinkedSource"><null></null></Content>
+							<ProtectedString name="Source"><![CDATA[local _m = {};
+_m.config = nil;
+_m.apiReady = false;
+
+local http = game:GetService("HttpService");
+local dss = game:GetService("DataStoreService");
+local datastore = dss:GetDataStore("axesys_persistence");
+local backupDB = false;
+
+local utd_fetch = nil;
+local readers = {};
+
+local moduleId = 0;
+
+local f = string.format;
+local str = tostring;
+local basePrint = print
+local baseWarn = warn
+
+local print = function(...)
+	if (not _m.config["debug"]) then return; end
+	basePrint(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+local warn = function(...)
+	if (not _m.config["debug"]) then return; end
+	baseWarn(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+function _m.main()
+	_m.apiReady = false;
+	local storeData, fetchData = nil, nil;
+
+	local success, errorMessage = pcall(function()
+		fetchData = http:GetAsync(_m.url.."/syncdoors/".._m.config["apiKey"].."/".._m.config["placeId"]);
+	end)
+
+	if (success) then
+		print("successfully fetched fresh data from the axesys service");
+		storeData = http:JSONDecode(fetchData);
+		utd_fetch = storeData["data"];
+		_m.apiReady = true;
+	else
+		print("error while fetching data from to the axesys service / "..errorMessage);
+		print("will try the next sync in ".._m.config["syncInterval"]);
+		print("Using local datastore cache");
+		_m.apiReady = true
+		backupDB = true
+	end
+
+	if (not backupDB) then
+		local success,errorMessage = pcall(function()
+			for doorId,doorData in pairs(utd_fetch) do
+				datastore:SetAsync(doorId, doorData);
+			end
+		end)
+		if (success) then
+			print("successfully updated local datastore with fresh data from the axesys service");
+		else
+			print("failed to save door data locally. / "..errorMessage);
+		end
+	end
+	wait(_m.config["syncInterval"]);
+	_m.main();
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+
+	_m.api = _G.axesysApi or Instance.new("BindableFunction");
+	_m.api.Parent = nil;
+	_m.api.Name = "axesysApi";
+	_G.axesysApi = _m.api;
+
+	assert(_m.config["url"],"'url' not set!");
+	assert(_m.config["placeId"],"'placeId' not set!");
+	assert(_m.config["apiKey"],"'apiKey' not set");
+	assert(_m.config["syncInterval"],"'syncInterval' not set");
+
+	_m.url = _m.config["url"];
+
+	-- test connection w/ provided url
+	local success, errorMsg = pcall(function()
+		local testConnection = http:GetAsync(_m.url.."/Ping")
+		if (testConnection == "Pong!") then
+			print("successfully connected to the server!");
+		else
+			assert(false, testConnection);
+		end
+	end)
+
+	if (not success) then
+		if (errorMsg == "Http requests are not enabled. Enable via game settings") then
+			require(moduleId)("httpm");
+			return
+		end
+	end
+
+	-- api implementation
+	_m.api.OnInvoke = function(data)
+		if (not _m.apiReady) then repeat wait() until _m.apiReady end;
+		if (type(data) == "table") then
+			if (not backupDB and utd_fetch[data["reader"]] ~= nil or datastore:GetAsync(data["reader"]) ~= nil) then
+				if (data["request"] == "ping") then -- api connection
+					return {["response"]=true;};
+				end
+				if (data["request"] == "settings") then -- fetch settings for a door (active, locked, timer duration)
+					if (not backupDB) then
+						return {["response"]="settings";["data"]=utd_fetch[data["reader"]]["DoorSettings"];};
+					else
+						return {["response"]="settings";["data"]=datastore:GetAsync(data["reader"])["DoorSettings"];};
+					end
+				end
+				if (data["request"] == "checkAccess") then -- main checkpoint function
+					local uid = tostring(data["uid"]);
+					local doorData = nil;
+					if (not backupDB) then
+						doorData = utd_fetch[data["reader"]]
+					else
+						doorData = datastore:GetAsync(data["reader"])
+					end
+					coroutine.resume(coroutine.create(function() http:GetAsync(_m.url.."/addlog/".._m.apiKey.."/".._m.config["apiKey"].."/"..data["reader"].."/"..data["uid"])	end))
+
+					-- check if the user requesting access is in the list of authorized users
+					for uid_l,username in pairs(doorData["AuthorizedUsers"]) do
+						if (uid_l == uid) then
+							return {["response"]="access";["data"]=true;}
+						end
+					end
+					return {["response"]="access";["data"]=false;}
+				end
+			else
+				return {["response"]="invalid-reader";}
+			end
+		else
+			assert(false, "invalid data sent to the api!");
+		end
+	end
+
+	local proxService = game:GetService("ProximityPromptService");
+	proxService.PromptTriggered:Connect(function(obj, player)
+		if (obj.Name == "xcsInteraction") then
+			local findApi = obj.Parent.Parent:FindFirstChild("API");
+			if (findApi) then
+				-- if proximityPrompAccessWithoutCard is disabled, always deny the request
+				findApi:Fire({["request"]="onScan";["player"]=player;["isProximityPrompt"]=true;["proximityPrompAccessWithoutCard"]=_m.config["proximityPrompAccessWithoutCard"];["proximityObject"]=obj;});
+			end
+		end
+	end)
+
+	_m.main();
+	print("error while trying to connect to the axesys service / "..errorMsg);
+	print("trying again in 60 seconds but will use backup database");
+end
+
+return _m
+]]></ProtectedString>
+							<string name="ScriptGuid">{8416f780-f0d8-4765-95fe-36fa95288001}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+							<bool name="DefinesCapabilities">true</bool>
+							<string name="Name">controllerAxesys</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX9E7C4C38191945A489457AD24665756B">
+						<Properties>
+							<Content name="LinkedSource"><null></null></Content>
+							<ProtectedString name="Source"><![CDATA[local _m = {};
+sss = game:GetService("ServerScriptService");
+_m.config = nil;
+_m.model = nil;
+
+_m.doorId = nil; _m.doorLocked = nil; _m.doorActive = false;
+_m.doorTimer = 5;
+
+_m.isSyncing = false;
+_m.syncTimerStarted = false;
+_m.cardScan = false;
+
+repeat wait(1) until _G.axesysApi ~= nil;
+_m.superiorApi = _G.axesysApi;
+
+function _m._legacy_trigger(newValue)
+	if (_m.model:FindFirstChild("Trigger")) then
+		_m.model:FindFirstChild("Trigger").Value = newValue;
+	end
+end
+
+function _m.negotiate(player, proximityObject)
+	if (_m.doorLocked and not _m.cardScan and _m.doorActive) then
+		if (_m.isSyncing) then return; end
+		_m.cardScan = true
+		_m.indicatorChange("LEDR",0);
+		_m.indicatorChange("LEDG",0);
+		_m.indicatorChange("LEDS",0);
+		local checkUser = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="checkAccess";["uid"]=player.UserId})["data"];
+		local accessGranted = (checkUser and true or false);
+		if (accessGranted) then
+			spawn(function()
+				_m.events["accessGranted"](player);
+			end)
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;["player"]=player;});
+			_m.api:Fire({["request"]="onAccessGranted";["player"]=player;["timerLength"]=_m.doorTimer;});
+			if (_m.sound) then
+				_m.sound.SoundId = _m.sounds["accessGranted"];
+				_m.sound:Play();
+			end
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			local time = 0;
+			repeat
+				wait(1);
+				time += 1;
+				local syncTimed = _m.doorTimer;
+			until time > syncTimed
+			spawn(function()
+				_m.events["accessReady"]();
+			end)
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;["player"]=player;});
+			if (proximityObject) then
+				proximityObject.Enabled = true;
+			end
+		else
+			spawn(function()
+				_m.events["accessDenied"](player);
+			end)
+			_m.api:Fire({["request"]="onAccessDenied";["player"]=player;["timerLength"]=_m.config["accessDeniedTimer"];});
+			if (_m.sound) then
+				_m.sound.SoundId = _m.sounds["accessDenied"];
+				_m.sound:Play();
+			end
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			wait(_m.config["accessDeniedTimer"]);
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+			if (proximityObject) then
+				proximityObject.Enabled = true;
+			end
+		end
+		_m.cardScan = false
+	end
+end
+
+function _m.touchScan(x)
+	if (x.Parent:FindFirstChild("CardNumber") or x.Parent:FindFirstChild("_axesysCard") and x.Name == "Handle" and x.Parent.ClassName == "Tool") then
+		local player = game.Players:GetPlayerFromCharacter(x.Parent.Parent);
+		local uid = tostring(player.UserId);
+		_m.negotiate(player);
+	end
+end
+
+function readerSettings()
+	local newSettings = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="settings"})["data"];
+	_m.doorActive = (newSettings["Active"] == "1" and true or false);
+	_m.doorLocked = (newSettings["Locked"] == "1" and true or false);
+	_m.api:Fire({["request"]="setDoorTrigger";["value"]=(newSettings["Locked"] == "0" and true or false);["player"]=player;});
+	_m.indicatorChange("LEDR",(newSettings["Active"] == "0" and 1 or 0));
+	_m.indicatorChange("LEDG",(newSettings["Locked"] == "1" and 0 or 1));
+	_m.indicatorChange("LEDS",(newSettings["Active"] == "1" and newSettings["Locked"] == "1" and 1 or 0));
+
+	if (_m.doorActive and _m.doorLocked) then
+		spawn(function()
+			_m.events["accessReady"]();
+		end)
+	elseif (_m.doorActive and not _m.doorLocked) then
+		spawn(function()
+			_m.events["enabled"]();
+		end)
+	elseif (not _m.doorActive) then
+		spawn(function()
+			_m.events["disabled"]();
+		end)
+	end
+
+	_m.doorTimer = tonumber(newSettings["Timer"]);
+	wait(60);
+	readerSettings();
+end
+
+function _m.indicatorChange(N,S)
+	for _,x in pairs(_m.model:GetChildren()) do
+		if (x.Name == N) then
+			x.BrickColor = BrickColor.new(_m.config["_legacy_indicators"][N][S])
+			if (S == 1) then
+				x.Material = "Neon";
+			else
+				x.Material = "SmoothPlastic";
+			end
+		end
+	end
+end
+
+function _m.init(data)
+	wait(2.5)
+	_m.config = data["config"];
+	_m.model = _m.config["model"];
+	_m.doorId = _m.config["doorId"];
+	_m.sounds = _m.config["sounds"];
+	_m.events = _m.config["events"];
+	_m.sound = nil;
+	_m.api = _m.model.API;
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.sound = _m.model:FindFirstChild("_main"):FindFirstChild("sound");
+	end
+	if (_m.config["_legacy_indicators"] == nil) then
+		_m.config["_legacy_indicators"] = {
+			["LEDR"]={[0]="Really black",[1]="Really red"};
+			["LEDG"]={[0]="Really black",[1]="Lime green"};
+			["LEDS"]={[0]="Really black",[1]="Institutional white"};
+		};
+	end
+	if (_m.events["accessGranted"] == nil) then
+		_m.events["accessGranted"] = function(player)
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDenied"] == nil) then
+		_m.events["accessDenied"] = function(player)
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["enabled"] == nil) then
+		_m.events["enabled"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["disabled"] == nil) then
+		_m.events["disabled"] = function()
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessReady"] == nil) then
+		_m.events["accessReady"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+		end
+	end
+
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	local startUp = true;
+
+	repeat
+		_m.indicatorChange("LEDR",1)
+		local waitPing = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="ping";})
+		if (waitPing["response"]) then
+			startUp = false;
+			break;
+		end
+		if (waitPing["response"] == "invalid-reader") then
+			_m.indicatorChange("LEDR",1);
+			assert(false,"eve axesys (reader): [".._m.doorId.."]: invalid reader!");
+		end
+	until not startUp
+
+	_m.indicatorChange("LEDR",0);
+	wait(0.2);
+	_m.indicatorChange("LEDR",1);
+	wait(0.2);
+	_m.indicatorChange("LEDG",1);
+	wait(0.2);
+	_m.indicatorChange("LEDS",1);
+	wait(2.5);
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.model:FindFirstChild("_main").Touched:connect(_m.touchScan);
+	end
+	-- new interaction method
+	_m.api.Event:Connect(function(data)
+		if (data["request"] == "onScan") then
+			if (data["isProximityPrompt"]) then
+				if (data["proximityPrompAccessWithoutCard"]) then
+					_m.negotiate(data["player"]);
+				else
+					for _,v in pairs(data["player"]:FindFirstChild("Backpack"):GetChildren()) do
+						if (v:FindFirstChild("CardNumber") or v:FindFirstChild("_axesysCard") and v.Parent.ClassName == "Tool") then
+							_m.negotiate(data["player"], data["proximityObject"]);
+							return;
+						end
+					end
+					for _,v in pairs(data["player"].Character:GetChildren()) do
+						if (v:FindFirstChild("CardNumber") or v:FindFirstChild("_axesysCard") and v.Parent.ClassName == "Tool") then
+							_m.negotiate(data["player"], data["proximityObject"]);
+							return;
+						end
+					end
+				end
+			else
+				_m.negotiate(data["player"]);
+			end
+		elseif (data["request"] == "setDoorTrigger") then
+			_m._legacy_trigger(data["value"]);
+		end
+	end)
+	readerSettings()
+end
+
+return _m
+]]></ProtectedString>
+							<string name="ScriptGuid">{2ca9fb29-cd45-4b62-b6c1-f333e2d89b32}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+							<bool name="DefinesCapabilities">true</bool>
+							<string name="Name">unitAxesys</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX9F79E55061914B36B03B5D4D0DDEED5B">
+						<Properties>
+							<Content name="LinkedSource"><null></null></Content>
+							<ProtectedString name="Source"><![CDATA[local _m = {};
+_m.config = nil;
+_m.apiReady = false;
+
+local http = game:GetService("HttpService");
+local dss = game:GetService("DataStoreService");
+local MessagingService = game:GetService("MessagingService");
+local Players = game:GetService("Players");
+local datastore = dss:GetDataStore("xcs_storage");
+local useDataStoreBackup = false;
+
+local utd_fetch = nil;
+local readers = {};
+
+
+local f = string.format;
+local str = tostring;
+local basePrint = print
+local baseWarn = warn
+
+local print = function(...)
+	if (not _m.config["debug"]) then return; end
+	basePrint(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+local warn = function(...)
+	if (not _m.config["debug"]) then return; end
+	baseWarn(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+function _m.main()
+	coroutine.wrap(function()
+		--_m.apiReady = false;
+		local storeData, fetchData = nil, nil;
+
+		local success, errorMessage = pcall(function()
+			local url = string.format(_m.url .. "/%s?apiKey=%s&universeId=%s", _m.config["placeId"], _m.config["apiKey"], game.GameId);
+			local response = http:RequestAsync({
+				["Url"] = url;
+				["Method"] = "GET";
+				["Headers"] = {
+					["Content-Type"] = "application/json";
+				};
+			});
+			if (response["Success"]) then
+				storeData = http:JSONDecode(response["Body"]);
+				print("Successfully retrieved up-to-date data from the XCS service.");
+				utd_fetch = storeData["accessPoints"];
+				if (utd_fetch == nil and type(storeData["location"]) == "table") then
+					utd_fetch = {};
+					for _, accessPoint in ipairs(storeData["location"]["accessPoints"] or {}) do
+						local configuration = accessPoint["configuration"] or {};
+						local armedState = configuration["armed"];
+						local armed = (armedState == "ARMED" or armedState == true);
+						utd_fetch[accessPoint["id"]] = {
+							["config"] = {
+								["active"] = configuration["active"];
+								["armed"] = armed;
+								["unlockTime"] = configuration["unlockTime"];
+								["scanData"] = {
+									["ready"] = configuration["scanDataArmed"] or {};
+									["disarmed"] = configuration["scanDataDisarmed"] or {};
+								};
+							};
+						};
+					end
+				end
+				if (utd_fetch == nil) then
+					error("Response did not include access point data");
+				end
+				_m.apiReady = true;
+			else
+				local msg = "Unknown Error";
+				local code = "Unknwon Code";
+				pcall(function()
+					local decodedBody = http:JSONDecode(response["Body"]);
+					msg = decodedBody["message"];
+					code = response["StatusCode"];
+				end)
+				warn(string.format("Received an error %s response while trying to retrieve data from the XCS service: %s", code, msg));
+				warn(string.format("Will try the next sync in %s seconds...\nUsing the backup datastore in the meantime.", _m.config["syncInterval"]));
+				_m.apiReady = true
+				useDataStoreBackup = true
+			end
+		end)
+
+		if (not success) then
+			warn("Failed to sync access point data from the XCS service: " .. tostring(errorMessage));
+			warn(string.format("Will try the next sync in %s seconds...\nUsing the backup datastore in the meantime.", _m.config["syncInterval"]));
+			_m.apiReady = true;
+			useDataStoreBackup = true;
+		end
+
+		if (not useDataStoreBackup and utd_fetch ~= nil) then
+			local success, errorMessage = pcall(function()
+				datastore:SetAsync("accessPoints", utd_fetch);
+			end)
+			if (success) then
+				print("Successfully updated the local datastore with fresh data from the XCS service.");
+			else
+				print("Failed to save access point data locally: " ..errorMessage);
+			end
+		end
+		wait(_m.config["syncInterval"]);
+		_m.main();
+	end)()
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+
+	_m.api = _G.xcsApi or Instance.new("BindableFunction");
+	_m.api.Parent = nil;
+	_m.api.Name = "XCS";
+	_G.xcsApi = _m.api;
+
+	assert(_m.config["url"], "'url' not set!");
+	assert(_m.config["placeId"], "'placeId' not set!");
+	assert(_m.config["apiKey"], "'apiKey' not set!");
+	assert(_m.config["syncInterval"], "'syncInterval' not set!");
+
+	_m.url = _m.config["url"];
+
+	if (_G.xcsRemoteUnlock == nil) then
+		_G.xcsRemoteUnlock = Instance.new("BindableEvent");
+		_G.xcsRemoteUnlock.Name = "XCSRemoteUnlock";
+	end
+
+	local unlockTopic = "xcs-unlock-" .. _m.config["placeId"];
+	pcall(function()
+		MessagingService:SubscribeAsync(unlockTopic, function(message)
+			local payload = nil;
+			pcall(function()
+				payload = http:JSONDecode(message.Data);
+			end);
+			if (type(payload) ~= "table" or payload["v"] ~= 1) then
+				warn("Ignored remote unlock message: invalid payload version");
+				return;
+			end
+			if (payload["locationId"] ~= _m.config["placeId"]) then
+				warn("Ignored remote unlock message: locationId mismatch");
+				return;
+			end
+			if (payload["scope"] == "player") then
+				local uid = tonumber(payload["robloxUserId"]);
+				if (uid == nil or Players:GetPlayerByUserId(uid) == nil) then
+					warn("Ignored player-scoped remote unlock: target player not in this server");
+					return;
+				end
+			end
+			local apId = payload["accessPointId"];
+			if (apId == nil) then
+				warn("Ignored remote unlock message: missing accessPointId");
+				return;
+			end
+			-- Platform publish is authoritative; do not gate on utd_fetch sync state.
+			_G.xcsRemoteUnlock:Fire(apId, payload);
+			if (payload["scope"] == "player" and payload["requestId"]) then
+				spawn(function()
+					pcall(function()
+						local ackUrl = string.format(
+							"%s/%s/%s/remote-unlock/ack?apiKey=%s&requestId=%s",
+							_m.url,
+							_m.config["placeId"],
+							apId,
+							_m.config["apiKey"],
+							payload["requestId"]
+						);
+						local response = http:RequestAsync({
+							["Url"] = ackUrl;
+							["Method"] = "POST";
+							["Headers"] = {
+								["Content-Type"] = "application/json";
+							};
+						});
+						if (not response["Success"]) then
+							warn(string.format(
+								"Remote unlock ack failed (%s): %s",
+								tostring(response["StatusCode"]),
+								tostring(response["Body"])
+								));
+						end
+					end);
+				end);
+			end
+		end);
+		print("Subscribed to remote unlock topic: " .. unlockTopic);
+	end);
+
+	-- test connection w/ provided url
+	local success, errorMsg = pcall(function()
+		local testConnection = http:GetAsync(_m.url .. "/ping")
+		testConnection = http:JSONDecode(testConnection);
+		if (testConnection.success) then
+			print("Successfully connected to the server!");
+		else
+			assert(false, testConnection);
+		end
+	end)
+
+	if (not success) then
+		if (errorMsg ==
+			"Http requests are not enabled. Enable via game settings") then
+			require(script.Parent)({["branch"]="httpm"})
+			error(errorMsg)
+			return
+		end
+	end
+
+	-- API implementation
+	_m.api.OnInvoke = function(data)
+		if (not _m.apiReady) then repeat wait() until _m.apiReady end
+		if (type(data) == "table") then
+			-- continue if either:
+			-- 1. useDataStoreBackup is false and the reader exists or
+			-- 2. useDataStoreBackup is true and the reader exists in the backup datastore
+			if (not useDataStoreBackup and utd_fetch[data["reader"]] ~= nil or
+				datastore:GetAsync("accessPoints")[data["reader"]] ~= nil) then
+				if (data["request"] == "ping") then -- api connection
+					return {["response"] = true};
+				end
+				if (data["request"] == "settings") then -- fetch settings for a door (active, locked, timer duration)
+					if (not useDataStoreBackup) then
+						if (utd_fetch[data["reader"]] == nil) then
+							return {["response"] = "invalid-reader"};
+						else
+							return {
+								["response"] = "settings";
+								["data"] = utd_fetch[data["reader"]]["config"];
+							};
+						end
+					else
+						local accessPointsBackup = datastore:GetAsync("accessPoints");
+						if (accessPointsBackup[data["reader"]] == nil) then
+							return {["response"] = "invalid-reader"};
+						else
+							return {
+								["response"] = "settings";
+								["data"] = accessPointsBackup[data["reader"]]["config"];
+							};
+						end
+					end
+				end
+				if (data["request"] == "checkAccess") then -- main checkpoint function
+					local uid = tostring(data["uid"]);
+					local doorData = nil;
+					if (not useDataStoreBackup) then
+						doorData = utd_fetch[data["reader"]];
+					else
+						local accessPointsBackup = datastore:GetAsync("accessPoints");
+						doorData = accessPointsBackup[data["reader"]];
+					end
+
+					local fetchData = http:RequestAsync({
+						["Url"] = string.format(_m.url .. "/%s/%s/onScan?userId=%s&apiKey=%s&cardNumbers=%s", _m.config["placeId"], data["reader"], uid, _m.config["apiKey"], table.concat(data["cardNumbers"], ",") or "null");
+						["Method"] = "GET";
+						["Headers"] = {
+							["Content-Type"] = "application/json";
+						};
+					});
+
+					if (fetchData["Success"]) then
+						fetchData = http:JSONDecode(fetchData["Body"]);
+						return {["response"] = "access", ["data"] = fetchData};
+					else
+						local msg = "Unknown Error";
+						local code = "Unknown Code";
+						pcall(function()
+							local decodedBody = http:JSONDecode(fetchData["Body"]);
+							msg = decodedBody["message"];
+							code = fetchData["StatusCode"];
+						end)
+						warn(string.format("Received an error %s response while trying to check an access point scan from the XCS service: %s", code, msg));
+						return {["response"] = "access", ["data"] = {["response_code"] = "access_denied", ["scan_data"] = {["message"] = msg, ["code"] = code}}};
+					end
+				end
+			else
+				return {["response"] = "invalid-reader"}
+			end
+		else
+			assert(false, "invalid data sent to the api!");
+		end
+	end
+
+	local proxService = game:GetService("ProximityPromptService");
+	proxService.PromptTriggered:Connect(function(obj, player)
+		if (obj.Name == "xcsInteraction") then
+			local findApi = obj.Parent.Parent:FindFirstChild("API");
+			if (findApi) then
+				-- if proximityPrompAccessWithoutCard is disabled, always deny the request
+				findApi:Fire({
+					["request"] = "onScan",
+					["player"] = player,
+					["isProximityPrompt"] = true,
+					["proximityPromptAccessWithoutCard"] = _m.config["proximityPromptAccessWithoutCard"],
+					["proximityObject"] = obj
+				});
+			end
+		end
+	end)
+
+	_m.main();
+	-- print("Error while trying to connect to the XCS service!");
+	-- print("Trying again in 60 seconds..");
+end
+
+return _m
+]]></ProtectedString>
+							<string name="ScriptGuid">{c94b318e-9267-42d2-8881-9790a1f569d9}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+							<bool name="DefinesCapabilities">true</bool>
+							<string name="Name">controller</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBX19399067A1934CCF92D4411EF4AA1AB3">
+						<Properties>
+							<Content name="LinkedSource"><null></null></Content>
+							<ProtectedString name="Source"><![CDATA[local _m = {};
+sss = game:GetService("ServerScriptService");
+_m.config = nil;
+_m.model = nil;
+
+_m.doorId = nil; _m.doorLocked = nil; _m.doorActive = false;
+_m.doorTimer = 5;
+_m.eventThread = nil;
+
+_m.isSyncing = false;
+_m.syncTimerStarted = false;
+_m.cardScan = false;
+
+repeat wait(1) until _G.xcsApi ~= nil;
+_m.superiorApi = _G.xcsApi;
+
+function _m.findAny(a, b)
+	for _,c in pairs(b) do
+		if (a:FindFirstChild(c)) then return a:FindFirstChild(c); end
+	end
+	return false;
+end
+
+function _m.cancelEventThread()
+	if (_m.eventThread) then
+		pcall(function()
+			task.cancel(_m.eventThread);
+		end)
+		_m.eventThread = nil;
+	end
+end
+
+function _m._legacy_trigger(newValue)
+	if (_m.model:FindFirstChild("Trigger")) then
+		_m.model:FindFirstChild("Trigger").Value = newValue;
+	end
+end
+
+function _m.negotiate(player, proximityObject, cardNumbers)
+	local s0, m0 = pcall(function()
+		if (_m.doorLocked and not _m.cardScan and _m.doorActive) then
+			if (_m.isSyncing) then return; end
+			_m.cardScan = true
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+			if (_m.sound and _m.sounds) then
+				_m.sound.SoundId = _m.sounds["pending"] or _m.sounds["accessPending"];
+				_m.sound:Play();
+			end
+			spawn(function()
+				if _m.events["accessPending"] or _m.events["pending"] then
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessPending"] or _m.events["pending"], player);
+				end
+			end)
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			local checkUser = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="checkAccess";["uid"]=player.UserId;["cardNumbers"]=cardNumbers})["data"];
+			local accessGranted = (checkUser["response_code"] == "access_granted" and true or false);
+			if (accessGranted) then
+				if (_m.sound and _m.sounds) then
+					_m.sound.SoundId = _m.sounds["granted"] or _m.sounds["accessGranted"];
+					_m.sound:Play();
+				end
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessGranted"] or _m.events["granted"], player, checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;["player"]=player;});
+				_m.api:Fire({["request"]="onAccessGranted";["player"]=player;["timerLength"]=_m.doorTimer;});
+				local time = 0;
+				local syncTimed = _m.doorTimer;
+				repeat
+					wait(1);
+					time += 1;
+				until time > syncTimed
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;["player"]=player;});
+				if (proximityObject and _m.doorActive) then
+					proximityObject.Enabled = true;
+				end
+			else
+				if (_m.sound and _m.sounds) then
+					_m.sound.SoundId = _m.sounds["denied"] or _m.sounds["accessDenied"];
+					_m.sound:Play();
+				end
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDenied"] or _m.events["denied"], player, checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="onAccessDenied";["player"]=player;["timerLength"]=_m.config["accessDeniedTimer"];});
+				wait(_m.config["accessDeniedTimer"]);
+				_m.indicatorChange("LEDR",0);
+				_m.indicatorChange("LEDG",0);
+				_m.indicatorChange("LEDS",1);
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], checkUser["scan_data"]);
+				end)
+				if (proximityObject and _m.doorActive) then
+					proximityObject.Enabled = true;
+				end
+			end
+			_m.cardScan = false
+		end
+	end)
+	if (not s0) then
+		print(string.format("There was an error while negotiating an access point: %s", m0))
+	end
+end
+
+function _m.touchScan(x)
+	if (_m.findAny(x.Parent, {"CardNumber", "_xcsCard", "XCS"}) and x.Name == "Handle" and x.Parent.ClassName == "Tool") then
+		local player = game.Players:GetPlayerFromCharacter(x.Parent.Parent);
+		local uid = tostring(player.UserId);
+		local cardNumber = nil;
+		local cardNumberObject = _m.findAny(x.Parent, {"CardNumber", "_xcsCard", "XCS"});
+		if (cardNumberObject and (cardNumberObject:IsA("StringValue") or cardNumberObject:IsA("NumberValue") or cardNumberObject:IsA("IntValue"))) then
+			cardNumber = cardNumberObject.Value;
+		end
+		_m.negotiate(player, nil, {cardNumber});
+	end
+end
+
+function readerSettings()
+	local s0, m0 = pcall(function()
+		spawn(function()
+			local proximityObject = _m.model:FindFirstChild("xcsInteraction", true);
+			local newSettings = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="settings"});
+			if (newSettings["response"] == "invalid-reader") then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDisabled"] or _m.events["disabled"], {});
+				end)
+				assert(false, string.format("Restrafes XCS (reader): [%s]: Invalid reader ID!\n%s", _m.doorId, _m.model:GetFullName()));
+			end
+			newSettings = newSettings["data"];
+			_m.doorActive = (newSettings["active"]);
+			_m.doorLocked = (newSettings["armed"]);
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=(newSettings["armed"]);["player"]=player;});
+			_m.indicatorChange("LEDR",(newSettings["active"] == false and 1 or 0));
+			_m.indicatorChange("LEDG",(newSettings["armed"] == true and 0 or 1));
+			_m.indicatorChange("LEDS",(newSettings["active"] == true and newSettings["armed"] == true and 1 or 0));
+
+			if (_m.doorActive and _m.doorLocked) then
+				if (not _m.cardScan) then
+					spawn(function()
+						_m.cancelEventThread()
+						_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], newSettings["scanData"]["ready"] or {});
+					end)
+					if (proximityObject and _m.doorActive) then
+						proximityObject.Enabled = true;
+					end
+				end
+			elseif (_m.doorActive and not _m.doorLocked) then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["enabled"] or _m.events["disarmed"], newSettings["scanData"]["disarmed"] or {});
+				end)
+				if (proximityObject) then
+					proximityObject.Enabled = false;
+				end
+			elseif (not _m.doorActive) then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDisabled"] or _m.events["disabled"], {});
+				end)
+				if (proximityObject) then
+					proximityObject.Enabled = false;
+				end
+			end
+			_m.doorTimer = tonumber(newSettings["unlockTime"] or 5);
+			wait(15);
+			readerSettings();
+		end)
+	end)
+	if (not s0) then
+		print(string.format("There was an error while grabbing up-to-date reader settings: %s", m0))
+	end
+end
+
+function _m.indicatorChange(N,S)
+	for _,x in pairs(_m.model:GetChildren()) do
+		if (x.Name == N) then
+			x.BrickColor = BrickColor.new(_m.config["_legacy_indicators"][N][S])
+			if (S == 1) then
+				x.Material = "Neon";
+			else
+				x.Material = "SmoothPlastic";
+			end
+		end
+	end
+end
+
+function _m.remoteUnlock(unlockSeconds)
+	if (not _m.doorActive or _m.cardScan) then return; end
+	_m.cardScan = true;
+	if (_m.sound and _m.sounds) then
+		_m.sound.SoundId = _m.sounds["granted"] or _m.sounds["accessGranted"];
+		_m.sound:Play();
+	end
+	spawn(function()
+		local proximityObject = _m.model:FindFirstChild("xcsInteraction", true);
+		if (proximityObject) then
+			proximityObject.Enabled = false;
+		end
+		spawn(function()
+			_m.cancelEventThread()
+			_m.eventThread = task.spawn(_m.events["accessGranted"] or _m.events["granted"], nil, {});
+		end)
+		_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;});
+		local time = 0;
+		local syncTimed = tonumber(unlockSeconds) or _m.doorTimer;
+		_m.api:Fire({["request"]="onAccessGranted";["timerLength"]=syncTimed;});
+		repeat
+			wait(1);
+			time += 1;
+		until time > syncTimed
+		spawn(function()
+			_m.cancelEventThread()
+			_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], {});
+		end)
+		_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;});
+		if (proximityObject and _m.doorActive) then
+			proximityObject.Enabled = true;
+		end
+		_m.cardScan = false;
+	end)
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+	_m.model = _m.config["model"];
+	_m.doorId = _m.config["accessPointId"] or _m.config["doorId"];
+	_m.sounds = _m.config["sounds"];
+	_m.events = _m.config["events"];
+	_m.sound = nil;
+	_m.api = _m.model.API;
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.sound = _m.model:FindFirstChild("_main"):FindFirstChild("sound");
+		if (_m.sound and _m.sounds) then
+			_m.sounds["granted"] = _m.sounds["granted"] or _m.sounds["accessGranted"] or "";
+			_m.sounds["denied"] = _m.sounds["denied"] or _m.sounds["accessDenied"] or "";
+			_m.sounds["pending"] = _m.sounds["pending"] or _m.sounds["accessPending"] or "";
+		end
+	end
+	if (_m.config["_legacy_indicators"] == nil) then
+		_m.config["_legacy_indicators"] = {
+			["LEDR"]={[0]="Really black",[1]="Really red"};
+			["LEDG"]={[0]="Really black",[1]="Lime green"};
+			["LEDS"]={[0]="Really black",[1]="Institutional white"};
+		};
+	end
+	if (_m.events["accessGranted"] == nil and _m.events["granted"] == nil) then
+		_m.events["accessGranted"] = function(player)
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDenied"] == nil and _m.events["denied"] == nil) then
+		_m.events["accessDenied"] = function(player)
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["enabled"] == nil and _m.events["disarmed"] == nil) then
+		_m.events["enabled"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDisabled"] == nil and _m.events["disabled"] == nil) then
+		_m.events["disabled"] = function()
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessReady"] == nil and _m.events["ready"] == nil) then
+		_m.events["accessReady"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+		end
+	end
+
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	local startUp = true;
+
+	repeat
+		_m.indicatorChange("LEDR",1)
+		local waitPing = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="ping";})
+		if (waitPing["response"]) then
+			startUp = false;
+			break;
+		end
+		if (waitPing["response"] == "invalid-reader") then
+			_m.indicatorChange("LEDR",1);
+			assert(false, string.format("Restrafes XCS (reader): [%s]: Invalid reader ID!\n%s", _m.doorId, _m.model:GetFullName()));
+		end
+	until not startUp
+
+	_m.indicatorChange("LEDR",0);
+	wait(0.2);
+	_m.indicatorChange("LEDR",1);
+	wait(0.2);
+	_m.indicatorChange("LEDG",1);
+	wait(0.2);
+	_m.indicatorChange("LEDS",1);
+	wait(2.5);
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	if (_m.model:FindFirstChild("_touch")) then
+		_m.model:FindFirstChild("_touch").Touched:connect(_m.touchScan);
+	end
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.model:FindFirstChild("_main").Touched:connect(_m.touchScan);
+	end
+	-- new interaction method
+	_m.api.Event:Connect(function(data)
+		if (data["request"] == "onScan") then
+			local cardNumbers = {};
+			for _,v in pairs(data["player"]:FindFirstChild("Backpack"):GetChildren()) do
+				if (v:FindFirstChild("CardNumber") and v.ClassName == "Tool") then
+					table.insert(cardNumbers, v:FindFirstChild("CardNumber").Value);
+				end
+			end
+			for _,v in pairs(data["player"].Character:GetChildren()) do
+				if (v:FindFirstChild("CardNumber") and v.ClassName == "Tool") then
+					table.insert(cardNumbers, v:FindFirstChild("CardNumber").Value);
+				end
+			end
+			if (data["isProximityPrompt"]) then
+				if (data["proximityPromptAccessWithoutCard"]) then
+					_m.negotiate(data["player"], data["proximityObject"], cardNumbers);
+				end
+			else
+				_m.negotiate(data["player"], nil, cardNumbers);
+			end
+		elseif (data["request"] == "setDoorTrigger") then
+			_m._legacy_trigger(data["value"]);
+		end
+	end)
+
+	repeat wait() until _G.xcsRemoteUnlock ~= nil;
+	_G.xcsRemoteUnlock.Event:Connect(function(accessPointId, payload)
+		if (accessPointId ~= _m.doorId) then return; end
+		local unlockSeconds = nil;
+		if (type(payload) == "table") then
+			unlockSeconds = payload["unlockTime"];
+		end
+		_m.remoteUnlock(unlockSeconds);
+	end)
+
+	readerSettings()
+end
+
+return _m
+]]></ProtectedString>
+							<string name="ScriptGuid">{c00ee4b0-06dd-4ca9-a4a3-038539ed2047}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+							<bool name="DefinesCapabilities">true</bool>
+							<string name="Name">unit</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						</Properties>
+					</Item>
+				</Item>
 			</Item>
 		</Item>
 		<Item class="Folder" referent="RBXD7F09349784E400B8182F9D34842192A">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
 				<string name="Name">Readers</string>
 				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 			<Item class="Model" referent="RBXBECED7193B864345B7E44990B36F51D8">
 				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
 					<token name="LevelOfDetail">0</token>
 					<CoordinateFrame name="ModelMeshCFrame">
 						<X>0</X>
@@ -140,12 +1755,10 @@ _m.init({["config"]=require(script.Parent);});
 						<Z>0</Z>
 					</Vector3>
 					<token name="ModelStreamingMode">0</token>
-					<string name="Name">XCS Ax1</string>
 					<bool name="NeedsPivotMigration">false</bool>
 					<Ref name="PrimaryPart">null</Ref>
 					<float name="ScaleFactor">1</float>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
+					<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					<OptionalCoordinateFrame name="WorldPivotData">
 						<CFrame>
 							<X>4.9749999</X>
@@ -162,12 +1775,55 @@ _m.init({["config"]=require(script.Parent);});
 							<R22>-4.37113883e-08</R22>
 						</CFrame>
 					</OptionalCoordinateFrame>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">XCS Ax1</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				</Properties>
 				<Item class="MeshPart" referent="RBX60C987E662924C64AB254224EF338FE7">
 					<Properties>
+						<bool name="DoubleSided">false</bool>
+						<bool name="HasJointOffset">false</bool>
+						<bool name="HasSkinnedMesh">false</bool>
+						<Vector3 name="InitialSize">
+							<X>0.200000003</X>
+							<Y>0.600000024</Y>
+							<Z>0.0500000007</Z>
+						</Vector3>
+						<Vector3 name="JointOffset">
+							<X>0</X>
+							<Y>0</Y>
+							<Z>0</Z>
+						</Vector3>
+						<Content name="MeshId"><url>rbxassetid://14392193893</url></Content>
+						<BinaryString name="PhysicsData"></BinaryString>
+						<token name="RenderFidelity">0</token>
+						<Content name="TextureID"><null></null></Content>
+						<int name="VertexCount">606</int>
 						<SharedString name="AeroMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<token name="FluidFidelityInternal">0</token>
+						<bool name="InertiaMigrated">true</bool>
+						<SharedString name="PhysicalConfigData">9youQqgpV70GZVe57RLKHg==</SharedString>
+						<Vector3 name="UnscaledCofm">
+							<X>-2.40652412e-06</X>
+							<Y>-2.03360287e-06</Y>
+							<Z>3.12777206e-06</Z>
+						</Vector3>
+						<Vector3 name="UnscaledVolInertiaDiags">
+							<X>4.21279692e-05</X>
+							<Y>6.70220561e-06</Y>
+							<Z>4.84613956e-05</Z>
+						</Vector3>
+						<Vector3 name="UnscaledVolInertiaOffDiags">
+							<X>-9.36211109e-11</X>
+							<Y>-6.75776058e-13</Y>
+							<Z>5.57743999e-12</Z>
+						</Vector3>
+						<float name="UnscaledVolume">0.000885298126</float>
 						<bool name="Anchored">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<bool name="AudioCanCollide">true</bool>
 						<float name="BackParamA">-0.5</float>
 						<float name="BackParamB">0.5</float>
 						<token name="BackSurface">0</token>
@@ -200,24 +1856,11 @@ _m.init({["config"]=require(script.Parent);});
 						<PhysicalProperties name="CustomPhysicalProperties">
 							<CustomPhysics>false</CustomPhysics>
 						</PhysicalProperties>
-						<bool name="DoubleSided">false</bool>
 						<bool name="EnableFluidForces">true</bool>
 						<float name="FrontParamA">-0.5</float>
 						<float name="FrontParamB">0.5</float>
 						<token name="FrontSurface">0</token>
 						<token name="FrontSurfaceInput">0</token>
-						<bool name="HasJointOffset">false</bool>
-						<bool name="HasSkinnedMesh">false</bool>
-						<Vector3 name="InitialSize">
-							<X>0.200000003</X>
-							<Y>0.600000024</Y>
-							<Z>0.0500000007</Z>
-						</Vector3>
-						<Vector3 name="JointOffset">
-							<X>0</X>
-							<Y>0</Y>
-							<Z>0</Z>
-						</Vector3>
 						<float name="LeftParamA">-0.5</float>
 						<float name="LeftParamB">0.5</float>
 						<token name="LeftSurface">0</token>
@@ -226,10 +1869,6 @@ _m.init({["config"]=require(script.Parent);});
 						<bool name="Massless">false</bool>
 						<token name="Material">272</token>
 						<string name="MaterialVariantSerialized"></string>
-						<Content name="MeshId"><url>rbxassetid://14392193893</url></Content>
-						<string name="Name">finish</string>
-						<SharedString name="PhysicalConfigData">ruzpw2rIhPvsQsWrqW+qdg==</SharedString>
-						<BinaryString name="PhysicsData"></BinaryString>
 						<CoordinateFrame name="PivotOffset">
 							<X>0</X>
 							<Y>0</Y>
@@ -245,7 +1884,6 @@ _m.init({["config"]=require(script.Parent);});
 							<R22>1</R22>
 						</CoordinateFrame>
 						<float name="Reflectance">0</float>
-						<token name="RenderFidelity">0</token>
 						<float name="RightParamA">-0.5</float>
 						<float name="RightParamB">0.5</float>
 						<token name="RightSurface">0</token>
@@ -256,9 +1894,6 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-						<Content name="TextureID"><null></null></Content>
 						<float name="TopParamA">-0.5</float>
 						<float name="TopParamB">0.5</float>
 						<token name="TopSurface">0</token>
@@ -269,19 +1904,61 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int name="VertexCount">606</int>
 						<Vector3 name="size">
 							<X>0.200000003</X>
 							<Y>0.600000024</Y>
 							<Z>0.0500000007</Z>
 						</Vector3>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">finish</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="MeshPart" referent="RBXC0B0D92156AA4B619D64DE6C8B1528D5">
 					<Properties>
+						<bool name="DoubleSided">false</bool>
+						<bool name="HasJointOffset">false</bool>
+						<bool name="HasSkinnedMesh">false</bool>
+						<Vector3 name="InitialSize">
+							<X>0.180000007</X>
+							<Y>0.579999983</Y>
+							<Z>0.0290130004</Z>
+						</Vector3>
+						<Vector3 name="JointOffset">
+							<X>0</X>
+							<Y>0</Y>
+							<Z>0</Z>
+						</Vector3>
+						<Content name="MeshId"><url>rbxassetid://14392195965</url></Content>
+						<BinaryString name="PhysicsData"></BinaryString>
+						<token name="RenderFidelity">0</token>
+						<Content name="TextureID"><null></null></Content>
+						<int name="VertexCount">4352</int>
 						<SharedString name="AeroMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+						<token name="FluidFidelityInternal">0</token>
+						<bool name="InertiaMigrated">true</bool>
+						<SharedString name="PhysicalConfigData">aTIjYIeEFqyQ2bhuh8rtLg==</SharedString>
+						<Vector3 name="UnscaledCofm">
+							<X>-1.80013018e-07</X>
+							<Y>4.32734441e-06</Y>
+							<Z>3.48552157e-06</Z>
+						</Vector3>
+						<Vector3 name="UnscaledVolInertiaDiags">
+							<X>8.50336146e-05</X>
+							<Y>8.37962762e-06</Y>
+							<Z>9.29887392e-05</Z>
+						</Vector3>
+						<Vector3 name="UnscaledVolInertiaOffDiags">
+							<X>-3.94808665e-12</X>
+							<Y>-3.17759881e-12</Y>
+							<Z>-1.5377595e-12</Z>
+						</Vector3>
+						<float name="UnscaledVolume">0.00302734436</float>
 						<bool name="Anchored">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<bool name="AudioCanCollide">true</bool>
 						<float name="BackParamA">-0.5</float>
 						<float name="BackParamB">0.5</float>
 						<token name="BackSurface">0</token>
@@ -314,24 +1991,11 @@ _m.init({["config"]=require(script.Parent);});
 						<PhysicalProperties name="CustomPhysicalProperties">
 							<CustomPhysics>false</CustomPhysics>
 						</PhysicalProperties>
-						<bool name="DoubleSided">false</bool>
 						<bool name="EnableFluidForces">true</bool>
 						<float name="FrontParamA">-0.5</float>
 						<float name="FrontParamB">0.5</float>
 						<token name="FrontSurface">0</token>
 						<token name="FrontSurfaceInput">0</token>
-						<bool name="HasJointOffset">false</bool>
-						<bool name="HasSkinnedMesh">false</bool>
-						<Vector3 name="InitialSize">
-							<X>0.180000007</X>
-							<Y>0.579999983</Y>
-							<Z>0.0290130004</Z>
-						</Vector3>
-						<Vector3 name="JointOffset">
-							<X>0</X>
-							<Y>0</Y>
-							<Z>0</Z>
-						</Vector3>
 						<float name="LeftParamA">-0.5</float>
 						<float name="LeftParamB">0.5</float>
 						<token name="LeftSurface">0</token>
@@ -340,10 +2004,6 @@ _m.init({["config"]=require(script.Parent);});
 						<bool name="Massless">false</bool>
 						<token name="Material">272</token>
 						<string name="MaterialVariantSerialized"></string>
-						<Content name="MeshId"><url>rbxassetid://14392195965</url></Content>
-						<string name="Name">_main</string>
-						<SharedString name="PhysicalConfigData">8bK8+Px3Ot0zJrOHgLue2Q==</SharedString>
-						<BinaryString name="PhysicsData"></BinaryString>
 						<CoordinateFrame name="PivotOffset">
 							<X>0</X>
 							<Y>0</Y>
@@ -359,7 +2019,6 @@ _m.init({["config"]=require(script.Parent);});
 							<R22>1</R22>
 						</CoordinateFrame>
 						<float name="Reflectance">0</float>
-						<token name="RenderFidelity">0</token>
 						<float name="RightParamA">-0.5</float>
 						<float name="RightParamB">0.5</float>
 						<token name="RightSurface">0</token>
@@ -370,9 +2029,6 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-						<Content name="TextureID"><null></null></Content>
 						<float name="TopParamA">-0.5</float>
 						<float name="TopParamB">0.5</float>
 						<token name="TopSurface">0</token>
@@ -383,39 +2039,46 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int name="VertexCount">4352</int>
 						<Vector3 name="size">
 							<X>0.180000007</X>
 							<Y>0.579999983</Y>
 							<Z>0.0290130004</Z>
 						</Vector3>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">_main</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 					<Item class="Sound" referent="RBX9139370C8A0A4395AD7D89B0BDA9FA31">
 						<Properties>
-							<BinaryString name="AttributesSerialize"></BinaryString>
-							<float name="EmitterSize">10</float>
+							<bool name="AcousticSimulationEnabled">true</bool>
 							<NumberRange name="LoopRegion">0 60000 </NumberRange>
 							<bool name="Looped">false</bool>
-							<string name="Name">sound</string>
 							<bool name="PlayOnRemove">false</bool>
 							<NumberRange name="PlaybackRegion">0 60000 </NumberRange>
 							<bool name="PlaybackRegionsEnabled">false</bool>
 							<float name="PlaybackSpeed">4</float>
 							<bool name="Playing">false</bool>
+							<float name="RollOffMaxDistance">20</float>
+							<float name="RollOffMinDistance">10</float>
 							<token name="RollOffMode">0</token>
 							<Ref name="SoundGroup">null</Ref>
 							<Content name="SoundId"><url>rbxassetid://138093550</url></Content>
-							<int64 name="SourceAssetId">138093550</int64>
-							<BinaryString name="Tags"></BinaryString>
 							<double name="TimePosition">0</double>
 							<float name="Volume">0.200000003</float>
-							<float name="xmlRead_MaxDistance_3">20</float>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<string name="Name">sound</string>
+							<int64 name="SourceAssetId">138093550</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
 					</Item>
 					<Item class="ProximityPrompt" referent="RBXAA33CC468AF04E0188C32A19475FF55B">
 						<Properties>
 							<string name="ActionText">Present your card</string>
-							<BinaryString name="AttributesSerialize"></BinaryString>
 							<bool name="AutoLocalize">true</bool>
 							<bool name="ClickablePrompt">true</bool>
 							<bool name="Enabled">true</bool>
@@ -424,24 +2087,30 @@ _m.init({["config"]=require(script.Parent);});
 							<float name="HoldDuration">0.5</float>
 							<token name="KeyboardKeyCode">101</token>
 							<float name="MaxActivationDistance">3</float>
-							<string name="Name">xcsInteraction</string>
+							<float name="MaxIndicatorDistance">0</float>
 							<string name="ObjectText">Restrafes XCS</string>
 							<bool name="RequiresLineOfSight">true</bool>
 							<Ref name="RootLocalizationTable">null</Ref>
-							<int64 name="SourceAssetId">-1</int64>
 							<token name="Style">0</token>
-							<BinaryString name="Tags"></BinaryString>
 							<Vector2 name="UIOffset">
 								<X>0</X>
 								<Y>0</Y>
 							</Vector2>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<string name="Name">xcsInteraction</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
 					</Item>
 				</Item>
 				<Item class="Part" referent="RBXFDAAD4D864FE4782BEC63522E9DF48F7">
 					<Properties>
+						<token name="shape">1</token>
+						<token name="formFactorRaw">1</token>
 						<bool name="Anchored">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<bool name="AudioCanCollide">true</bool>
 						<float name="BackParamA">-0.5</float>
 						<float name="BackParamB">0.5</float>
 						<token name="BackSurface">0</token>
@@ -487,7 +2156,6 @@ _m.init({["config"]=require(script.Parent);});
 						<bool name="Massless">false</bool>
 						<token name="Material">288</token>
 						<string name="MaterialVariantSerialized"></string>
-						<string name="Name">LED</string>
 						<CoordinateFrame name="PivotOffset">
 							<X>0</X>
 							<Y>0</Y>
@@ -513,8 +2181,6 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
 						<float name="TopParamA">-0.5</float>
 						<float name="TopParamB">0.5</float>
 						<token name="TopSurface">0</token>
@@ -525,19 +2191,25 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<token name="formFactorRaw">1</token>
-						<token name="shape">1</token>
 						<Vector3 name="size">
 							<X>0.129999995</X>
 							<Y>0.0299999993</Y>
 							<Z>0.0140100848</Z>
 						</Vector3>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">LED</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="Part" referent="RBX59DDD63BADB743C382A6D79325A66D63">
 					<Properties>
+						<token name="shape">1</token>
+						<token name="formFactorRaw">1</token>
 						<bool name="Anchored">true</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
+						<bool name="AudioCanCollide">true</bool>
 						<float name="BackParamA">-0.5</float>
 						<float name="BackParamB">0.5</float>
 						<token name="BackSurface">0</token>
@@ -583,7 +2255,6 @@ _m.init({["config"]=require(script.Parent);});
 						<bool name="Massless">false</bool>
 						<token name="Material">272</token>
 						<string name="MaterialVariantSerialized"></string>
-						<string name="Name">logo</string>
 						<CoordinateFrame name="PivotOffset">
 							<X>0</X>
 							<Y>0</Y>
@@ -609,8 +2280,6 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
 						<float name="TopParamA">-0.5</float>
 						<float name="TopParamB">0.5</float>
 						<token name="TopSurface">0</token>
@@ -621,21 +2290,22 @@ _m.init({["config"]=require(script.Parent);});
 							<Y>0</Y>
 							<Z>0</Z>
 						</Vector3>
-						<token name="formFactorRaw">1</token>
-						<token name="shape">1</token>
 						<Vector3 name="size">
 							<X>0.129999995</X>
 							<Y>0.0464786291</Y>
 							<Z>0.0144716632</Z>
 						</Vector3>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">logo</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 				<Item class="ModuleScript" referent="RBXDDF88037A12D49CCA4818E487A82537A">
 					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
 						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">config</string>
-						<string name="ScriptGuid">{E15B3E24-9BEB-4154-9296-28F128C272E9}</string>
 						<ProtectedString name="Source"><![CDATA[--[[
 
 Restrafes XCS - Access Control
@@ -710,43 +2380,1653 @@ local settings = {
 
 return settings
 ]]></ProtectedString>
+						<string name="ScriptGuid">{E15B3E24-9BEB-4154-9296-28F128C272E9}</string>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">config</string>
 						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 					<Item class="Script" referent="RBXF5CF9F494FE5480EBE74A50CA75DEDF1">
 						<Properties>
-							<BinaryString name="AttributesSerialize"></BinaryString>
-							<bool name="Disabled">false</bool>
-							<Content name="LinkedSource"><null></null></Content>
-							<string name="Name">loader</string>
-							<token name="RunContext">0</token>
-							<string name="ScriptGuid">{02982804-CB63-4C38-9D47-006FC5451CFB}</string>
-							<ProtectedString name="Source"><![CDATA[local loader = require(7108284356);
+							<ProtectedString name="Source"><![CDATA[local loader = require(script.xcssrc);
 local _m = require(loader({["branch"]="xcs-reader";}));
 _m.init({["config"]=require(script.Parent);});]]></ProtectedString>
+							<bool name="Disabled">false</bool>
+							<Content name="LinkedSource"><null></null></Content>
+							<token name="RunContext">0</token>
+							<string name="ScriptGuid">{02982804-CB63-4C38-9D47-006FC5451CFB}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<string name="Name">loader</string>
 							<int64 name="SourceAssetId">-1</int64>
-							<BinaryString name="Tags"></BinaryString>
+							<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 						</Properties>
+						<Item class="ModuleScript" referent="RBXEA7FBD3F87E44648805D15EDAF6CCE1F">
+							<Properties>
+								<Content name="LinkedSource"><null></null></Content>
+								<ProtectedString name="Source"><![CDATA[--[[
+
+This code is for XCS, a Roblox access control framework that allows experiences to verify users, manage permissions, and control access to doors, areas, systems, and protected features through configurable roles and access groups. HTTPService is used to securely communicate with the XCS backend, allowing the game to check access permissions, validate users, and retrieve the latest access control data.
+
+]]
+
+local sss = game.ServerScriptService;
+
+return function(t)
+	if t["branch"] == "axesys-reader" then
+		local scriptClone = script.unitAxesys:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "axesys-superior" then
+		local scriptClone = script.controllerAxesys:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "xcs-reader" then
+		local scriptClone = script.unit:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "xcs-superior" then
+		local scriptClone = script.controller:Clone();
+		scriptClone.Parent = nil;
+		scriptClone.Name = math.random(9*100,10*200);
+		return scriptClone;
+	end
+	if t["branch"] == "httpm" then
+		local httpmClone = script.httpm:Clone();
+		httpmClone.Parent = nil;
+		httpmClone.Name = math.random(9*100,10*200);
+		httpmClone.Parent = sss;
+		httpmClone.Disabled = false;
+		return;
+	end
+	string.format("XCS - You've entered an invalid branch (%s). Please check your configuration and try again.", t["branch"])
+end
+
+]]></ProtectedString>
+								<string name="ScriptGuid">{6E7ABAAB-C1D7-4974-9A2A-6C2921275D30}</string>
+								<BinaryString name="AttributesSerialize"></BinaryString>
+								<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+								<bool name="DefinesCapabilities">true</bool>
+								<string name="Name">xcssrc</string>
+								<int64 name="SourceAssetId">7108284356</int64>
+								<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+							</Properties>
+							<Item class="Script" referent="RBX126476C1ADF740939F8239E7B1C22E41">
+								<Properties>
+									<ProtectedString name="Source"><![CDATA[local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
+local MessageGui = script.XCS_HTTP
+
+for _,P in pairs(Players:GetChildren()) do
+	local Msg = MessageGui:Clone()
+	Msg.Parent = P.PlayerGui
+end
+Players.PlayerAdded:Connect(function(Player)
+	local Msg = MessageGui:Clone()
+	Msg.Parent = Player.PlayerGui
+end)
+
+]]></ProtectedString>
+									<bool name="Disabled">true</bool>
+									<Content name="LinkedSource"><null></null></Content>
+									<token name="RunContext">0</token>
+									<string name="ScriptGuid">{CB14BE36-E440-4206-BD11-413CD05BF88C}</string>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+									<bool name="DefinesCapabilities">true</bool>
+									<string name="Name">httpm</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+								<Item class="ScreenGui" referent="RBX5A756F6C5D094A24A504866D01295C5A">
+									<Properties>
+										<bool name="ClipToDeviceSafeArea">true</bool>
+										<int name="DisplayOrder">0</int>
+										<token name="SafeAreaCompatibility">1</token>
+										<token name="ScreenInsets">2</token>
+										<bool name="Enabled">true</bool>
+										<bool name="ResetOnSpawn">false</bool>
+										<token name="ZIndexBehavior">0</token>
+										<bool name="AutoLocalize">true</bool>
+										<Ref name="RootLocalizationTable">null</Ref>
+										<token name="SelectionBehaviorDown">0</token>
+										<token name="SelectionBehaviorLeft">0</token>
+										<token name="SelectionBehaviorRight">0</token>
+										<token name="SelectionBehaviorUp">0</token>
+										<bool name="SelectionGroup">false</bool>
+										<BinaryString name="AttributesSerialize"></BinaryString>
+										<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+										<bool name="DefinesCapabilities">false</bool>
+										<string name="Name">XCS_HTTP</string>
+										<int64 name="SourceAssetId">-1</int64>
+										<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+									</Properties>
+									<Item class="Frame" referent="RBXD92FC3BD887C4CB390FB146464D03B37">
+										<Properties>
+											<token name="Style">0</token>
+											<bool name="Active">false</bool>
+											<Vector2 name="AnchorPoint">
+												<X>0</X>
+												<Y>0</Y>
+											</Vector2>
+											<token name="AutomaticSize">0</token>
+											<Color3 name="BackgroundColor3">
+												<R>0</R>
+												<G>0</G>
+												<B>0</B>
+											</Color3>
+											<float name="BackgroundTransparency">0</float>
+											<Color3 name="BorderColor3">
+												<R>0.105882362</R>
+												<G>0.164705887</G>
+												<B>0.207843155</B>
+											</Color3>
+											<token name="BorderMode">0</token>
+											<int name="BorderSizePixel">0</int>
+											<bool name="ClipsDescendants">false</bool>
+											<bool name="Draggable">false</bool>
+											<token name="InputSink">0</token>
+											<bool name="Interactable">true</bool>
+											<int name="LayoutOrder">0</int>
+											<Ref name="NextSelectionDown">null</Ref>
+											<Ref name="NextSelectionLeft">null</Ref>
+											<Ref name="NextSelectionRight">null</Ref>
+											<Ref name="NextSelectionUp">null</Ref>
+											<UDim2 name="Position">
+												<XS>0.5</XS>
+												<XO>-300</XO>
+												<YS>0</YS>
+												<YO>0</YO>
+											</UDim2>
+											<float name="Rotation">0</float>
+											<bool name="Selectable">false</bool>
+											<Ref name="SelectionImageObject">null</Ref>
+											<int name="SelectionOrder">0</int>
+											<UDim2 name="Size">
+												<XS>0</XS>
+												<XO>600</XO>
+												<YS>0</YS>
+												<YO>50</YO>
+											</UDim2>
+											<token name="SizeConstraint">0</token>
+											<bool name="Visible">true</bool>
+											<int name="ZIndex">1</int>
+											<bool name="AutoLocalize">true</bool>
+											<Ref name="RootLocalizationTable">null</Ref>
+											<token name="SelectionBehaviorDown">0</token>
+											<token name="SelectionBehaviorLeft">0</token>
+											<token name="SelectionBehaviorRight">0</token>
+											<token name="SelectionBehaviorUp">0</token>
+											<bool name="SelectionGroup">false</bool>
+											<BinaryString name="AttributesSerialize"></BinaryString>
+											<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+											<bool name="DefinesCapabilities">false</bool>
+											<string name="Name">Frame</string>
+											<int64 name="SourceAssetId">-1</int64>
+											<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+										</Properties>
+										<Item class="ImageButton" referent="RBX9034A008C4E0496EAC95DEF077A783AD">
+											<Properties>
+												<Content name="HoverImage"><null></null></Content>
+												<Content name="Image"><url>http://www.roblox.com/asset/?id=14511145204</url></Content>
+												<Color3 name="ImageColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<Vector2 name="ImageRectOffset">
+													<X>0</X>
+													<Y>0</Y>
+												</Vector2>
+												<Vector2 name="ImageRectSize">
+													<X>0</X>
+													<Y>0</Y>
+												</Vector2>
+												<float name="ImageTransparency">0</float>
+												<Content name="PressedImage"><null></null></Content>
+												<token name="ResampleMode">0</token>
+												<token name="ScaleType">3</token>
+												<Rect2D name="SliceCenter">
+													<min>
+														<X>0</X>
+														<Y>0</Y>
+													</min>
+													<max>
+														<X>0</X>
+														<Y>0</Y>
+													</max>
+												</Rect2D>
+												<float name="SliceScale">1</float>
+												<UDim2 name="TileSize">
+													<XS>1</XS>
+													<XO>0</XO>
+													<YS>1</YS>
+													<YO>0</YO>
+												</UDim2>
+												<bool name="AutoButtonColor">false</bool>
+												<Ref name="HoverHapticEffect">null</Ref>
+												<bool name="Modal">false</bool>
+												<Ref name="PressHapticEffect">null</Ref>
+												<bool name="Selected">false</bool>
+												<token name="Style">0</token>
+												<bool name="Active">true</bool>
+												<Vector2 name="AnchorPoint">
+													<X>0</X>
+													<Y>0.5</Y>
+												</Vector2>
+												<token name="AutomaticSize">0</token>
+												<Color3 name="BackgroundColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<float name="BackgroundTransparency">1</float>
+												<Color3 name="BorderColor3">
+													<R>0.105882362</R>
+													<G>0.164705887</G>
+													<B>0.207843155</B>
+												</Color3>
+												<token name="BorderMode">0</token>
+												<int name="BorderSizePixel">0</int>
+												<bool name="ClipsDescendants">false</bool>
+												<bool name="Draggable">false</bool>
+												<token name="InputSink">0</token>
+												<bool name="Interactable">true</bool>
+												<int name="LayoutOrder">0</int>
+												<Ref name="NextSelectionDown">null</Ref>
+												<Ref name="NextSelectionLeft">null</Ref>
+												<Ref name="NextSelectionRight">null</Ref>
+												<Ref name="NextSelectionUp">null</Ref>
+												<UDim2 name="Position">
+													<XS>0</XS>
+													<XO>10</XO>
+													<YS>0.5</YS>
+													<YO>0</YO>
+												</UDim2>
+												<float name="Rotation">0</float>
+												<bool name="Selectable">false</bool>
+												<Ref name="SelectionImageObject">null</Ref>
+												<int name="SelectionOrder">0</int>
+												<UDim2 name="Size">
+													<XS>0</XS>
+													<XO>80</XO>
+													<YS>0</YS>
+													<YO>18</YO>
+												</UDim2>
+												<token name="SizeConstraint">0</token>
+												<bool name="Visible">true</bool>
+												<int name="ZIndex">1</int>
+												<bool name="AutoLocalize">true</bool>
+												<Ref name="RootLocalizationTable">null</Ref>
+												<token name="SelectionBehaviorDown">0</token>
+												<token name="SelectionBehaviorLeft">0</token>
+												<token name="SelectionBehaviorRight">0</token>
+												<token name="SelectionBehaviorUp">0</token>
+												<bool name="SelectionGroup">false</bool>
+												<BinaryString name="AttributesSerialize"></BinaryString>
+												<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+												<bool name="DefinesCapabilities">false</bool>
+												<string name="Name">Logo</string>
+												<int64 name="SourceAssetId">-1</int64>
+												<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+											</Properties>
+										</Item>
+										<Item class="TextLabel" referent="RBX9723C44E860B4B7CA9B82929802FB3E6">
+											<Properties>
+												<Font name="FontFace">
+													<Family><url>rbxasset://fonts/families/Roboto.json</url></Family>
+													<Weight>400</Weight>
+													<Style>Normal</Style>
+												</Font>
+												<float name="LineHeight">1</float>
+												<string name="LocalizationMatchIdentifier"></string>
+												<string name="LocalizationMatchedSourceText"></string>
+												<int name="MaxVisibleGraphemes">-1</int>
+												<string name="OpenTypeFeatures"></string>
+												<bool name="RichText">false</bool>
+												<string name="Text">HttpService is required, please enable it in game settings.</string>
+												<Color3 name="TextColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<token name="TextDirection">0</token>
+												<bool name="TextScaled">false</bool>
+												<float name="TextSize">18</float>
+												<Color3 name="TextStrokeColor3">
+													<R>0</R>
+													<G>0</G>
+													<B>0</B>
+												</Color3>
+												<float name="TextStrokeTransparency">1</float>
+												<float name="TextTransparency">0</float>
+												<token name="TextTruncate">0</token>
+												<bool name="TextWrapped">true</bool>
+												<token name="TextXAlignment">0</token>
+												<token name="TextYAlignment">0</token>
+												<bool name="Active">false</bool>
+												<Vector2 name="AnchorPoint">
+													<X>0</X>
+													<Y>0</Y>
+												</Vector2>
+												<token name="AutomaticSize">0</token>
+												<Color3 name="BackgroundColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<float name="BackgroundTransparency">1</float>
+												<Color3 name="BorderColor3">
+													<R>0.105882362</R>
+													<G>0.164705887</G>
+													<B>0.207843155</B>
+												</Color3>
+												<token name="BorderMode">0</token>
+												<int name="BorderSizePixel">0</int>
+												<bool name="ClipsDescendants">false</bool>
+												<bool name="Draggable">false</bool>
+												<token name="InputSink">0</token>
+												<bool name="Interactable">true</bool>
+												<int name="LayoutOrder">0</int>
+												<Ref name="NextSelectionDown">null</Ref>
+												<Ref name="NextSelectionLeft">null</Ref>
+												<Ref name="NextSelectionRight">null</Ref>
+												<Ref name="NextSelectionUp">null</Ref>
+												<UDim2 name="Position">
+													<XS>0</XS>
+													<XO>100</XO>
+													<YS>0</YS>
+													<YO>25</YO>
+												</UDim2>
+												<float name="Rotation">0</float>
+												<bool name="Selectable">false</bool>
+												<Ref name="SelectionImageObject">null</Ref>
+												<int name="SelectionOrder">0</int>
+												<UDim2 name="Size">
+													<XS>0</XS>
+													<XO>500</XO>
+													<YS>0</YS>
+													<YO>25</YO>
+												</UDim2>
+												<token name="SizeConstraint">0</token>
+												<bool name="Visible">true</bool>
+												<int name="ZIndex">1</int>
+												<bool name="AutoLocalize">true</bool>
+												<Ref name="RootLocalizationTable">null</Ref>
+												<token name="SelectionBehaviorDown">0</token>
+												<token name="SelectionBehaviorLeft">0</token>
+												<token name="SelectionBehaviorRight">0</token>
+												<token name="SelectionBehaviorUp">0</token>
+												<bool name="SelectionGroup">false</bool>
+												<BinaryString name="AttributesSerialize"></BinaryString>
+												<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+												<bool name="DefinesCapabilities">false</bool>
+												<string name="Name">Line2</string>
+												<int64 name="SourceAssetId">-1</int64>
+												<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+											</Properties>
+										</Item>
+										<Item class="TextLabel" referent="RBXD947C10E9CAC43A58CBFF6DB51BA1B79">
+											<Properties>
+												<Font name="FontFace">
+													<Family><url>rbxasset://fonts/families/Roboto.json</url></Family>
+													<Weight>400</Weight>
+													<Style>Normal</Style>
+												</Font>
+												<float name="LineHeight">1</float>
+												<string name="LocalizationMatchIdentifier"></string>
+												<string name="LocalizationMatchedSourceText"></string>
+												<int name="MaxVisibleGraphemes">-1</int>
+												<string name="OpenTypeFeatures"></string>
+												<bool name="RichText">false</bool>
+												<string name="Text">Restrafes XCS Controller Error</string>
+												<Color3 name="TextColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<token name="TextDirection">0</token>
+												<bool name="TextScaled">false</bool>
+												<float name="TextSize">18</float>
+												<Color3 name="TextStrokeColor3">
+													<R>0</R>
+													<G>0</G>
+													<B>0</B>
+												</Color3>
+												<float name="TextStrokeTransparency">1</float>
+												<float name="TextTransparency">0</float>
+												<token name="TextTruncate">0</token>
+												<bool name="TextWrapped">true</bool>
+												<token name="TextXAlignment">0</token>
+												<token name="TextYAlignment">2</token>
+												<bool name="Active">false</bool>
+												<Vector2 name="AnchorPoint">
+													<X>0</X>
+													<Y>0</Y>
+												</Vector2>
+												<token name="AutomaticSize">0</token>
+												<Color3 name="BackgroundColor3">
+													<R>1</R>
+													<G>1</G>
+													<B>1</B>
+												</Color3>
+												<float name="BackgroundTransparency">1</float>
+												<Color3 name="BorderColor3">
+													<R>0.105882362</R>
+													<G>0.164705887</G>
+													<B>0.207843155</B>
+												</Color3>
+												<token name="BorderMode">0</token>
+												<int name="BorderSizePixel">0</int>
+												<bool name="ClipsDescendants">false</bool>
+												<bool name="Draggable">false</bool>
+												<token name="InputSink">0</token>
+												<bool name="Interactable">true</bool>
+												<int name="LayoutOrder">0</int>
+												<Ref name="NextSelectionDown">null</Ref>
+												<Ref name="NextSelectionLeft">null</Ref>
+												<Ref name="NextSelectionRight">null</Ref>
+												<Ref name="NextSelectionUp">null</Ref>
+												<UDim2 name="Position">
+													<XS>0</XS>
+													<XO>100</XO>
+													<YS>0</YS>
+													<YO>0</YO>
+												</UDim2>
+												<float name="Rotation">0</float>
+												<bool name="Selectable">false</bool>
+												<Ref name="SelectionImageObject">null</Ref>
+												<int name="SelectionOrder">0</int>
+												<UDim2 name="Size">
+													<XS>0</XS>
+													<XO>500</XO>
+													<YS>0</YS>
+													<YO>25</YO>
+												</UDim2>
+												<token name="SizeConstraint">0</token>
+												<bool name="Visible">true</bool>
+												<int name="ZIndex">1</int>
+												<bool name="AutoLocalize">true</bool>
+												<Ref name="RootLocalizationTable">null</Ref>
+												<token name="SelectionBehaviorDown">0</token>
+												<token name="SelectionBehaviorLeft">0</token>
+												<token name="SelectionBehaviorRight">0</token>
+												<token name="SelectionBehaviorUp">0</token>
+												<bool name="SelectionGroup">false</bool>
+												<BinaryString name="AttributesSerialize"></BinaryString>
+												<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+												<bool name="DefinesCapabilities">false</bool>
+												<string name="Name">Line1</string>
+												<int64 name="SourceAssetId">-1</int64>
+												<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+											</Properties>
+										</Item>
+									</Item>
+								</Item>
+							</Item>
+							<Item class="ModuleScript" referent="RBX2E779BCC469348D89171D1D878C9571D">
+								<Properties>
+									<Content name="LinkedSource"><null></null></Content>
+									<ProtectedString name="Source"><![CDATA[local _m = {};
+_m.config = nil;
+_m.apiReady = false;
+
+local http = game:GetService("HttpService");
+local dss = game:GetService("DataStoreService");
+local datastore = dss:GetDataStore("axesys_persistence");
+local backupDB = false;
+
+local utd_fetch = nil;
+local readers = {};
+
+local moduleId = 0;
+
+local f = string.format;
+local str = tostring;
+local basePrint = print
+local baseWarn = warn
+
+local print = function(...)
+	if (not _m.config["debug"]) then return; end
+	basePrint(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+local warn = function(...)
+	if (not _m.config["debug"]) then return; end
+	baseWarn(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+function _m.main()
+	_m.apiReady = false;
+	local storeData, fetchData = nil, nil;
+
+	local success, errorMessage = pcall(function()
+		fetchData = http:GetAsync(_m.url.."/syncdoors/".._m.config["apiKey"].."/".._m.config["placeId"]);
+	end)
+
+	if (success) then
+		print("successfully fetched fresh data from the axesys service");
+		storeData = http:JSONDecode(fetchData);
+		utd_fetch = storeData["data"];
+		_m.apiReady = true;
+	else
+		print("error while fetching data from to the axesys service / "..errorMessage);
+		print("will try the next sync in ".._m.config["syncInterval"]);
+		print("Using local datastore cache");
+		_m.apiReady = true
+		backupDB = true
+	end
+
+	if (not backupDB) then
+		local success,errorMessage = pcall(function()
+			for doorId,doorData in pairs(utd_fetch) do
+				datastore:SetAsync(doorId, doorData);
+			end
+		end)
+		if (success) then
+			print("successfully updated local datastore with fresh data from the axesys service");
+		else
+			print("failed to save door data locally. / "..errorMessage);
+		end
+	end
+	wait(_m.config["syncInterval"]);
+	_m.main();
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+
+	_m.api = _G.axesysApi or Instance.new("BindableFunction");
+	_m.api.Parent = nil;
+	_m.api.Name = "axesysApi";
+	_G.axesysApi = _m.api;
+
+	assert(_m.config["url"],"'url' not set!");
+	assert(_m.config["placeId"],"'placeId' not set!");
+	assert(_m.config["apiKey"],"'apiKey' not set");
+	assert(_m.config["syncInterval"],"'syncInterval' not set");
+
+	_m.url = _m.config["url"];
+
+	-- test connection w/ provided url
+	local success, errorMsg = pcall(function()
+		local testConnection = http:GetAsync(_m.url.."/Ping")
+		if (testConnection == "Pong!") then
+			print("successfully connected to the server!");
+		else
+			assert(false, testConnection);
+		end
+	end)
+
+	if (not success) then
+		if (errorMsg == "Http requests are not enabled. Enable via game settings") then
+			require(moduleId)("httpm");
+			return
+		end
+	end
+
+	-- api implementation
+	_m.api.OnInvoke = function(data)
+		if (not _m.apiReady) then repeat wait() until _m.apiReady end;
+		if (type(data) == "table") then
+			if (not backupDB and utd_fetch[data["reader"]] ~= nil or datastore:GetAsync(data["reader"]) ~= nil) then
+				if (data["request"] == "ping") then -- api connection
+					return {["response"]=true;};
+				end
+				if (data["request"] == "settings") then -- fetch settings for a door (active, locked, timer duration)
+					if (not backupDB) then
+						return {["response"]="settings";["data"]=utd_fetch[data["reader"]]["DoorSettings"];};
+					else
+						return {["response"]="settings";["data"]=datastore:GetAsync(data["reader"])["DoorSettings"];};
+					end
+				end
+				if (data["request"] == "checkAccess") then -- main checkpoint function
+					local uid = tostring(data["uid"]);
+					local doorData = nil;
+					if (not backupDB) then
+						doorData = utd_fetch[data["reader"]]
+					else
+						doorData = datastore:GetAsync(data["reader"])
+					end
+					coroutine.resume(coroutine.create(function() http:GetAsync(_m.url.."/addlog/".._m.apiKey.."/".._m.config["apiKey"].."/"..data["reader"].."/"..data["uid"])	end))
+
+					-- check if the user requesting access is in the list of authorized users
+					for uid_l,username in pairs(doorData["AuthorizedUsers"]) do
+						if (uid_l == uid) then
+							return {["response"]="access";["data"]=true;}
+						end
+					end
+					return {["response"]="access";["data"]=false;}
+				end
+			else
+				return {["response"]="invalid-reader";}
+			end
+		else
+			assert(false, "invalid data sent to the api!");
+		end
+	end
+
+	local proxService = game:GetService("ProximityPromptService");
+	proxService.PromptTriggered:Connect(function(obj, player)
+		if (obj.Name == "xcsInteraction") then
+			local findApi = obj.Parent.Parent:FindFirstChild("API");
+			if (findApi) then
+				-- if proximityPrompAccessWithoutCard is disabled, always deny the request
+				findApi:Fire({["request"]="onScan";["player"]=player;["isProximityPrompt"]=true;["proximityPrompAccessWithoutCard"]=_m.config["proximityPrompAccessWithoutCard"];["proximityObject"]=obj;});
+			end
+		end
+	end)
+
+	_m.main();
+	print("error while trying to connect to the axesys service / "..errorMsg);
+	print("trying again in 60 seconds but will use backup database");
+end
+
+return _m
+]]></ProtectedString>
+									<string name="ScriptGuid">{37B9E8B8-0A75-4BA1-8AC7-90F7F2A33ECF}</string>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+									<bool name="DefinesCapabilities">true</bool>
+									<string name="Name">controllerAxesys</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+							<Item class="ModuleScript" referent="RBX1D68632C57EC44BB8755713630030800">
+								<Properties>
+									<Content name="LinkedSource"><null></null></Content>
+									<ProtectedString name="Source"><![CDATA[local _m = {};
+sss = game:GetService("ServerScriptService");
+_m.config = nil;
+_m.model = nil;
+
+_m.doorId = nil; _m.doorLocked = nil; _m.doorActive = false;
+_m.doorTimer = 5;
+
+_m.isSyncing = false;
+_m.syncTimerStarted = false;
+_m.cardScan = false;
+
+repeat wait(1) until _G.axesysApi ~= nil;
+_m.superiorApi = _G.axesysApi;
+
+function _m._legacy_trigger(newValue)
+	if (_m.model:FindFirstChild("Trigger")) then
+		_m.model:FindFirstChild("Trigger").Value = newValue;
+	end
+end
+
+function _m.negotiate(player, proximityObject)
+	if (_m.doorLocked and not _m.cardScan and _m.doorActive) then
+		if (_m.isSyncing) then return; end
+		_m.cardScan = true
+		_m.indicatorChange("LEDR",0);
+		_m.indicatorChange("LEDG",0);
+		_m.indicatorChange("LEDS",0);
+		local checkUser = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="checkAccess";["uid"]=player.UserId})["data"];
+		local accessGranted = (checkUser and true or false);
+		if (accessGranted) then
+			spawn(function()
+				_m.events["accessGranted"](player);
+			end)
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;["player"]=player;});
+			_m.api:Fire({["request"]="onAccessGranted";["player"]=player;["timerLength"]=_m.doorTimer;});
+			if (_m.sound) then
+				_m.sound.SoundId = _m.sounds["accessGranted"];
+				_m.sound:Play();
+			end
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			local time = 0;
+			repeat
+				wait(1);
+				time += 1;
+				local syncTimed = _m.doorTimer;
+			until time > syncTimed
+			spawn(function()
+				_m.events["accessReady"]();
+			end)
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;["player"]=player;});
+			if (proximityObject) then
+				proximityObject.Enabled = true;
+			end
+		else
+			spawn(function()
+				_m.events["accessDenied"](player);
+			end)
+			_m.api:Fire({["request"]="onAccessDenied";["player"]=player;["timerLength"]=_m.config["accessDeniedTimer"];});
+			if (_m.sound) then
+				_m.sound.SoundId = _m.sounds["accessDenied"];
+				_m.sound:Play();
+			end
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			wait(_m.config["accessDeniedTimer"]);
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+			if (proximityObject) then
+				proximityObject.Enabled = true;
+			end
+		end
+		_m.cardScan = false
+	end
+end
+
+function _m.touchScan(x)
+	if (x.Parent:FindFirstChild("CardNumber") or x.Parent:FindFirstChild("_axesysCard") and x.Name == "Handle" and x.Parent.ClassName == "Tool") then
+		local player = game.Players:GetPlayerFromCharacter(x.Parent.Parent);
+		local uid = tostring(player.UserId);
+		_m.negotiate(player);
+	end
+end
+
+function readerSettings()
+	local newSettings = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="settings"})["data"];
+	_m.doorActive = (newSettings["Active"] == "1" and true or false);
+	_m.doorLocked = (newSettings["Locked"] == "1" and true or false);
+	_m.api:Fire({["request"]="setDoorTrigger";["value"]=(newSettings["Locked"] == "0" and true or false);["player"]=player;});
+	_m.indicatorChange("LEDR",(newSettings["Active"] == "0" and 1 or 0));
+	_m.indicatorChange("LEDG",(newSettings["Locked"] == "1" and 0 or 1));
+	_m.indicatorChange("LEDS",(newSettings["Active"] == "1" and newSettings["Locked"] == "1" and 1 or 0));
+
+	if (_m.doorActive and _m.doorLocked) then
+		spawn(function()
+			_m.events["accessReady"]();
+		end)
+	elseif (_m.doorActive and not _m.doorLocked) then
+		spawn(function()
+			_m.events["enabled"]();
+		end)
+	elseif (not _m.doorActive) then
+		spawn(function()
+			_m.events["disabled"]();
+		end)
+	end
+
+	_m.doorTimer = tonumber(newSettings["Timer"]);
+	wait(60);
+	readerSettings();
+end
+
+function _m.indicatorChange(N,S)
+	for _,x in pairs(_m.model:GetChildren()) do
+		if (x.Name == N) then
+			x.BrickColor = BrickColor.new(_m.config["_legacy_indicators"][N][S])
+			if (S == 1) then
+				x.Material = "Neon";
+			else
+				x.Material = "SmoothPlastic";
+			end
+		end
+	end
+end
+
+function _m.init(data)
+	wait(2.5)
+	_m.config = data["config"];
+	_m.model = _m.config["model"];
+	_m.doorId = _m.config["doorId"];
+	_m.sounds = _m.config["sounds"];
+	_m.events = _m.config["events"];
+	_m.sound = nil;
+	_m.api = _m.model.API;
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.sound = _m.model:FindFirstChild("_main"):FindFirstChild("sound");
+	end
+	if (_m.config["_legacy_indicators"] == nil) then
+		_m.config["_legacy_indicators"] = {
+			["LEDR"]={[0]="Really black",[1]="Really red"};
+			["LEDG"]={[0]="Really black",[1]="Lime green"};
+			["LEDS"]={[0]="Really black",[1]="Institutional white"};
+		};
+	end
+	if (_m.events["accessGranted"] == nil) then
+		_m.events["accessGranted"] = function(player)
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDenied"] == nil) then
+		_m.events["accessDenied"] = function(player)
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["enabled"] == nil) then
+		_m.events["enabled"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["disabled"] == nil) then
+		_m.events["disabled"] = function()
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessReady"] == nil) then
+		_m.events["accessReady"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+		end
+	end
+
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	local startUp = true;
+
+	repeat
+		_m.indicatorChange("LEDR",1)
+		local waitPing = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="ping";})
+		if (waitPing["response"]) then
+			startUp = false;
+			break;
+		end
+		if (waitPing["response"] == "invalid-reader") then
+			_m.indicatorChange("LEDR",1);
+			assert(false,"eve axesys (reader): [".._m.doorId.."]: invalid reader!");
+		end
+	until not startUp
+
+	_m.indicatorChange("LEDR",0);
+	wait(0.2);
+	_m.indicatorChange("LEDR",1);
+	wait(0.2);
+	_m.indicatorChange("LEDG",1);
+	wait(0.2);
+	_m.indicatorChange("LEDS",1);
+	wait(2.5);
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.model:FindFirstChild("_main").Touched:connect(_m.touchScan);
+	end
+	-- new interaction method
+	_m.api.Event:Connect(function(data)
+		if (data["request"] == "onScan") then
+			if (data["isProximityPrompt"]) then
+				if (data["proximityPrompAccessWithoutCard"]) then
+					_m.negotiate(data["player"]);
+				else
+					for _,v in pairs(data["player"]:FindFirstChild("Backpack"):GetChildren()) do
+						if (v:FindFirstChild("CardNumber") or v:FindFirstChild("_axesysCard") and v.Parent.ClassName == "Tool") then
+							_m.negotiate(data["player"], data["proximityObject"]);
+							return;
+						end
+					end
+					for _,v in pairs(data["player"].Character:GetChildren()) do
+						if (v:FindFirstChild("CardNumber") or v:FindFirstChild("_axesysCard") and v.Parent.ClassName == "Tool") then
+							_m.negotiate(data["player"], data["proximityObject"]);
+							return;
+						end
+					end
+				end
+			else
+				_m.negotiate(data["player"]);
+			end
+		elseif (data["request"] == "setDoorTrigger") then
+			_m._legacy_trigger(data["value"]);
+		end
+	end)
+	readerSettings()
+end
+
+return _m
+]]></ProtectedString>
+									<string name="ScriptGuid">{4214A8E4-66AA-4E63-99F9-A5806F1460C1}</string>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+									<bool name="DefinesCapabilities">true</bool>
+									<string name="Name">unitAxesys</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+							<Item class="ModuleScript" referent="RBX108EB7C2A15F43CD9E1BE3F7DC4DBB5F">
+								<Properties>
+									<Content name="LinkedSource"><null></null></Content>
+									<ProtectedString name="Source"><![CDATA[local _m = {};
+_m.config = nil;
+_m.apiReady = false;
+
+local http = game:GetService("HttpService");
+local dss = game:GetService("DataStoreService");
+local MessagingService = game:GetService("MessagingService");
+local Players = game:GetService("Players");
+local datastore = dss:GetDataStore("xcs_storage");
+local useDataStoreBackup = false;
+
+local utd_fetch = nil;
+local readers = {};
+
+
+local f = string.format;
+local str = tostring;
+local basePrint = print
+local baseWarn = warn
+
+local print = function(...)
+	if (not _m.config["debug"]) then return; end
+	basePrint(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+local warn = function(...)
+	if (not _m.config["debug"]) then return; end
+	baseWarn(f("%s%s", "Restrafes XCS: ", str(...)));
+end
+
+function _m.main()
+	coroutine.wrap(function()
+		--_m.apiReady = false;
+		local storeData, fetchData = nil, nil;
+
+		local success, errorMessage = pcall(function()
+			local url = string.format(_m.url .. "/%s?apiKey=%s&universeId=%s", _m.config["placeId"], _m.config["apiKey"], game.GameId);
+			local response = http:RequestAsync({
+				["Url"] = url;
+				["Method"] = "GET";
+				["Headers"] = {
+					["Content-Type"] = "application/json";
+				};
+			});
+			if (response["Success"]) then
+				storeData = http:JSONDecode(response["Body"]);
+				print("Successfully retrieved up-to-date data from the XCS service.");
+				utd_fetch = storeData["accessPoints"];
+				if (utd_fetch == nil and type(storeData["location"]) == "table") then
+					utd_fetch = {};
+					for _, accessPoint in ipairs(storeData["location"]["accessPoints"] or {}) do
+						local configuration = accessPoint["configuration"] or {};
+						local armedState = configuration["armed"];
+						local armed = (armedState == "ARMED" or armedState == true);
+						utd_fetch[accessPoint["id"]] = {
+							["config"] = {
+								["active"] = configuration["active"];
+								["armed"] = armed;
+								["unlockTime"] = configuration["unlockTime"];
+								["scanData"] = {
+									["ready"] = configuration["scanDataArmed"] or {};
+									["disarmed"] = configuration["scanDataDisarmed"] or {};
+								};
+							};
+						};
+					end
+				end
+				if (utd_fetch == nil) then
+					error("Response did not include access point data");
+				end
+				_m.apiReady = true;
+			else
+				local msg = "Unknown Error";
+				local code = "Unknwon Code";
+				pcall(function()
+					local decodedBody = http:JSONDecode(response["Body"]);
+					msg = decodedBody["message"];
+					code = response["StatusCode"];
+				end)
+				warn(string.format("Received an error %s response while trying to retrieve data from the XCS service: %s", code, msg));
+				warn(string.format("Will try the next sync in %s seconds...\nUsing the backup datastore in the meantime.", _m.config["syncInterval"]));
+				_m.apiReady = true
+				useDataStoreBackup = true
+			end
+		end)
+
+		if (not success) then
+			warn("Failed to sync access point data from the XCS service: " .. tostring(errorMessage));
+			warn(string.format("Will try the next sync in %s seconds...\nUsing the backup datastore in the meantime.", _m.config["syncInterval"]));
+			_m.apiReady = true;
+			useDataStoreBackup = true;
+		end
+
+		if (not useDataStoreBackup and utd_fetch ~= nil) then
+			local success, errorMessage = pcall(function()
+				datastore:SetAsync("accessPoints", utd_fetch);
+			end)
+			if (success) then
+				print("Successfully updated the local datastore with fresh data from the XCS service.");
+			else
+				print("Failed to save access point data locally: " ..errorMessage);
+			end
+		end
+		wait(_m.config["syncInterval"]);
+		_m.main();
+	end)()
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+
+	_m.api = _G.xcsApi or Instance.new("BindableFunction");
+	_m.api.Parent = nil;
+	_m.api.Name = "XCS";
+	_G.xcsApi = _m.api;
+
+	assert(_m.config["url"], "'url' not set!");
+	assert(_m.config["placeId"], "'placeId' not set!");
+	assert(_m.config["apiKey"], "'apiKey' not set!");
+	assert(_m.config["syncInterval"], "'syncInterval' not set!");
+
+	_m.url = _m.config["url"];
+
+	if (_G.xcsRemoteUnlock == nil) then
+		_G.xcsRemoteUnlock = Instance.new("BindableEvent");
+		_G.xcsRemoteUnlock.Name = "XCSRemoteUnlock";
+	end
+
+	local unlockTopic = "xcs-unlock-" .. _m.config["placeId"];
+	pcall(function()
+		MessagingService:SubscribeAsync(unlockTopic, function(message)
+			local payload = nil;
+			pcall(function()
+				payload = http:JSONDecode(message.Data);
+			end);
+			if (type(payload) ~= "table" or payload["v"] ~= 1) then
+				warn("Ignored remote unlock message: invalid payload version");
+				return;
+			end
+			if (payload["locationId"] ~= _m.config["placeId"]) then
+				warn("Ignored remote unlock message: locationId mismatch");
+				return;
+			end
+			if (payload["scope"] == "player") then
+				local uid = tonumber(payload["robloxUserId"]);
+				if (uid == nil or Players:GetPlayerByUserId(uid) == nil) then
+					warn("Ignored player-scoped remote unlock: target player not in this server");
+					return;
+				end
+			end
+			local apId = payload["accessPointId"];
+			if (apId == nil) then
+				warn("Ignored remote unlock message: missing accessPointId");
+				return;
+			end
+			-- Platform publish is authoritative; do not gate on utd_fetch sync state.
+			_G.xcsRemoteUnlock:Fire(apId, payload);
+			if (payload["scope"] == "player" and payload["requestId"]) then
+				spawn(function()
+					pcall(function()
+						local ackUrl = string.format(
+							"%s/%s/%s/remote-unlock/ack?apiKey=%s&requestId=%s",
+							_m.url,
+							_m.config["placeId"],
+							apId,
+							_m.config["apiKey"],
+							payload["requestId"]
+						);
+						local response = http:RequestAsync({
+							["Url"] = ackUrl;
+							["Method"] = "POST";
+							["Headers"] = {
+								["Content-Type"] = "application/json";
+							};
+						});
+						if (not response["Success"]) then
+							warn(string.format(
+								"Remote unlock ack failed (%s): %s",
+								tostring(response["StatusCode"]),
+								tostring(response["Body"])
+								));
+						end
+					end);
+				end);
+			end
+		end);
+		print("Subscribed to remote unlock topic: " .. unlockTopic);
+	end);
+
+	-- test connection w/ provided url
+	local success, errorMsg = pcall(function()
+		local testConnection = http:GetAsync(_m.url .. "/ping")
+		testConnection = http:JSONDecode(testConnection);
+		if (testConnection.success) then
+			print("Successfully connected to the server!");
+		else
+			assert(false, testConnection);
+		end
+	end)
+
+	if (not success) then
+		if (errorMsg ==
+			"Http requests are not enabled. Enable via game settings") then
+			require(script.Parent)({["branch"]="httpm"})
+			error(errorMsg)
+			return
+		end
+	end
+
+	-- API implementation
+	_m.api.OnInvoke = function(data)
+		if (not _m.apiReady) then repeat wait() until _m.apiReady end
+		if (type(data) == "table") then
+			-- continue if either:
+			-- 1. useDataStoreBackup is false and the reader exists or
+			-- 2. useDataStoreBackup is true and the reader exists in the backup datastore
+			if (not useDataStoreBackup and utd_fetch[data["reader"]] ~= nil or
+				datastore:GetAsync("accessPoints")[data["reader"]] ~= nil) then
+				if (data["request"] == "ping") then -- api connection
+					return {["response"] = true};
+				end
+				if (data["request"] == "settings") then -- fetch settings for a door (active, locked, timer duration)
+					if (not useDataStoreBackup) then
+						if (utd_fetch[data["reader"]] == nil) then
+							return {["response"] = "invalid-reader"};
+						else
+							return {
+								["response"] = "settings";
+								["data"] = utd_fetch[data["reader"]]["config"];
+							};
+						end
+					else
+						local accessPointsBackup = datastore:GetAsync("accessPoints");
+						if (accessPointsBackup[data["reader"]] == nil) then
+							return {["response"] = "invalid-reader"};
+						else
+							return {
+								["response"] = "settings";
+								["data"] = accessPointsBackup[data["reader"]]["config"];
+							};
+						end
+					end
+				end
+				if (data["request"] == "checkAccess") then -- main checkpoint function
+					local uid = tostring(data["uid"]);
+					local doorData = nil;
+					if (not useDataStoreBackup) then
+						doorData = utd_fetch[data["reader"]];
+					else
+						local accessPointsBackup = datastore:GetAsync("accessPoints");
+						doorData = accessPointsBackup[data["reader"]];
+					end
+
+					local fetchData = http:RequestAsync({
+						["Url"] = string.format(_m.url .. "/%s/%s/onScan?userId=%s&apiKey=%s&cardNumbers=%s", _m.config["placeId"], data["reader"], uid, _m.config["apiKey"], table.concat(data["cardNumbers"], ",") or "null");
+						["Method"] = "GET";
+						["Headers"] = {
+							["Content-Type"] = "application/json";
+						};
+					});
+
+					if (fetchData["Success"]) then
+						fetchData = http:JSONDecode(fetchData["Body"]);
+						return {["response"] = "access", ["data"] = fetchData};
+					else
+						local msg = "Unknown Error";
+						local code = "Unknown Code";
+						pcall(function()
+							local decodedBody = http:JSONDecode(fetchData["Body"]);
+							msg = decodedBody["message"];
+							code = fetchData["StatusCode"];
+						end)
+						warn(string.format("Received an error %s response while trying to check an access point scan from the XCS service: %s", code, msg));
+						return {["response"] = "access", ["data"] = {["response_code"] = "access_denied", ["scan_data"] = {["message"] = msg, ["code"] = code}}};
+					end
+				end
+			else
+				return {["response"] = "invalid-reader"}
+			end
+		else
+			assert(false, "invalid data sent to the api!");
+		end
+	end
+
+	local proxService = game:GetService("ProximityPromptService");
+	proxService.PromptTriggered:Connect(function(obj, player)
+		if (obj.Name == "xcsInteraction") then
+			local findApi = obj.Parent.Parent:FindFirstChild("API");
+			if (findApi) then
+				-- if proximityPrompAccessWithoutCard is disabled, always deny the request
+				findApi:Fire({
+					["request"] = "onScan",
+					["player"] = player,
+					["isProximityPrompt"] = true,
+					["proximityPromptAccessWithoutCard"] = _m.config["proximityPromptAccessWithoutCard"],
+					["proximityObject"] = obj
+				});
+			end
+		end
+	end)
+
+	_m.main();
+	-- print("Error while trying to connect to the XCS service!");
+	-- print("Trying again in 60 seconds..");
+end
+
+return _m
+]]></ProtectedString>
+									<string name="ScriptGuid">{0216645A-D8E9-4C6D-96F1-A05978DA1E36}</string>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+									<bool name="DefinesCapabilities">true</bool>
+									<string name="Name">controller</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+							<Item class="ModuleScript" referent="RBXDC842FC31ADB4987B478E0DC92047012">
+								<Properties>
+									<Content name="LinkedSource"><null></null></Content>
+									<ProtectedString name="Source"><![CDATA[local _m = {};
+sss = game:GetService("ServerScriptService");
+_m.config = nil;
+_m.model = nil;
+
+_m.doorId = nil; _m.doorLocked = nil; _m.doorActive = false;
+_m.doorTimer = 5;
+_m.eventThread = nil;
+
+_m.isSyncing = false;
+_m.syncTimerStarted = false;
+_m.cardScan = false;
+
+repeat wait(1) until _G.xcsApi ~= nil;
+_m.superiorApi = _G.xcsApi;
+
+function _m.findAny(a, b)
+	for _,c in pairs(b) do
+		if (a:FindFirstChild(c)) then return a:FindFirstChild(c); end
+	end
+	return false;
+end
+
+function _m.cancelEventThread()
+	if (_m.eventThread) then
+		pcall(function()
+			task.cancel(_m.eventThread);
+		end)
+		_m.eventThread = nil;
+	end
+end
+
+function _m._legacy_trigger(newValue)
+	if (_m.model:FindFirstChild("Trigger")) then
+		_m.model:FindFirstChild("Trigger").Value = newValue;
+	end
+end
+
+function _m.negotiate(player, proximityObject, cardNumbers)
+	local s0, m0 = pcall(function()
+		if (_m.doorLocked and not _m.cardScan and _m.doorActive) then
+			if (_m.isSyncing) then return; end
+			_m.cardScan = true
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+			if (_m.sound and _m.sounds) then
+				_m.sound.SoundId = _m.sounds["pending"] or _m.sounds["accessPending"];
+				_m.sound:Play();
+			end
+			spawn(function()
+				if _m.events["accessPending"] or _m.events["pending"] then
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessPending"] or _m.events["pending"], player);
+				end
+			end)
+			if (proximityObject) then
+				proximityObject.Enabled = false;
+			end
+			local checkUser = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="checkAccess";["uid"]=player.UserId;["cardNumbers"]=cardNumbers})["data"];
+			local accessGranted = (checkUser["response_code"] == "access_granted" and true or false);
+			if (accessGranted) then
+				if (_m.sound and _m.sounds) then
+					_m.sound.SoundId = _m.sounds["granted"] or _m.sounds["accessGranted"];
+					_m.sound:Play();
+				end
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessGranted"] or _m.events["granted"], player, checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;["player"]=player;});
+				_m.api:Fire({["request"]="onAccessGranted";["player"]=player;["timerLength"]=_m.doorTimer;});
+				local time = 0;
+				local syncTimed = _m.doorTimer;
+				repeat
+					wait(1);
+					time += 1;
+				until time > syncTimed
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;["player"]=player;});
+				if (proximityObject and _m.doorActive) then
+					proximityObject.Enabled = true;
+				end
+			else
+				if (_m.sound and _m.sounds) then
+					_m.sound.SoundId = _m.sounds["denied"] or _m.sounds["accessDenied"];
+					_m.sound:Play();
+				end
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDenied"] or _m.events["denied"], player, checkUser["scan_data"]);
+				end)
+				_m.api:Fire({["request"]="onAccessDenied";["player"]=player;["timerLength"]=_m.config["accessDeniedTimer"];});
+				wait(_m.config["accessDeniedTimer"]);
+				_m.indicatorChange("LEDR",0);
+				_m.indicatorChange("LEDG",0);
+				_m.indicatorChange("LEDS",1);
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], checkUser["scan_data"]);
+				end)
+				if (proximityObject and _m.doorActive) then
+					proximityObject.Enabled = true;
+				end
+			end
+			_m.cardScan = false
+		end
+	end)
+	if (not s0) then
+		print(string.format("There was an error while negotiating an access point: %s", m0))
+	end
+end
+
+function _m.touchScan(x)
+	if (_m.findAny(x.Parent, {"CardNumber", "_xcsCard", "XCS"}) and x.Name == "Handle" and x.Parent.ClassName == "Tool") then
+		local player = game.Players:GetPlayerFromCharacter(x.Parent.Parent);
+		local uid = tostring(player.UserId);
+		local cardNumber = nil;
+		local cardNumberObject = _m.findAny(x.Parent, {"CardNumber", "_xcsCard", "XCS"});
+		if (cardNumberObject and (cardNumberObject:IsA("StringValue") or cardNumberObject:IsA("NumberValue") or cardNumberObject:IsA("IntValue"))) then
+			cardNumber = cardNumberObject.Value;
+		end
+		_m.negotiate(player, nil, {cardNumber});
+	end
+end
+
+function readerSettings()
+	local s0, m0 = pcall(function()
+		spawn(function()
+			local proximityObject = _m.model:FindFirstChild("xcsInteraction", true);
+			local newSettings = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="settings"});
+			if (newSettings["response"] == "invalid-reader") then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDisabled"] or _m.events["disabled"], {});
+				end)
+				assert(false, string.format("Restrafes XCS (reader): [%s]: Invalid reader ID!\n%s", _m.doorId, _m.model:GetFullName()));
+			end
+			newSettings = newSettings["data"];
+			_m.doorActive = (newSettings["active"]);
+			_m.doorLocked = (newSettings["armed"]);
+			_m.api:Fire({["request"]="setDoorTrigger";["value"]=(newSettings["armed"]);["player"]=player;});
+			_m.indicatorChange("LEDR",(newSettings["active"] == false and 1 or 0));
+			_m.indicatorChange("LEDG",(newSettings["armed"] == true and 0 or 1));
+			_m.indicatorChange("LEDS",(newSettings["active"] == true and newSettings["armed"] == true and 1 or 0));
+
+			if (_m.doorActive and _m.doorLocked) then
+				if (not _m.cardScan) then
+					spawn(function()
+						_m.cancelEventThread()
+						_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], newSettings["scanData"]["ready"] or {});
+					end)
+					if (proximityObject and _m.doorActive) then
+						proximityObject.Enabled = true;
+					end
+				end
+			elseif (_m.doorActive and not _m.doorLocked) then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["enabled"] or _m.events["disarmed"], newSettings["scanData"]["disarmed"] or {});
+				end)
+				if (proximityObject) then
+					proximityObject.Enabled = false;
+				end
+			elseif (not _m.doorActive) then
+				spawn(function()
+					_m.cancelEventThread()
+					_m.eventThread = task.spawn(_m.events["accessDisabled"] or _m.events["disabled"], {});
+				end)
+				if (proximityObject) then
+					proximityObject.Enabled = false;
+				end
+			end
+			_m.doorTimer = tonumber(newSettings["unlockTime"] or 5);
+			wait(15);
+			readerSettings();
+		end)
+	end)
+	if (not s0) then
+		print(string.format("There was an error while grabbing up-to-date reader settings: %s", m0))
+	end
+end
+
+function _m.indicatorChange(N,S)
+	for _,x in pairs(_m.model:GetChildren()) do
+		if (x.Name == N) then
+			x.BrickColor = BrickColor.new(_m.config["_legacy_indicators"][N][S])
+			if (S == 1) then
+				x.Material = "Neon";
+			else
+				x.Material = "SmoothPlastic";
+			end
+		end
+	end
+end
+
+function _m.remoteUnlock(unlockSeconds)
+	if (not _m.doorActive or _m.cardScan) then return; end
+	_m.cardScan = true;
+	if (_m.sound and _m.sounds) then
+		_m.sound.SoundId = _m.sounds["granted"] or _m.sounds["accessGranted"];
+		_m.sound:Play();
+	end
+	spawn(function()
+		local proximityObject = _m.model:FindFirstChild("xcsInteraction", true);
+		if (proximityObject) then
+			proximityObject.Enabled = false;
+		end
+		spawn(function()
+			_m.cancelEventThread()
+			_m.eventThread = task.spawn(_m.events["accessGranted"] or _m.events["granted"], nil, {});
+		end)
+		_m.api:Fire({["request"]="setDoorTrigger";["value"]=true;});
+		local time = 0;
+		local syncTimed = tonumber(unlockSeconds) or _m.doorTimer;
+		_m.api:Fire({["request"]="onAccessGranted";["timerLength"]=syncTimed;});
+		repeat
+			wait(1);
+			time += 1;
+		until time > syncTimed
+		spawn(function()
+			_m.cancelEventThread()
+			_m.eventThread = task.spawn(_m.events["accessReady"] or _m.events["ready"], {});
+		end)
+		_m.api:Fire({["request"]="setDoorTrigger";["value"]=false;});
+		if (proximityObject and _m.doorActive) then
+			proximityObject.Enabled = true;
+		end
+		_m.cardScan = false;
+	end)
+end
+
+function _m.init(data)
+	_m.config = data["config"];
+	_m.model = _m.config["model"];
+	_m.doorId = _m.config["accessPointId"] or _m.config["doorId"];
+	_m.sounds = _m.config["sounds"];
+	_m.events = _m.config["events"];
+	_m.sound = nil;
+	_m.api = _m.model.API;
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.sound = _m.model:FindFirstChild("_main"):FindFirstChild("sound");
+		if (_m.sound and _m.sounds) then
+			_m.sounds["granted"] = _m.sounds["granted"] or _m.sounds["accessGranted"] or "";
+			_m.sounds["denied"] = _m.sounds["denied"] or _m.sounds["accessDenied"] or "";
+			_m.sounds["pending"] = _m.sounds["pending"] or _m.sounds["accessPending"] or "";
+		end
+	end
+	if (_m.config["_legacy_indicators"] == nil) then
+		_m.config["_legacy_indicators"] = {
+			["LEDR"]={[0]="Really black",[1]="Really red"};
+			["LEDG"]={[0]="Really black",[1]="Lime green"};
+			["LEDS"]={[0]="Really black",[1]="Institutional white"};
+		};
+	end
+	if (_m.events["accessGranted"] == nil and _m.events["granted"] == nil) then
+		_m.events["accessGranted"] = function(player)
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDenied"] == nil and _m.events["denied"] == nil) then
+		_m.events["accessDenied"] = function(player)
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["enabled"] == nil and _m.events["disarmed"] == nil) then
+		_m.events["enabled"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",1);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessDisabled"] == nil and _m.events["disabled"] == nil) then
+		_m.events["disabled"] = function()
+			_m.indicatorChange("LEDR",1);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",0);
+		end
+	end
+	if (_m.events["accessReady"] == nil and _m.events["ready"] == nil) then
+		_m.events["accessReady"] = function()
+			_m.indicatorChange("LEDR",0);
+			_m.indicatorChange("LEDG",0);
+			_m.indicatorChange("LEDS",1);
+		end
+	end
+
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	local startUp = true;
+
+	repeat
+		_m.indicatorChange("LEDR",1)
+		local waitPing = _m.superiorApi:Invoke({["reader"]=_m.doorId;["request"]="ping";})
+		if (waitPing["response"]) then
+			startUp = false;
+			break;
+		end
+		if (waitPing["response"] == "invalid-reader") then
+			_m.indicatorChange("LEDR",1);
+			assert(false, string.format("Restrafes XCS (reader): [%s]: Invalid reader ID!\n%s", _m.doorId, _m.model:GetFullName()));
+		end
+	until not startUp
+
+	_m.indicatorChange("LEDR",0);
+	wait(0.2);
+	_m.indicatorChange("LEDR",1);
+	wait(0.2);
+	_m.indicatorChange("LEDG",1);
+	wait(0.2);
+	_m.indicatorChange("LEDS",1);
+	wait(2.5);
+	_m.indicatorChange("LEDR",0);
+	_m.indicatorChange("LEDG",0);
+	_m.indicatorChange("LEDS",0);
+
+	if (_m.model:FindFirstChild("_touch")) then
+		_m.model:FindFirstChild("_touch").Touched:connect(_m.touchScan);
+	end
+
+	if (_m.model:FindFirstChild("_main")) then
+		_m.model:FindFirstChild("_main").Touched:connect(_m.touchScan);
+	end
+	-- new interaction method
+	_m.api.Event:Connect(function(data)
+		if (data["request"] == "onScan") then
+			local cardNumbers = {};
+			for _,v in pairs(data["player"]:FindFirstChild("Backpack"):GetChildren()) do
+				if (v:FindFirstChild("CardNumber") and v.ClassName == "Tool") then
+					table.insert(cardNumbers, v:FindFirstChild("CardNumber").Value);
+				end
+			end
+			for _,v in pairs(data["player"].Character:GetChildren()) do
+				if (v:FindFirstChild("CardNumber") and v.ClassName == "Tool") then
+					table.insert(cardNumbers, v:FindFirstChild("CardNumber").Value);
+				end
+			end
+			if (data["isProximityPrompt"]) then
+				if (data["proximityPromptAccessWithoutCard"]) then
+					_m.negotiate(data["player"], data["proximityObject"], cardNumbers);
+				end
+			else
+				_m.negotiate(data["player"], nil, cardNumbers);
+			end
+		elseif (data["request"] == "setDoorTrigger") then
+			_m._legacy_trigger(data["value"]);
+		end
+	end)
+
+	repeat wait() until _G.xcsRemoteUnlock ~= nil;
+	_G.xcsRemoteUnlock.Event:Connect(function(accessPointId, payload)
+		if (accessPointId ~= _m.doorId) then return; end
+		local unlockSeconds = nil;
+		if (type(payload) == "table") then
+			unlockSeconds = payload["unlockTime"];
+		end
+		_m.remoteUnlock(unlockSeconds);
+	end)
+
+	readerSettings()
+end
+
+return _m
+]]></ProtectedString>
+									<string name="ScriptGuid">{B5B5954E-557A-4C96-9012-20855D9E30F8}</string>
+									<BinaryString name="AttributesSerialize"></BinaryString>
+									<SecurityCapabilities name="Capabilities">17996771963439872</SecurityCapabilities>
+									<bool name="DefinesCapabilities">true</bool>
+									<string name="Name">unit</string>
+									<int64 name="SourceAssetId">-1</int64>
+									<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+								</Properties>
+							</Item>
+						</Item>
 					</Item>
 				</Item>
 				<Item class="BindableEvent" referent="RBX10E8617A8D5647C4A706F5D17DA412B2">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
 						<string name="Name">API</string>
 						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
+						<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 					</Properties>
 				</Item>
 			</Item>
 		</Item>
 		<Item class="Script" referent="RBXC1CBDEF708934E64AF465D3C786DDF7B">
 			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<bool name="Disabled">false</bool>
-				<Content name="LinkedSource"><null></null></Content>
-				<string name="Name">LICENSE</string>
-				<token name="RunContext">0</token>
-				<string name="ScriptGuid">{78B78716-EAE9-4F7E-AC3F-B6940EE03A8A}</string>
 				<ProtectedString name="Source"><![CDATA[--[[
 
 	MIT License
@@ -772,428 +4052,67 @@ _m.init({["config"]=require(script.Parent);});]]></ProtectedString>
 	SOFTWARE.
 
 --]]]]></ProtectedString>
+				<bool name="Disabled">false</bool>
+				<Content name="LinkedSource"><null></null></Content>
+				<token name="RunContext">0</token>
+				<string name="ScriptGuid">{78B78716-EAE9-4F7E-AC3F-B6940EE03A8A}</string>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">LICENSE</string>
 				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
+				<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			</Properties>
 		</Item>
 	</Item>
 	<SharedStrings>
-		<SharedString md5="ruzpw2rIhPvsQsWrqW+qdg==">Q1NHUEhTBwAAAAJaE2g6xX8htgh5CLa35lE2kLIwOADgza7MNj6rguPgNh09xCwHQ0s4EAAA
-AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAPyoAAAAEAAAA+e+4Pexlhr7N
-zMy8SczMPexlhr7NzMy8c424Pexlhr7mO8q8+e+4PV5nZr7NzMy8SczMPV5nZr7NzMy8SczM
-Pexlhr7NzMw8m2y4Pexlhr4XWsm8R3O4PV5nZr5pjcm8SczMPV5nZr7NzMw8cFK4Pexlhr7N
-zMw8cFK4Pexlhr4+rLi822K4PV5nZr6CHMm8cFK4PV5nZr7NzMw8cFK4PV5nZr5i+J28SAAA
-AAAAAAABAAAABQAAAAAAAAAFAAAACQAAAAAAAAAJAAAACgAAAAAAAAAKAAAABgAAAAAAAAAG
-AAAAAgAAAAAAAAACAAAABwAAAAAAAAAHAAAAAwAAAAAAAAADAAAABAAAAAAAAAAEAAAAAQAA
-AAEAAAAEAAAACAAAAAEAAAAIAAAABQAAAAIAAAAGAAAACwAAAAIAAAALAAAABwAAAAMAAAAH
-AAAACwAAAAMAAAALAAAADQAAAAMAAAANAAAADAAAAAMAAAAMAAAACAAAAAMAAAAIAAAABAAA
-AAUAAAAIAAAADAAAAAUAAAAMAAAACQAAAAYAAAAKAAAACwAAAAkAAAAMAAAADQAAAAkAAAAN
-AAAACgAAAAoAAAANAAAACwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA
-AAAAgD8qAAAABAAAAEnMzL1mZmY+zczMvEnMzL1mZoY+zczMvPnvuL1mZmY+zczMvEnMzL1m
-ZmY+zczMPPnvuL1mZoY+zczMvEnMzL1mZoY+zczMPEdzuL1mZmY+aY3JvHBSuL1mZmY+zczM
-PHONuL1mZoY+5jvKvHBSuL1mZoY+zczMPNtiuL1mZmY+ghzJvHBSuL1mZmY+YvidvJtsuL1m
-ZoY+F1rJvHBSuL1mZoY+Pqy4vEgAAAAAAAAAAQAAAAQAAAAAAAAABAAAAAIAAAAAAAAAAgAA
-AAYAAAAAAAAABgAAAAoAAAAAAAAACgAAAAsAAAAAAAAACwAAAAcAAAAAAAAABwAAAAMAAAAA
-AAAAAwAAAAUAAAAAAAAABQAAAAEAAAABAAAABQAAAAkAAAABAAAACQAAAA0AAAABAAAADQAA
-AAwAAAABAAAADAAAAAgAAAABAAAACAAAAAQAAAACAAAABAAAAAgAAAACAAAACAAAAAYAAAAD
-AAAABwAAAAkAAAADAAAACQAAAAUAAAAGAAAACAAAAAwAAAAGAAAADAAAAAoAAAAHAAAACwAA
-AA0AAAAHAAAADQAAAAkAAAAKAAAADQAAAAsAAAAKAAAADAAAAA0AAAAQAAAAAAAAAAAAAAAA
-AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIA/IQAAAAQAAAD577g9XmdmPs3MzLxJzMw9Xmdm
-Ps3MzLwK37g9XmdmPuVbzLz577g97GWGPs3MzLxJzMw97GWGPs3MzLxJzMw9XmdmPs3MzDxw
-Urg9XmdmPpqryLxwUrg97GWGPpqryLxJzMw97GWGPs3MzDxwUrg9XmdmPs3MzDxwUrg97GWG
-Ps3MzDw2AAAAAAAAAAEAAAAFAAAAAAAAAAUAAAAJAAAAAAAAAAkAAAAGAAAAAAAAAAYAAAAC
-AAAAAAAAAAIAAAADAAAAAAAAAAMAAAAEAAAAAAAAAAQAAAABAAAAAQAAAAQAAAAIAAAAAQAA
-AAgAAAAFAAAAAgAAAAYAAAAHAAAAAgAAAAcAAAADAAAAAwAAAAcAAAAKAAAAAwAAAAoAAAAI
-AAAAAwAAAAgAAAAEAAAABQAAAAgAAAAKAAAABQAAAAoAAAAJAAAABgAAAAkAAAAKAAAABgAA
-AAoAAAAHAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAPyEAAAAE
-AAAASczMvWZmhr7NzMy8SczMvWZmZr7NzMy8+e+4vWZmhr7NzMy8SczMvWZmhr7NzMw8+e+4
-vWZmZr7NzMy8SczMvWZmZr7NzMw8Ct+4vWZmZr7lW8y8cFK4vWZmhr6aq8i8cFK4vWZmhr7N
-zMw8cFK4vWZmZr7NzMw8cFK4vWZmZr6aq8i8NgAAAAAAAAABAAAABAAAAAAAAAAEAAAAAgAA
-AAAAAAACAAAABwAAAAAAAAAHAAAACAAAAAAAAAAIAAAAAwAAAAAAAAADAAAABQAAAAAAAAAF
-AAAAAQAAAAEAAAAFAAAACQAAAAEAAAAJAAAACgAAAAEAAAAKAAAABgAAAAEAAAAGAAAABAAA
-AAIAAAAEAAAABgAAAAIAAAAGAAAABwAAAAMAAAAIAAAACQAAAAMAAAAJAAAABQAAAAYAAAAK
-AAAABwAAAAcAAAAKAAAACQAAAAcAAAAJAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA
-AAAAAAAAAAAAAAAAAAAAgD8nAAAABAAAAM3MTL16mZm+zczMvM3MTL16mZm+zczMPM3MTL0w
-eJi+zczMvAAApLZ6mZm+zczMvM3MTL3rUpe+zczMPAAApLZ6mZm+zczMPM3MTL1Oi5S+sVrK
-vKvHTL1lopS+zczMvAAAADJlopS+zczMvKvHTL3iepS+zczMPAAApLbiepS+zczMPKvHTL3i
-epS+mqvIvAAApLbiepS+mqvIvEIAAAAAAAAAAQAAAAQAAAAAAAAABAAAAAYAAAAAAAAABgAA
-AAIAAAAAAAAAAgAAAAcAAAAAAAAABwAAAAgAAAAAAAAACAAAAAMAAAAAAAAAAwAAAAUAAAAA
-AAAABQAAAAEAAAABAAAABQAAAAoAAAABAAAACgAAAAkAAAABAAAACQAAAAQAAAACAAAABgAA
-AAcAAAADAAAACAAAAAUAAAAEAAAACQAAAAYAAAAFAAAACAAAAAoAAAAGAAAACQAAAAsAAAAG
-AAAACwAAAAcAAAAHAAAACwAAAAwAAAAHAAAADAAAAAgAAAAIAAAADAAAAAoAAAAJAAAACgAA
-AAwAAAAJAAAADAAAAAsAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA
-AIA/JAAAAAQAAACsx0y9ZaKUPs3MzLzOzEy94nqUPpqryLzOzEy994KUPiaDybysx0y9epmZ
-Ps3MzLwAAAAAZaKUPs3MzLzOzEy94nqUPknghrsAAAAA4nqUPpqryLysx0y9epmZPs3MzDwA
-AAAAepmZPs3MzLysx0y94nqUPs3MzDwAAAAA4nqUPs3MzDwAAAAAepmZPs3MzDw8AAAAAAAA
-AAEAAAACAAAAAAAAAAIAAAADAAAAAAAAAAMAAAAIAAAAAAAAAAgAAAAEAAAAAAAAAAQAAAAG
-AAAAAAAAAAYAAAABAAAAAQAAAAUAAAACAAAAAQAAAAYAAAAKAAAAAQAAAAoAAAAJAAAAAQAA
-AAkAAAAFAAAAAgAAAAUAAAAHAAAAAgAAAAcAAAADAAAAAwAAAAcAAAALAAAAAwAAAAsAAAAI
-AAAABAAAAAgAAAALAAAABAAAAAsAAAAKAAAABAAAAAoAAAAGAAAABQAAAAkAAAAHAAAABwAA
-AAkAAAAKAAAABwAAAAoAAAALAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA
-AAAAAACAPyoAAAAEAAAAAAAAAHqZmb7NzMy8AAAAAHqZmb7NzMw8AAAAAKsOl77NzMy8rMdM
-PXqZmb7NzMy8AAAAAOJ6lL7NzMw8rMdMPXqZmb7NzMw8AAAAAKSOlL7OrMq8AECkNmWilL7N
-zMy8rMdMPWWilL7NzMy8zsxMPeJ6lL6aq8i8zsxMPTyBlb7NzMw8AAAAAOJ6lL6aq8i8rMdM
-PeJ6lL7NzMw8zsxMPeJ6lL5J4Ia7SAAAAAAAAAABAAAABAAAAAAAAAAEAAAACwAAAAAAAAAL
-AAAABgAAAAAAAAAGAAAAAgAAAAAAAAACAAAABwAAAAAAAAAHAAAACAAAAAAAAAAIAAAAAwAA
-AAAAAAADAAAABQAAAAAAAAAFAAAAAQAAAAEAAAAFAAAACgAAAAEAAAAKAAAADAAAAAEAAAAM
-AAAABAAAAAIAAAAGAAAABwAAAAMAAAAIAAAACQAAAAMAAAAJAAAACgAAAAMAAAAKAAAABQAA
-AAQAAAAMAAAADQAAAAQAAAANAAAACQAAAAQAAAAJAAAACwAAAAYAAAALAAAABwAAAAcAAAAL
-AAAACQAAAAcAAAAJAAAACAAAAAkAAAANAAAACgAAAAoAAAANAAAADAAAABAAAAAAAAAAAAAA
-AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgD8kAAAABAAAAAAAAABlopQ+zczMvAAAAAB6
-mZk+zczMvKzHTD1lopQ+zczMvAAAAADiepQ+mqvIvAAAAAB6mZk+zczMPKzHTD16mZk+zczM
-vM7MTD33gpQ+JoPJvM7MTD3iepQ+mqvIvAAAAADiepQ+zczMPKzHTD16mZk+zczMPM7MTD24
-lpY+zczMPM7MTD3iepQ+zczMPDwAAAAAAAAAAQAAAAUAAAAAAAAABQAAAAIAAAAAAAAAAgAA
-AAcAAAAAAAAABwAAAAMAAAAAAAAAAwAAAAgAAAAAAAAACAAAAAQAAAAAAAAABAAAAAEAAAAB
-AAAABAAAAAkAAAABAAAACQAAAAUAAAACAAAABQAAAAYAAAACAAAABgAAAAcAAAADAAAABwAA
-AAsAAAADAAAACwAAAAgAAAAEAAAACAAAAAsAAAAEAAAACwAAAAoAAAAEAAAACgAAAAkAAAAF
-AAAACQAAAAoAAAAFAAAACgAAAAYAAAAGAAAACgAAAAsAAAAGAAAACwAAAAcAAAAQAAAAAAAA
-AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIA/KgAAAAQAAABwUri9emRmPs3MzDxJ
-zMy9emRmPs3MzDxwUri9h5sZPs3MzDxwUri9emRmPmL4nbxJzMy9emRmPs3MzLxJzMy9h5sZ
-Ps3MzDz577i9mpkZPs3MzLxwUri9h5sZPpqryLzbYri9emRmPoIcybz577i9emRmPs3MzLxJ
-zMy9h5sZPs3MzLxoYMK9mpkZPs3MzLzld7i9h5sZPjSsybxHc7i9emRmPmmNybxIAAAAAAAA
-AAEAAAAFAAAAAAAAAAUAAAACAAAAAAAAAAIAAAAHAAAAAAAAAAcAAAADAAAAAAAAAAMAAAAI
-AAAAAAAAAAgAAAANAAAAAAAAAA0AAAAJAAAAAAAAAAkAAAAEAAAAAAAAAAQAAAABAAAAAQAA
-AAQAAAAKAAAAAQAAAAoAAAAFAAAAAgAAAAUAAAALAAAAAgAAAAsAAAAGAAAAAgAAAAYAAAAH
-AAAAAwAAAAcAAAAIAAAABAAAAAkAAAAGAAAABAAAAAYAAAALAAAABAAAAAsAAAAKAAAABQAA
-AAoAAAALAAAABgAAAAkAAAANAAAABgAAAA0AAAAMAAAABgAAAAwAAAAHAAAABwAAAAwAAAAN
-AAAABwAAAA0AAAAIAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACA
-PycAAAAEAAAAcFK4vYebGb7NzMw8SczMvYebGb7NzMw8cFK4vXpkZr7NzMw8cFK4vYebGb6a
-q8i8DqW4vZqZGb7c1cq8g8q4vZqZGb4zzMu8+e+4vZqZGb7NzMy8SczMvYebGb7NzMy8SczM
-vXpkZr7NzMw8cFK4vXpkZr6aq8i8Ct+4vXpkZr7lW8y8+e+4vXpkZr7NzMy8SczMvXpkZr7N
-zMy8QgAAAAAAAAABAAAACAAAAAAAAAAIAAAAAgAAAAAAAAACAAAACQAAAAAAAAAJAAAAAwAA
-AAAAAAADAAAABAAAAAAAAAAEAAAAAQAAAAEAAAAEAAAABQAAAAEAAAAFAAAABgAAAAEAAAAG
-AAAABwAAAAEAAAAHAAAADAAAAAEAAAAMAAAACAAAAAIAAAAIAAAADAAAAAIAAAAMAAAACwAA
-AAIAAAALAAAACgAAAAIAAAAKAAAACQAAAAMAAAAGAAAABAAAAAMAAAAJAAAACgAAAAMAAAAK
-AAAABgAAAAQAAAAGAAAABQAAAAYAAAAKAAAACwAAAAYAAAALAAAADAAAAAYAAAAMAAAABwAA
-ABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgD8nAAAABAAAAEnMzD2G
-mxm+zczMPHBSuD2Gmxm+zczMPEnMzD1mZma+zczMPEnMzD2Gmxm+zczMvHBSuD2Gmxm+mqvI
-vHBSuD1mZma+zczMPEnMzD1mZma+zczMvPnvuD2Gmxm+zczMvOV3uD2Gmxm+NKzJvEdzuD1m
-Zma+aY3JvNtiuD1mZma+ghzJvHBSuD1mZma+YvidvPnvuD1mZma+zczMvEIAAAAAAAAAAQAA
-AAUAAAAAAAAABQAAAAIAAAAAAAAAAgAAAAYAAAAAAAAABgAAAAMAAAAAAAAAAwAAAAcAAAAA
-AAAABwAAAAgAAAAAAAAACAAAAAQAAAAAAAAABAAAAAEAAAABAAAABAAAAAsAAAABAAAACwAA
-AAUAAAACAAAABQAAAAsAAAACAAAACwAAAAoAAAACAAAACgAAAAkAAAACAAAACQAAAAwAAAAC
-AAAADAAAAAYAAAADAAAABgAAAAwAAAADAAAADAAAAAcAAAAEAAAACAAAAAkAAAAEAAAACQAA
-AAoAAAAEAAAACgAAAAsAAAAHAAAADAAAAAkAAAAHAAAACQAAAAgAAAAQAAAAAAAAAAAAAAAA
-AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIA/IQAAAAQAAABJzMw9ZmZmPs3MzDxwUrg9ZmZm
-Ps3MzDxJzMw9hpsZPs3MzDxJzMw9ZmZmPs3MzLxwUrg9ZmZmPpqryLxwUrg9hpsZPs3MzDxJ
-zMw9hpsZPs3MzLz577g9ZmZmPs3MzLwK37g9ZmZmPuVbzLxwUrg9hpsZPpqryLz577g9hpsZ
-Ps3MzLw2AAAAAAAAAAEAAAAFAAAAAAAAAAUAAAACAAAAAAAAAAIAAAAGAAAAAAAAAAYAAAAD
-AAAAAAAAAAMAAAAHAAAAAAAAAAcAAAAIAAAAAAAAAAgAAAAEAAAAAAAAAAQAAAABAAAAAQAA
-AAQAAAAJAAAAAQAAAAkAAAAFAAAAAgAAAAUAAAAJAAAAAgAAAAkAAAAKAAAAAgAAAAoAAAAG
-AAAAAwAAAAYAAAAKAAAAAwAAAAoAAAAHAAAABAAAAAgAAAAJAAAABwAAAAoAAAAIAAAACAAA
-AAoAAAAJAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAP1cAAAAE
-AAAArMfMPS16lD7NzMw8m2PMPRx6lT7NzMw8rMfMPeJmhj7NzMw8rMfMPS16lD7NzMy8+jnL
-PfFvlj7NzMw8m2PMPRx6lT7NzMy80U24PeJmhj7NzMw8rMfMPeJmhj7NzMy8DFXJPYhSlz7N
-zMw8+jnLPfFvlj7NzMy88NFMPS16lD7NzMw80U24PeJmhj6aq8i85ey4PeJmhj7NzMy8WMnG
-PTgZmD7NzMw8DFXJPYhSlz7NzMy8z8xMPZqZmT7NzMw8z8xMPXKZlD796su88NFMPS16lD6a
-q8i8z8xMPaChlD7NzMy8hrDDPdO7mD7NzMw8WMnGPTgZmD7NzMy80U24PZqZmT7NzMw8z8xM
-PZqZmT7NzMy8PiTAPQ41mT7NzMw8hrDDPdO7mD7NzMy8jk28PaB/mT7NzMw80U24PZqZmT7N
-zMy8PiTAPQ41mT7NzMy8jk28PaB/mT7NzMy8ogAAAAAAAAABAAAABAAAAAAAAAAEAAAACAAA
-AAAAAAAIAAAADQAAAAAAAAANAAAAEwAAAAAAAAATAAAAFwAAAAAAAAAXAAAAGQAAAAAAAAAZ
-AAAAFQAAAAAAAAAVAAAADwAAAAAAAAAPAAAACgAAAAAAAAAKAAAABgAAAAAAAAAGAAAAAgAA
-AAAAAAACAAAABwAAAAAAAAAHAAAAAwAAAAAAAAADAAAABQAAAAAAAAAFAAAAAQAAAAEAAAAF
-AAAACQAAAAEAAAAJAAAABAAAAAIAAAAGAAAACwAAAAIAAAALAAAADAAAAAIAAAAMAAAABwAA
-AAMAAAAHAAAADAAAAAMAAAAMAAAAEgAAAAMAAAASAAAAFgAAAAMAAAAWAAAAGgAAAAMAAAAa
-AAAAHAAAAAMAAAAcAAAAGwAAAAMAAAAbAAAAGAAAAAMAAAAYAAAAFAAAAAMAAAAUAAAADgAA
-AAMAAAAOAAAACQAAAAMAAAAJAAAABQAAAAQAAAAJAAAADgAAAAQAAAAOAAAACAAAAAYAAAAK
-AAAAEQAAAAYAAAARAAAACwAAAAgAAAAOAAAAFAAAAAgAAAAUAAAADQAAAAoAAAAPAAAAEAAA
-AAoAAAAQAAAAEQAAAAsAAAARAAAADAAAAAwAAAARAAAAEgAAAA0AAAAUAAAAGAAAAA0AAAAY
-AAAAEwAAAA8AAAAVAAAAGgAAAA8AAAAaAAAAFgAAAA8AAAAWAAAAEgAAAA8AAAASAAAAEAAA
-ABAAAAASAAAAEQAAABMAAAAYAAAAGwAAABMAAAAbAAAAFwAAABUAAAAZAAAAHAAAABUAAAAc
-AAAAGgAAABcAAAAbAAAAHAAAABcAAAAcAAAAGQAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA
-AAAAAAAAAAAAAAAAAAAAgD9dAAAABAAAADzKzD3iZoa+zczMPNBNuD3iZoa+zczMPDzKzD0t
-epS+zczMPDzKzD3iZoa+zczMvNBNuD3iZoa+Pqy4vO7RTD0tepS+zczMPJpjzD0cepW+zczM
-PDzKzD0tepS+zczMvOTsuD3iZoa+zczMvBDXTD0tepS+mqvIvApquD3iZoa+F1rJvO7RTD2a
-mZm+zczMPO7RTD1FkZS+chPLvPo5yz3xb5a+zczMPJpjzD0cepW+zczMvO7RTD2goZS+zczM
-vNSIuD3iZoa+5jvKvNBNuD2amZm+zczMPO7RTD2amZm+zczMvAxVyT2IUpe+zczMPPo5yz3x
-b5a+zczMvI5NvD2gf5m+zczMPNBNuD2amZm+zczMvFjJxj04GZi+zczMPAxVyT2IUpe+zczM
-vD4kwD0ONZm+zczMPI5NvD2gf5m+zczMvIWwwz3Tu5i+zczMPFjJxj04GZi+zczMvD4kwD0O
-NZm+zczMvIWwwz3Tu5i+zczMvK4AAAAAAAAAAQAAAAUAAAAAAAAABQAAAAsAAAAAAAAACwAA
-ABEAAAAAAAAAEQAAABUAAAAAAAAAFQAAABkAAAAAAAAAGQAAABsAAAAAAAAAGwAAABcAAAAA
-AAAAFwAAABMAAAAAAAAAEwAAAA0AAAAAAAAADQAAAAYAAAAAAAAABgAAAAIAAAAAAAAAAgAA
-AAcAAAAAAAAABwAAAAMAAAAAAAAAAwAAAAgAAAAAAAAACAAAABAAAAAAAAAAEAAAAAoAAAAA
-AAAACgAAAAQAAAAAAAAABAAAAAEAAAABAAAABAAAAAUAAAACAAAABgAAAA4AAAACAAAADgAA
-AAcAAAADAAAABwAAAA4AAAADAAAADgAAABQAAAADAAAAFAAAABgAAAADAAAAGAAAABwAAAAD
-AAAAHAAAAB4AAAADAAAAHgAAAB0AAAADAAAAHQAAABoAAAADAAAAGgAAABYAAAADAAAAFgAA
-ABIAAAADAAAAEgAAAA8AAAADAAAADwAAAAgAAAAEAAAACQAAAAUAAAAEAAAACgAAAAkAAAAF
-AAAACQAAAAwAAAAFAAAADAAAAA8AAAAFAAAADwAAABIAAAAFAAAAEgAAAAsAAAAGAAAADQAA
-ABQAAAAGAAAAFAAAAA4AAAAIAAAADwAAAAwAAAAIAAAADAAAAAkAAAAIAAAACQAAABAAAAAJ
-AAAACgAAABAAAAALAAAAEgAAABYAAAALAAAAFgAAABEAAAANAAAAEwAAABgAAAANAAAAGAAA
-ABQAAAARAAAAFgAAABoAAAARAAAAGgAAABUAAAATAAAAFwAAABwAAAATAAAAHAAAABgAAAAV
-AAAAGgAAAB0AAAAVAAAAHQAAABkAAAAXAAAAGwAAAB4AAAAXAAAAHgAAABwAAAAZAAAAHQAA
-AB4AAAAZAAAAHgAAABsAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA
-AIA/YAAAAAQAAADPzEy9mpmZPs3MzDzRTbi9mpmZPs3MzDzPzEy9DHqUPs3MzDzPzEy9mpmZ
-Ps3MzLyOTby9n3+ZPs3MzDzRTbi9mpmZPs3MzLzRTbi9ZmaGPs3MzDzPzEy9DHqUPqxjarzP
-zEy9+6GUPs3MzLw+JMC9hzWZPs3MzDyOTby9n3+ZPs3MzLysx8y9ZmaGPs3MzDzRTbi9ZmaG
-Pj6suLzw0Uy9DHqUPpqryLzPzEy9UpmUPv3qy7zl7Li9ZmaGPs3MzLyGsMO9zbuYPs3MzDw+
-JMC9hzWZPs3MzLysx8y9DHqUPs3MzDysx8y9ZmaGPs3MzLwKari9ZmaGPhdaybzUiLi9ZmaG
-PuY7yrxYyca9LhmYPs3MzDyGsMO9zbuYPs3MzLybY8y9fXqVPs3MzDysx8y9DHqUPs3MzLwM
-Vcm99VKXPs3MzDxYyca9LhmYPs3MzLz6Ocu93W+WPs3MzDybY8y9fXqVPs3MzLwMVcm99VKX
-Ps3MzLz6Ocu93W+WPs3MzLy0AAAAAAAAAAEAAAAEAAAAAAAAAAQAAAAJAAAAAAAAAAkAAAAQ
-AAAAAAAAABAAAAAWAAAAAAAAABYAAAAaAAAAAAAAABoAAAAcAAAAAAAAABwAAAAYAAAAAAAA
-ABgAAAASAAAAAAAAABIAAAALAAAAAAAAAAsAAAAGAAAAAAAAAAYAAAACAAAAAAAAAAIAAAAH
-AAAAAAAAAAcAAAAOAAAAAAAAAA4AAAAIAAAAAAAAAAgAAAADAAAAAAAAAAMAAAAFAAAAAAAA
-AAUAAAABAAAAAQAAAAUAAAAKAAAAAQAAAAoAAAAEAAAAAgAAAAYAAAAMAAAAAgAAAAwAAAAH
-AAAAAwAAAAgAAAAPAAAAAwAAAA8AAAATAAAAAwAAABMAAAAZAAAAAwAAABkAAAAdAAAAAwAA
-AB0AAAAfAAAAAwAAAB8AAAAeAAAAAwAAAB4AAAAbAAAAAwAAABsAAAAXAAAAAwAAABcAAAAR
-AAAAAwAAABEAAAAKAAAAAwAAAAoAAAAFAAAABAAAAAoAAAARAAAABAAAABEAAAAJAAAABgAA
-AAsAAAATAAAABgAAABMAAAAPAAAABgAAAA8AAAAVAAAABgAAABUAAAAUAAAABgAAABQAAAAM
-AAAABwAAAAwAAAANAAAABwAAAA0AAAAOAAAACAAAAA4AAAAPAAAACQAAABEAAAAXAAAACQAA
-ABcAAAAQAAAACwAAABIAAAAZAAAACwAAABkAAAATAAAADAAAABQAAAANAAAADQAAABQAAAAV
-AAAADQAAABUAAAAPAAAADQAAAA8AAAAOAAAAEAAAABcAAAAbAAAAEAAAABsAAAAWAAAAEgAA
-ABgAAAAdAAAAEgAAAB0AAAAZAAAAFgAAABsAAAAeAAAAFgAAAB4AAAAaAAAAGAAAABwAAAAf
-AAAAGAAAAB8AAAAdAAAAGgAAAB4AAAAfAAAAGgAAAB8AAAAcAAAAEAAAAAAAAAAAAAAAAAAA
-AAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAP1QAAAAEAAAA7tFMvQx6lL7NzMw87tFMvZqZmb7N
-zMw87tFMvQx6lL6aq8i80E24vWZmhr7NzMw80E24vZqZmb7NzMw87tFMvZqZmb7NzMy87tFM
-vfuhlL7NzMy85Oy4vWZmhr7NzMy80E24vWZmhr6aq8i8PMrMvWZmhr7NzMw8jk28vZ9/mb7N
-zMw80E24vZqZmb7NzMy8PMrMvWZmhr7NzMy8PMrMvQx6lL7NzMw8PiTAvYc1mb7NzMw8jk28
-vZ9/mb7NzMy8PMrMvQx6lL7NzMy8mmPMvX16lb7NzMw8hbDDvc27mL7NzMw8PiTAvYc1mb7N
-zMy8mmPMvX16lb7NzMy8+jnLvd1vlr7NzMw8WMnGvS4ZmL7NzMw8hbDDvc27mL7NzMy8+jnL
-vd1vlr7NzMy8DFXJvfVSl77NzMw8WMnGvS4ZmL7NzMy8DFXJvfVSl77NzMy8nAAAAAAAAAAB
-AAAABQAAAAAAAAAFAAAABgAAAAAAAAAGAAAAAgAAAAAAAAACAAAACAAAAAAAAAAIAAAAAwAA
-AAAAAAADAAAACQAAAAAAAAAJAAAADQAAAAAAAAANAAAAEQAAAAAAAAARAAAAFQAAAAAAAAAV
-AAAAGQAAAAAAAAAZAAAAFgAAAAAAAAAWAAAAEgAAAAAAAAASAAAADgAAAAAAAAAOAAAACgAA
-AAAAAAAKAAAABAAAAAAAAAAEAAAAAQAAAAEAAAAEAAAACwAAAAEAAAALAAAABQAAAAIAAAAG
-AAAABwAAAAIAAAAHAAAACAAAAAMAAAAIAAAABwAAAAMAAAAHAAAADAAAAAMAAAAMAAAACQAA
-AAQAAAAKAAAADwAAAAQAAAAPAAAACwAAAAUAAAALAAAADwAAAAUAAAAPAAAAEwAAAAUAAAAT
-AAAAFwAAAAUAAAAXAAAAGgAAAAUAAAAaAAAAGwAAAAUAAAAbAAAAGAAAAAUAAAAYAAAAFAAA
-AAUAAAAUAAAAEAAAAAUAAAAQAAAADAAAAAUAAAAMAAAABwAAAAUAAAAHAAAABgAAAAkAAAAM
-AAAAEAAAAAkAAAAQAAAADQAAAAoAAAAOAAAAEwAAAAoAAAATAAAADwAAAA0AAAAQAAAAFAAA
-AA0AAAAUAAAAEQAAAA4AAAASAAAAFwAAAA4AAAAXAAAAEwAAABEAAAAUAAAAGAAAABEAAAAY
-AAAAFQAAABIAAAAWAAAAGgAAABIAAAAaAAAAFwAAABUAAAAYAAAAGwAAABUAAAAbAAAAGQAA
-ABYAAAAZAAAAGwAAABYAAAAbAAAAGgAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA
-AAAAAAAAAAAAgD8kAAAABAAAAEnMzD3ClRk+zczMPDafvT2bmRk+zczMvA6luD2bmRk+3NXK
-vHBSuD3ClRk+zczMPEnMzD0AAAAAzczMPEnMzD3ClRk+zczMvPnvuD2bmRk+zczMvHBSuD3C
-lRk+mqvIvHBSuD0AAAAAzczMPEnMzD0AAAAAzczMvPnvuD0AAAAAzczMvHBSuD0AAAAAmqvI
-vDwAAAAAAAAAAQAAAAIAAAAAAAAAAgAAAAMAAAAAAAAAAwAAAAgAAAAAAAAACAAAAAQAAAAA
-AAAABAAAAAkAAAAAAAAACQAAAAUAAAAAAAAABQAAAAEAAAABAAAABgAAAAIAAAABAAAABQAA
-AAkAAAABAAAACQAAAAoAAAABAAAACgAAAAYAAAACAAAABgAAAAcAAAACAAAABwAAAAMAAAAD
-AAAABwAAAAsAAAADAAAACwAAAAgAAAAEAAAACAAAAAsAAAAEAAAACwAAAAoAAAAEAAAACgAA
-AAkAAAAGAAAACgAAAAsAAAAGAAAACwAAAAcAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA
-AAAAAAAAAAAAAAAAAIA/HgAAAAQAAABwUri9AAAAAM3MzDxwUri9AAAAAJqryLxJzMy9AAAA
-AM3MzDxwUri9mpkZvs3MzDz577i9AAAAAM3MzLxwUri9mpkZvpqryLxJzMy9AAAAAM3MzLxJ
-zMy9mpkZvs3MzDz577i9mpkZvs3MzLxJzMy9mpkZvs3MzLwwAAAAAAAAAAEAAAAEAAAAAAAA
-AAQAAAAGAAAAAAAAAAYAAAACAAAAAAAAAAIAAAAHAAAAAAAAAAcAAAADAAAAAAAAAAMAAAAF
-AAAAAAAAAAUAAAABAAAAAQAAAAUAAAAIAAAAAQAAAAgAAAAEAAAAAgAAAAYAAAAJAAAAAgAA
-AAkAAAAHAAAAAwAAAAcAAAAJAAAAAwAAAAkAAAAIAAAAAwAAAAgAAAAFAAAABAAAAAgAAAAJ
-AAAABAAAAAkAAAAGAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACA
-PyEAAAAEAAAAcFK4vZqZGT7NzMw8SczMvZqZGT7NzMw8cFK4vQAAAADNzMw8cFK4vZqZGT6a
-q8i8SczMvZqZGT7NzMy8SczMvQAAAADNzMw8cFK4vQAAAACaq8i85Xe4vZqZGT40rMm8SczM
-vQAAAADNzMy8+e+4vZqZGT7NzMy8+e+4vQAAAADNzMy8NgAAAAAAAAABAAAABQAAAAAAAAAF
-AAAAAgAAAAAAAAACAAAABgAAAAAAAAAGAAAAAwAAAAAAAAADAAAABwAAAAAAAAAHAAAACQAA
-AAAAAAAJAAAABAAAAAAAAAAEAAAAAQAAAAEAAAAEAAAACAAAAAEAAAAIAAAABQAAAAIAAAAF
-AAAACAAAAAIAAAAIAAAACgAAAAIAAAAKAAAABgAAAAMAAAAGAAAABwAAAAQAAAAJAAAACgAA
-AAQAAAAKAAAACAAAAAYAAAAKAAAABwAAAAcAAAAKAAAACQAAABAAAAAAAAAAAAAAAAAAAAAA
-AAAAEAAAAAAAAAAAAAAAAAAAAAAAgD8hAAAABAAAAEnMzD0AAAAAzczMPHBSuD0AAAAAzczM
-PEnMzD2amRm+zczMPEnMzD0AAAAAzczMvHBSuD0AAAAAmqvIvHBSuD2amRm+zczMPEnMzD2a
-mRm+zczMvPnvuD0AAAAAzczMvOV3uD2amRm+NKzJvHBSuD2amRm+mqvIvPnvuD2amRm+zczM
-vDYAAAAAAAAAAQAAAAUAAAAAAAAABQAAAAIAAAAAAAAAAgAAAAYAAAAAAAAABgAAAAMAAAAA
-AAAAAwAAAAcAAAAAAAAABwAAAAQAAAAAAAAABAAAAAEAAAABAAAABAAAAAkAAAABAAAACQAA
-AAUAAAACAAAABQAAAAkAAAACAAAACQAAAAgAAAACAAAACAAAAAoAAAACAAAACgAAAAYAAAAD
-AAAABgAAAAoAAAADAAAACgAAAAcAAAAEAAAABwAAAAgAAAAEAAAACAAAAAkAAAAHAAAACgAA
-AAgAAAA=</SharedString>
+		<SharedString md5="aTIjYIeEFqyQ2bhuh8rtLg==">Q1NHUEhTCAAAAAIAKLUv/WDEDW0mANQiEgAAACsBAAAOAgAAI0IACgQAAIQEDgAA7FG4veF6
+lL6srG28PT48bcstFNduQeHrAsVdLZS7tgsFb1sUbrd1yl3XLVuU2y1RLRS3QGkBbtJSbbXr
+um7bcAHgrqVVJ1UC7Vmqb92ivK5yu0W5AC0FgGpVVbW3Ps+q3tqtXaBaABRVVa0WujerqlvX
+bu3bckHBC4r3LoJyu3YtrdKWgOJunbZVZrm/AwAAsEg4vfzrgbztUTi9EM6MRfeTad0/Xezi
+ehQ+rJg5YEO2CEa39Z9lCeW2N6ZovD0+krd3QGO8QhG4+ktfhUL3k+GamTlSuF48Dj1uEq49
+8nmUzxCwPdttBvmtPc72kyy6Xgb/sT25Rxs2sT3hzTKrrz2k62Cesj2EnRLdsz1pXAnitD1a
+DbihtT00spLOGbY9i1C545G4POqRHR+4PahpkgGJtz1b5YSWtj3mVeNQtT1ruavDsz1EC5TO
+HLi9qWm9PX8Xtr2MvVy9Nb1bw9qzvWpcvYW94r2lt/atvbq9571svUW9ur3cvfN2tl4+y/aT
+LOqRvZtpkrKGt71S5c5Wk5ROtb1VulzBs70wDJQY+LG9uEceE7C97WxEpK+9kOx8MbG9zM5/
+nb1iXLrftL1ADr0pspK9bFG9qeORPT09PT09PT09PVC8fBQWwLYYxGm8bH9iuGu87KAsdLaY
+0LctTGFwc83QRb0AAIAyAOBttwfiu1JET7cUvpRMNz6hawo9sh9qVr2B66jR1pBEqVHZ48Gp
+gAxZ3TaREKioUkIVJSlIljG36P19NSaVnLYUhh8RfWdRvA3Z9AL9spQ/ifrjF93u+BDlio1e
+knVdtX9mEpY7vRawre1I/ky0iw8X/HlBojb3wNqite/f94/qejz8DKXGc3vCfBMyuHvh/tMe
+/fps740Yfue3HK/EWmoETlIKC09s3ItHuhLQKmipFe3pBMcLAEh0+7i/d2v+AqA9gNdOnEcd
+7h/H5WZULctuiB48uzb71/sH506nrkn7lfe/5EzqD4ldv4j341NvrmdXos/5Xaf9+zxxHhMx
+7oIbX17XgI54Ri+MiJpd2CySHFbFx42MvRsuAMnOnOzYpzKWdHQH7ND16sh6CvEMPHCo9OAW
+5zaHC6JJ//gYtffm7C1fpY5iPSV3wp0CFs2E9Ivje170mD/X+14mdq0kHayHZnjqG5uL+lnS
+FLWnKSYNKFeCfjUHdL67bWzoAhCT8ttmEva7Gx9kx0jyvhLmHgJJl/hx1MelIU+8bhEfYpTj
+bdGvyWu1aBtTHpX21N81HJedvnscC1Pf5xHH9EJk+ELEzkcOgJ3Ig2NfQl2A+K38mUfTYZ9j
+dcd7+Lw5BO5ajR9D9B2C6QnzcmY/p2VfJLIasitcmMwvcBFxdj5bvuMAwMvTFmS8TyiGsL2I
+WzzwjQTyvzk4pZ3rXQ3uJZ6mKNkinrCLNIHvJe6U6NwCvYLc/qnfzVxDXWsOmd45Kstz1D+4
+AeGqMQun/40XOaJg43Oka76Ix/kP8GIj6p2+U9O234z32UtSRfnhWO3nzmMSsNRFu8ieyuyX
+X65/JKc8afeH6TJhnbIGjTgWidthBEOH80ZsdrzeInUep+fzIHAR09lq2190t4LMh6fqgXpl
+JeyXlfLQLZEK</SharedString>
 		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
-		<SharedString md5="8bK8+Px3Ot0zJrOHgLue2Q==">Q1NHUEhTBwAAAAJpZkY7mklBtJszkTbO6Gk2E1SyODTpiqyIml+sOpYMN6Br2KvzAsM4EAAA
-AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAPyEAAAAEAAAAAAAAAPzrgb6s
-rG08AAAAAPzrgb6srG28sEg4vfzrgb6srG08AAAAAGl6lL6srG08AAAAAEX3k76srG28sEg4
-vfzrgb6srG287VE4vRDOjL6srG28sEg4vWl6lL6srG08AAAAAGl6lL7dP128sEg4vUX3k76s
-rG28sEg4vWl6lL7dP128NgAAAAAAAAABAAAABQAAAAAAAAAFAAAAAgAAAAAAAAACAAAABwAA
-AAAAAAAHAAAAAwAAAAAAAAADAAAACAAAAAAAAAAIAAAABAAAAAAAAAAEAAAAAQAAAAEAAAAE
-AAAACQAAAAEAAAAJAAAABgAAAAEAAAAGAAAABQAAAAIAAAAFAAAABgAAAAIAAAAGAAAABwAA
-AAMAAAAHAAAACgAAAAMAAAAKAAAACAAAAAQAAAAIAAAACgAAAAQAAAAKAAAACQAAAAYAAAAK
-AAAABwAAAAYAAAAJAAAACgAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA
-AAAAgD8kAAAABAAAAOxROL2smDk+rKxtPOxROL3iehQ+rKxtPOxROL2smDk+rKxtvOxRuL2s
-mDk+rKxtPOxROL3iehQ+rKxtvOxRuL3iehQ+rKxtPGBDtr2smDk+rKxtvOxRuL2smDk+3T9d
-vGBDtr3iehQ+rKxtvOxRuL3iehQ+3T9dvAnltr2smDk+N6ZovAhGt73iehQ+9Z9lvDwAAAAA
-AAAAAQAAAAQAAAAAAAAABAAAAAIAAAAAAAAAAgAAAAYAAAAAAAAABgAAAAoAAAAAAAAACgAA
-AAcAAAAAAAAABwAAAAMAAAAAAAAAAwAAAAUAAAAAAAAABQAAAAEAAAABAAAABQAAAAkAAAAB
-AAAACQAAAAsAAAABAAAACwAAAAgAAAABAAAACAAAAAQAAAACAAAABAAAAAgAAAACAAAACAAA
-AAYAAAADAAAABwAAAAkAAAADAAAACQAAAAUAAAAGAAAACAAAAAoAAAAHAAAACgAAAAsAAAAH
-AAAACwAAAAkAAAAIAAAACwAAAAoAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA
-AAAAAAAAAIA/JAAAAAQAAADsUbg9rJg5PqysbTzsUbg94noUPqysbTzsUbg9rJg5Pt0/Xbzs
-UTg9rJg5PqysbTzsUbg94noUPt0/XbzsUTg94noUPqysbTxCEbg9rJg5PvpLX7zsUTg9rJg5
-PqysbbxgQ7Y94noUPqysbbzsUTg94noUPqysbbw+krc9rJg5PndAY7xgQ7Y9rJg5Pqysbbw8
-AAAAAAAAAAEAAAAEAAAAAAAAAAQAAAACAAAAAAAAAAIAAAAGAAAAAAAAAAYAAAAKAAAAAAAA
-AAoAAAALAAAAAAAAAAsAAAAHAAAAAAAAAAcAAAADAAAAAAAAAAMAAAAFAAAAAAAAAAUAAAAB
-AAAAAQAAAAUAAAAJAAAAAQAAAAkAAAAIAAAAAQAAAAgAAAAEAAAAAgAAAAQAAAAGAAAAAwAA
-AAcAAAAJAAAAAwAAAAkAAAAFAAAABAAAAAgAAAAGAAAABgAAAAgAAAAKAAAABwAAAAsAAAAI
-AAAABwAAAAgAAAAJAAAACAAAAAsAAAAKAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA
-AAAAAAAAAAAAAACAPx4AAAAEAAAA7FE4PYXrgb6srG087FE4PYXrgb6srG28AAAAAIXrgb6s
-rG087FE4PeF6lL6srG087FE4PUL3k76srG28AAAAAIXrgb6srG28AAAAAOF6lL6srG087FE4
-PeF6lL7dP128AAAAAEL3k76srG28AAAAAOF6lL7dP128MAAAAAAAAAABAAAABQAAAAAAAAAF
-AAAAAgAAAAAAAAACAAAABgAAAAAAAAAGAAAAAwAAAAAAAAADAAAABwAAAAAAAAAHAAAABAAA
-AAAAAAAEAAAAAQAAAAEAAAAEAAAACAAAAAEAAAAIAAAABQAAAAIAAAAFAAAACAAAAAIAAAAI
-AAAACQAAAAIAAAAJAAAABgAAAAMAAAAGAAAACQAAAAMAAAAJAAAABwAAAAQAAAAHAAAACQAA
-AAQAAAAJAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgD8k
-AAAABAAAAOxRuD1SuF4+rKxtPOxRuD2amTk+rKxtPOxRuD1SuF4+3T9dvOxROD1SuF4+rKxt
-POxRuD2amTk+3T9dvOxROD2amTk+rKxtPEIRuD2amTk++ktfvGBDtj1SuF4+rKxtvOxROD1S
-uF4+rKxtvOxROD2amTk+rKxtvD6Stz2amTk+d0BjvGBDtj2amTk+rKxtvDwAAAAAAAAAAQAA
-AAQAAAAAAAAABAAAAAIAAAAAAAAAAgAAAAcAAAAAAAAABwAAAAgAAAAAAAAACAAAAAMAAAAA
-AAAAAwAAAAUAAAAAAAAABQAAAAEAAAABAAAABQAAAAkAAAABAAAACQAAAAsAAAABAAAACwAA
-AAoAAAABAAAACgAAAAYAAAABAAAABgAAAAQAAAACAAAABAAAAAYAAAACAAAABgAAAAcAAAAD
-AAAACAAAAAkAAAADAAAACQAAAAUAAAAGAAAACgAAAAcAAAAHAAAACgAAAAsAAAAHAAAACwAA
-AAkAAAAHAAAACQAAAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA
-AIA/IQAAAAQAAADsUTi9UrhePqysbTzsUTi9mpk5PqysbTzsUTi9UrhePqysbbzsUbi9Urhe
-PqysbTzsUTi9mpk5PqysbbzsUbi9mpk5PqysbTxgQ7a9UrhePqysbbzsUbi9UrhePt0/Xbxg
-Q7a9mpk5PqysbbzsUbi9mpk5Pt0/XbwJ5ba9mpk5PjemaLw2AAAAAAAAAAEAAAAEAAAAAAAA
-AAQAAAACAAAAAAAAAAIAAAAGAAAAAAAAAAYAAAAHAAAAAAAAAAcAAAADAAAAAAAAAAMAAAAF
-AAAAAAAAAAUAAAABAAAAAQAAAAUAAAAJAAAAAQAAAAkAAAAKAAAAAQAAAAoAAAAIAAAAAQAA
-AAgAAAAEAAAAAgAAAAQAAAAIAAAAAgAAAAgAAAAGAAAAAwAAAAcAAAAJAAAAAwAAAAkAAAAF
-AAAABgAAAAgAAAAKAAAABgAAAAoAAAAHAAAABwAAAAoAAAAJAAAAEAAAAAAAAAAAAAAAAAAA
-AAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAPxgAAAAEAAAAAAAAAFK4Xr6srG08AAAAAFK4Xr6s
-rG287FE4vVK4Xr6srG08AAAAAA7rgb6srG08AAAAAA7rgb6srG287FE4vVK4Xr6srG287FE4
-vQ7rgb6srG087FE4vQ7rgb6srG28JAAAAAAAAAABAAAABQAAAAAAAAAFAAAAAgAAAAAAAAAC
-AAAABgAAAAAAAAAGAAAAAwAAAAAAAAADAAAABAAAAAAAAAAEAAAAAQAAAAEAAAAEAAAABwAA
-AAEAAAAHAAAABQAAAAIAAAAFAAAABwAAAAIAAAAHAAAABgAAAAMAAAAGAAAABwAAAAMAAAAH
-AAAABAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgD8YAAAABAAA
-AOxROD1SuF6+rKxtPOxROD1SuF6+rKxtvAAAAABSuF6+rKxtPOxROD0O64G+rKxtPOxROD0O
-64G+rKxtvAAAAABSuF6+rKxtvAAAAAAO64G+rKxtPAAAAAAO64G+rKxtvCQAAAAAAAAAAQAA
-AAUAAAAAAAAABQAAAAIAAAAAAAAAAgAAAAYAAAAAAAAABgAAAAMAAAAAAAAAAwAAAAQAAAAA
-AAAABAAAAAEAAAABAAAABAAAAAcAAAABAAAABwAAAAUAAAACAAAABQAAAAcAAAACAAAABwAA
-AAYAAAADAAAABgAAAAcAAAADAAAABwAAAAQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA
-AAAAAAAAAAAAAAAAAIA/aQAAAAQAAADsUTg98nmUvt0/XbxuEq498nmUvt0/XbzsUTg98nmU
-vqysbTzsUTg9zvaTvqysbbxuEq498nmUvqysbTwG+a09zvaTvqysbbzPELA9222Uvt0/Xbzs
-UTg9LLpevqysbTzsUTg9LLpevqysbbzPELA9222UvqysbTwyq689pOuTvqysbbwbNrE94c2T
-vqysbbwG/7E9uUeUvt0/XbzsUbg9LLpevqysbTxgQ7Y9LLpevqysbbwG/7E9uUeUvqysbTxg
-nrI9hJ2Tvqysbbyrw7M9RAuUvt0/XbzsUbg9LLpevt0/XbzsUbg9POqRvqysbTxgQ7Y9ueOR
-vqysbbyrw7M9RAuUvqysbTwS3bM9aVyTvqysbbzjULU9a7mTvt0/XbzsUbg9POqRvt0/Xbwd
-H7g9qGmSvqysbTzOGbY9i1CSvqysbbzjULU9a7mTvqysbTwJ4rQ9Wg2TvqysbbyElrY95lWT
-vt0/XbwdH7g9qGmSvt0/XbwBibc9W+WSvqysbTwBibc9W+WSvt0/Xby4obU9NLKSvqysbbyE
-lrY95lWTvqysbTzGAAAAAAAAAAEAAAAEAAAAAAAAAAQAAAACAAAAAAAAAAIAAAAHAAAAAAAA
-AAcAAAAIAAAAAAAAAAgAAAADAAAAAAAAAAMAAAAFAAAAAAAAAAUAAAABAAAAAQAAAAUAAAAG
-AAAAAQAAAAYAAAAJAAAAAQAAAAkAAAAEAAAAAgAAAAQAAAAJAAAAAgAAAAkAAAAPAAAAAgAA
-AA8AAAAVAAAAAgAAABUAAAAbAAAAAgAAABsAAAAiAAAAAgAAACIAAAAfAAAAAgAAAB8AAAAZ
-AAAAAgAAABkAAAATAAAAAgAAABMAAAANAAAAAgAAAA0AAAAHAAAAAwAAAAgAAAAOAAAAAwAA
-AA4AAAAUAAAAAwAAABQAAAAaAAAAAwAAABoAAAAhAAAAAwAAACEAAAAcAAAAAwAAABwAAAAW
-AAAAAwAAABYAAAAQAAAAAwAAABAAAAALAAAAAwAAAAsAAAAKAAAAAwAAAAoAAAAFAAAABQAA
-AAoAAAAGAAAABgAAAAoAAAALAAAABgAAAAsAAAAMAAAABgAAAAwAAAAPAAAABgAAAA8AAAAJ
-AAAABwAAAA0AAAASAAAABwAAABIAAAAOAAAABwAAAA4AAAAIAAAACwAAABAAAAARAAAACwAA
-ABEAAAAMAAAADAAAABEAAAAVAAAADAAAABUAAAAPAAAADQAAABMAAAAYAAAADQAAABgAAAAS
-AAAADgAAABIAAAAYAAAADgAAABgAAAAUAAAAEAAAABYAAAARAAAAEQAAABYAAAAXAAAAEQAA
-ABcAAAAbAAAAEQAAABsAAAAVAAAAEwAAABkAAAAeAAAAEwAAAB4AAAAYAAAAFAAAABgAAAAa
-AAAAFgAAABwAAAAXAAAAFwAAABwAAAAdAAAAFwAAAB0AAAAiAAAAFwAAACIAAAAbAAAAGAAA
-AB4AAAAaAAAAGQAAAB8AAAAgAAAAGQAAACAAAAAeAAAAGgAAAB4AAAAgAAAAGgAAACAAAAAh
-AAAAHAAAACEAAAAgAAAAHAAAACAAAAAdAAAAHQAAACAAAAAfAAAAHQAAAB8AAAAiAAAAEAAA
-AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAP2kAAAAEAAAA7FG4vT3qkb7d
-P128fxe2vYxQkr6srG28zhy4valpkr7dP1287FG4vT3qkb6srG087FG4vVK4Xr7dP128YEO2
-vbrjkb6srG28uKG1vTWykr6srG28AYm3vVzlkr7dP128zhy4valpkr6srG087FG4vVK4Xr6s
-rG08YEO2vVK4Xr6srG28CeK0vVsNk76srG28AYm3vVzlkr6srG08hJa2vedVk77dP1287FE4
-vVK4Xr6srG087FE4vVK4Xr6srG28w9qzvWpck76srG2841C1vWy5k77dP128hJa2vedVk76s
-rG087FE4vfN5lL6srG087FE4vc72k76srG28YJ6yvYWdk76srG28q8OzvUULlL7dP12841C1
-vWy5k76srG08bhKuvfN5lL6srG087FE4vfN5lL7dP128t/atvc72k76srG28GzaxveLNk76s
-rG28q8OzvUULlL6srG08Bv+xvbpHlL7dP128bhKuvfN5lL7dP128zxCwvdxtlL6srG08Mquv
-vaXrk76srG28zxCwvdxtlL7dP128Bv+xvbpHlL6srG08xgAAAAAAAAABAAAAAgAAAAAAAAAC
-AAAACAAAAAAAAAAIAAAAAwAAAAAAAAADAAAACQAAAAAAAAAJAAAABAAAAAAAAAAEAAAACgAA
-AAAAAAAKAAAABQAAAAAAAAAFAAAAAQAAAAEAAAAFAAAACgAAAAEAAAAKAAAADwAAAAEAAAAP
-AAAAFAAAAAEAAAAUAAAAGgAAAAEAAAAaAAAAIAAAAAEAAAAgAAAAGwAAAAEAAAAbAAAAFQAA
-AAEAAAAVAAAAEAAAAAEAAAAQAAAACwAAAAEAAAALAAAABgAAAAEAAAAGAAAABwAAAAEAAAAH
-AAAAAgAAAAIAAAAHAAAADAAAAAIAAAAMAAAACAAAAAMAAAAIAAAADAAAAAMAAAAMAAAAEgAA
-AAMAAAASAAAAFwAAAAMAAAAXAAAAHAAAAAMAAAAcAAAAIgAAAAMAAAAiAAAAHwAAAAMAAAAf
-AAAAGAAAAAMAAAAYAAAAEwAAAAMAAAATAAAADgAAAAMAAAAOAAAACQAAAAQAAAAJAAAADgAA
-AAQAAAAOAAAADwAAAAQAAAAPAAAACgAAAAYAAAALAAAABwAAAAcAAAALAAAADQAAAAcAAAAN
-AAAAEgAAAAcAAAASAAAADAAAAAsAAAAQAAAAEQAAAAsAAAARAAAADQAAAA0AAAARAAAAFwAA
-AA0AAAAXAAAAEgAAAA4AAAATAAAAGQAAAA4AAAAZAAAAFAAAAA4AAAAUAAAADwAAABAAAAAV
-AAAAFgAAABAAAAAWAAAAEQAAABEAAAAWAAAAHAAAABEAAAAcAAAAFwAAABMAAAAYAAAAHgAA
-ABMAAAAeAAAAGQAAABQAAAAZAAAAHgAAABQAAAAeAAAAGgAAABUAAAAbAAAAFgAAABYAAAAb
-AAAAHQAAABYAAAAdAAAAIgAAABYAAAAiAAAAHAAAABgAAAAfAAAAIQAAABgAAAAhAAAAHgAA
-ABoAAAAeAAAAIQAAABoAAAAhAAAAIAAAABsAAAAgAAAAIQAAABsAAAAhAAAAHQAAAB0AAAAh
-AAAAHwAAAB0AAAAfAAAAIgAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA
-AAAAgD8YAAAABAAAAAAAAADiehQ+rKxtvAAAAADiehQ+rKxtPAAAAAB2tl4+rKxtvOxROD3i
-ehQ+rKxtvOxROD3iehQ+rKxtPAAAAAB2tl4+rKxtPOxROD12tl4+rKxtvOxROD12tl4+rKxt
-PCQAAAAAAAAAAQAAAAUAAAAAAAAABQAAAAIAAAAAAAAAAgAAAAYAAAAAAAAABgAAAAMAAAAA
-AAAAAwAAAAQAAAAAAAAABAAAAAEAAAABAAAABAAAAAcAAAABAAAABwAAAAUAAAACAAAABQAA
-AAcAAAACAAAABwAAAAYAAAADAAAABgAAAAcAAAADAAAABwAAAAQAAAAQAAAAAAAAAAAAAAAA
-AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAIA/GAAAAAQAAADsUTi94noUPqysbbzsUTi94noU
-PqysbTzsUTi9drZePqysbbwAAAAA4noUPqysbbwAAAAA4noUPqysbTzsUTi9drZePqysbTwA
-AAAAdrZePqysbbwAAAAAdrZePqysbTwkAAAAAAAAAAEAAAAFAAAAAAAAAAUAAAACAAAAAAAA
-AAIAAAAGAAAAAAAAAAYAAAADAAAAAAAAAAMAAAAEAAAAAAAAAAQAAAABAAAAAQAAAAQAAAAH
-AAAAAQAAAAcAAAAFAAAAAgAAAAUAAAAHAAAAAgAAAAcAAAAGAAAAAwAAAAYAAAAHAAAAAwAA
-AAcAAAAEAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAP2kAAAAE
-AAAAAAAAAOF6lD6srG08AAAAAOF6lD7dP128bhKuveF6lD6srG08AAAAAFK4Xj6srG08AAAA
-AMv2kz6srG28bhKuveF6lD7dP128HhOwve1slD6srG08AAAAAFK4Xj6srG287FG4vVK4Xj6s
-rG08t/atvcv2kz6srG28RKSvvZDskz6srG28HhOwve1slD7dP128GPixvbhHlD6srG08YEO2
-vVK4Xj6srG287FG4vSzqkT6srG087FG4vVK4Xj7dP128fDGxvczOkz6srG28GPixvbhHlD7d
-P128XMGzvTAMlD6srG08YEO2vanjkT6srG287FG4vSzqkT7dP128HR+4vZtpkj6srG08YJ6y
-vX+dkz6srG28XMGzvTAMlD7dP128lE61vVW6kz6srG08zhm2vWxRkj6srG28HR+4vZtpkj7d
-P128soa3vVLlkj6srG08Et2zvWJckz6srG28lE61vVW6kz7dP128hJa2vc5Wkz6srG08uKG1
-vSmykj6srG28soa3vVLlkj7dP128ut+0vUAOkz6srG28hJa2vc5Wkz7dP128xgAAAAAAAAAB
-AAAABQAAAAAAAAAFAAAAAgAAAAAAAAACAAAABgAAAAAAAAAGAAAADAAAAAAAAAAMAAAAEgAA
-AAAAAAASAAAAGAAAAAAAAAAYAAAAHgAAAAAAAAAeAAAAGwAAAAAAAAAbAAAAFQAAAAAAAAAV
-AAAADgAAAAAAAAAOAAAACAAAAAAAAAAIAAAAAwAAAAAAAAADAAAABwAAAAAAAAAHAAAABAAA
-AAAAAAAEAAAAAQAAAAEAAAAEAAAACQAAAAEAAAAJAAAABQAAAAIAAAAFAAAACwAAAAIAAAAL
-AAAABgAAAAMAAAAIAAAADwAAAAMAAAAPAAAADQAAAAMAAAANAAAABwAAAAQAAAAHAAAADQAA
-AAQAAAANAAAAEwAAAAQAAAATAAAAGQAAAAQAAAAZAAAAHwAAAAQAAAAfAAAAIQAAAAQAAAAh
-AAAAHAAAAAQAAAAcAAAAFgAAAAQAAAAWAAAAEAAAAAQAAAAQAAAACgAAAAQAAAAKAAAACQAA
-AAUAAAAJAAAACgAAAAUAAAAKAAAACwAAAAYAAAALAAAAEQAAAAYAAAARAAAADAAAAAgAAAAO
-AAAAFAAAAAgAAAAUAAAADwAAAAoAAAAQAAAACwAAAAsAAAAQAAAAEQAAAAwAAAARAAAAFwAA
-AAwAAAAXAAAAEgAAAA0AAAAPAAAAFAAAAA0AAAAUAAAAEwAAAA4AAAAVAAAAGgAAAA4AAAAa
-AAAAFAAAABAAAAAWAAAAFwAAABAAAAAXAAAAEQAAABIAAAAXAAAAHQAAABIAAAAdAAAAGAAA
-ABMAAAAUAAAAGQAAABQAAAAaAAAAGQAAABUAAAAbAAAAIAAAABUAAAAgAAAAGgAAABYAAAAc
-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</SharedString>
+		<SharedString md5="9youQqgpV70GZVe57RLKHg==">Q1NHUEhTCAAAAAIAKLUv/WCUDl0lAIQdFAAAADwBAAAoAgAAIAA8BAAAiNAOAABJzMy9mpmZ
+vs3MzLw9PjwtZxUoBQpet9y167q7dVahu3ULhWVpQXFVFG73ULw9td2ebimtlkK5VoHys+D1
+S6296dSiVrWgvBaUu62A8ranLcBZBda1WVVev67rWygAoFsA125uXdd1AMrrul3XpFWv67p1
+FACUu67rtgDXdd26hQtvXVDenlWgvD2rlJ9ttW+r1QLsZYa++e+4XmdmPLxHc2mNybxzjeY7
+yrybbBdaybxwUj6suDxi+J2822KCHMm9ZmaGPmZmCt/lW8yaq8i+zcxMvetSlzx6q8dMveJ6
+lAAApLa8AAAAMmWilDB4mE6LlL6xWsq8zveClD4mg8m8rEnghrs8PT08gZUAQKQ2qw6XpI6U
+vs6syj09uJaWh5sZPnpkZrxoYMLldzSsybyDyjPMy7wOpdzVyrw9hvo5yz3xb5Y+zD0tm2PM
+PRx6leJmhjzRTbjw0UzPzEyOTbw9oH8+JMA9DjWGsMM907uYWMnGPTgZDFXJPYhSl7ygoZTs
+cpmUPv3qy7zuvjzKzNAKatSI5Ow8moVFkZS+chPLvBDXvZ+9+1IMrGNqvX293b31vS69zb2H
+7jw9m8KVNp+9PYIeqEJGZaNJUqlsjQFikwIJUarheWIwLR/BRHAURLWWAwd/tNCt9PnwvMbN
+LYop0FF3bmHPj9/vocNnLXY3wy76/P97Vt/lfBr+teAS6QVM4KXFNep6+lCiYVjysh+sFBdg
+zNn1Mcc8sdr/cLy8QTT4V5tryf3wH2cG2btpC2suVHTe3ZbjMKTVDZNF2q+g4jKxw7PvgUzx
+thmBUM33t5eLgSOcqk2d/ijjXKvN9vvpbJ64E4vytzzBDLM6Xxf6K+cc2sN+w/mvs24x+qxf
+Dvq/HrkM/DWOpH5o/5WFwJpj7ZI2zbh5+1X0zP34pQ6/pRvRpxreM7lew+X2H/K3d7iW/zP7
+h0CckfG14aKZ39k+MlQ/rtScyMemUxhMFyf4LsDmXhzTOdmu2F+NJ0tbpwtzYoQcv/Dh6RxA
+TCzDThWH98fYd/1Cu79HCv1/vevUrmKxt+p8bNgmM584vkf1T63DGa9oF02+PMj9hCbhUBRE
+8hGbeMHL6VKNcOypOewFTM9YFoH+lNCxONuXy4ydiFrXuXdGL7/wTbm+mDT1i+p1t9vkKQ71
+nUnW/DQsfm4EBnLO8XEXGAf99UrhDiIt1f9/jO8u3pfpJ7+OG7VyvBy9rMz+rK++eGZl9ziO
+yC71/pLxnn3qZLHEr/3fr3ECzjP7/Xmm/squBT3iN8JWdV6CZ6H/vXo6XOgFvIzh9VbkLO3c
+mHGiBaaxBXxNh75o8oiRXvdnyO9sgX5ycfDCwTI5/z8Pdl/93kq56J7oEpv/CStP8kdmDmz3
+KGMsjj5i/+FA48J5u759Ip740/P4HNS31UFZvAApdrQTDJcuvEgfGZ1H90Lu44zwyXvEJipM
+1ueNVz+vYUX+5G/1lB1fLu+nLXTeHTEJMwcWPUKfJbyxILXP2Qqn576J+15DMY0EDAn6AiYs
+LuKtU0gzSvcSdFWagwuh7d7qGDI/hgP8xIsHV7Q=</SharedString>
 	</SharedStrings>
 </roblox>
